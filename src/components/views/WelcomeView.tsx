@@ -4,6 +4,7 @@ import { Card, Button } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
 import FileManager, { UploadFile } from '../../data/FileManager';
 import { useEffect, useState } from 'react';
+import { url as urlPopulationView } from './PopulationView';
 
 interface WelcomeViewProps {}
 
@@ -30,7 +31,8 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
           <UploadTable uploadFiles={uploadFiles} />
           <Button
             variant='primary'
-            disabled={FileManager.allRequiredFilesUploaded() ? false : true}
+            disabled={!FileManager.allRequiredFilesUploaded()}
+            href={urlPopulationView}
           >
             Visualize
           </Button>
