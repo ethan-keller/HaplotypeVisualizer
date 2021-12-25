@@ -1,0 +1,64 @@
+{
+  "name": "haplotype-visualizer",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "@types/cytoscape": "^3.14.17",
+    "@types/d3": "^7.0.0",
+    "@types/dagre": "^0.7.45",
+    "@types/file-saver": "^2.0.2",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^12.0.0",
+    "@types/react": "^17.0.0",
+    "@types/react-color": "^3.0.4",
+    "@types/react-dom": "^17.0.0",
+    "bootstrap": "^5.1.1",
+    "cytoscape": "^3.19.0",
+    "cytoscape-layers": "^2.1.0",
+    "d3": "^7.0.0",
+    "dagre": "^0.8.5",
+    "eslint-plugin-prettier": "^4.0.0",
+    "react": "^17.0.2",
+    "react-bootstrap": "^2.0.3",
+    "react-dom": "^17.0.2",
+    "react-router": "^6.2.1",
+    "react-router-dom": "^6.2.1",
+    "react-scripts": "^4.0.3",
+    "typescript": "^4.1.2",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "lint:fix": "eslint --fix \"src/**/*.{ts,tsx}\"",
+    "precommit": "lint-staged"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "lint-staged": "^11.2.3",
+    "prettier": "2.5.1"
+  }
+}

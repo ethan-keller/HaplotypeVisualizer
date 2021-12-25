@@ -1,0 +1,15 @@
+.node rect {
+    stroke: #333;
+    fill: #fff;
+}
+
+
+.node text {
+    pointer-events: none;
+}
+
+.edgePath path {
+    stroke: #333;
+    stroke-width: 2px;
+    fill: #333;
+}

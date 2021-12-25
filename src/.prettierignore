@@ -1,0 +1,7 @@
+# Ignore artifacts:
+.vscode
+/node_modules
+/public
+
+# Ignore all HTML files:
+*.html
