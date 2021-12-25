@@ -11,3 +11,23 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.flexcontainer {
+  display: flex;
+  flex-wrap: wrap;
+  height: auto;
+  bottom: 0;
+  position: absolute;
+  top: 3.5rem;
+  width: 100%;
+}
+
+#sidebar {
+  flex-basis: 16.2rem;
+  flex-grow: 1;
+  border-right: 1px solid grey;
+  padding: 20px;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -1,26 +1,27 @@
-import {Navbar, NavDropdown, NavLink} from "react-bootstrap"
+import { Container, Nav, Navbar, NavDropdown, NavLink } from 'react-bootstrap';
 
 interface HeaderProps {
-    onData: (data: string) => void
-    setShowAbout: (showAbout: boolean) => void
-    setShowOpenFile: (showOpenFile: boolean) => void
+  setShowAbout: (showAbout: boolean) => void;
+  setShowSettings: (showSettings: boolean) => void;
 }
 
 const Header: React.FC<HeaderProps> = (props) => {
-    return (
-        <>
-            <Navbar bg="light">
-                <Navbar.Brand href=".">Haplotype Visualizer</Navbar.Brand>
-                <NavDropdown title="File">
-                    <NavDropdown.Item onClick={() => props.setShowOpenFile(true)}>Open file</NavDropdown.Item>
-                </NavDropdown>
-                <NavDropdown title="Examples">
-                    <NavDropdown.Item onClick={() => props.onData("MT.gfa")}>MT GFA-spec example</NavDropdown.Item>
-                </NavDropdown>
-                <NavLink onClick={() => props.setShowAbout(true)}>About</NavLink>
-            </Navbar>
-        </>
-    )
-}
+  return (
+    // <>
+    //   <Navbar bg='light'>
+    //     <Navbar.Brand>Haplotype Visualizer</Navbar.Brand>
+    //     <NavLink onClick={() => props.setShowSettings(true)}>Settings</NavLink>
+    //     <NavLink onClick={() => props.setShowAbout(true)}>About</NavLink>
+    //   </Navbar>
+    // </>
+    <Navbar bg='light' style={{marginLeft: '22px'}}>
+      <Navbar.Brand>Haplotype Visualizer</Navbar.Brand>
+      <Nav>
+        <Nav.Link href='#home'>Home</Nav.Link>
+        <Nav.Link href='#link'>Link</Nav.Link>
+      </Nav>
+    </Navbar>
+  );
+};
 
-export default Header
+export default Header;
