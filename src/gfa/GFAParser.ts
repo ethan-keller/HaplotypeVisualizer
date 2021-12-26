@@ -22,8 +22,8 @@ class GFAParser {
 
     if (!this.filePath) return emptyGFA();
 
-    let segmentIndex = 0;
-    let linkIndex = 0;
+    // let segmentIndex = 0;
+    // let linkIndex = 0;
 
     const rl = readline.createInterface({
       input: fs.createReadStream(this.filePath),

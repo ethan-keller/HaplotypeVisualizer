@@ -27,11 +27,15 @@ function isGfaEmpty(): boolean {
 }
 
 function getGfaFileFromFileManager(): UploadFile {
-  return FileManager.getRequestedFiles().filter((file) => file.fileExtensions.includes(FileExtensions.GFA))[0];
+  return FileManager.getRequestedFiles().filter((file) =>
+    file.fileExtensions.includes(FileExtensions.GFA),
+  )[0];
 }
 
 const GFAManager = {
+  getGFA,
   prepareGFA,
+  isGfaEmpty,
 };
 
 export default GFAManager;
