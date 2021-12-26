@@ -4,15 +4,21 @@ export interface UploadFile {
   fileDescription: string;
   status: UploadStatus;
   required: boolean;
-  fileExtensions: string[];
+  fileExtensions: FileExtensions[];
   fileName?: string;
-  filePath?: string;
 }
 
 export enum UploadStatus {
   NO_UPLOAD = 'No file uploaded',
   SUCCESSFUL_UPLOAD = 'Successfully uploaded',
   WARNING_UPLOAD = 'Unsuccessfully uploaded',
+}
+
+export enum FileExtensions {
+  GFA = '.gfa',
+  TXT = '.txt',
+  GFF = '.gff',
+  CSV = '.csv',
 }
 
 var EventEmitter = events.EventEmitter;
@@ -22,21 +28,23 @@ var requestedFiles: UploadFile[] = [
     fileDescription: 'GFA file',
     status: UploadStatus.NO_UPLOAD,
     required: true,
-    fileExtensions: ['.gfa'],
+    fileExtensions: [FileExtensions.GFA],
   },
   {
     fileDescription: 'Phenotype table',
     status: UploadStatus.NO_UPLOAD,
     required: false,
-    fileExtensions: ['.csv'],
+    fileExtensions: [FileExtensions.CSV],
   },
   {
     fileDescription: 'GFF file',
     status: UploadStatus.NO_UPLOAD,
     required: false,
-    fileExtensions: ['.gff'],
+    fileExtensions: [FileExtensions.GFF],
   },
 ];
+//@ts-ignore
+window.requestedFiles = requestedFiles;
 
 function validateFileExtension(fileName: string, acceptedFileExtensions: string[]) {
   return acceptedFileExtensions.includes(fileName.substring(fileName.lastIndexOf('.')));
@@ -57,7 +65,6 @@ function unsubscribe(callback: () => void): void {
 function uploadFile(fileIndex: number, name: string, path: string): void {
   let file: UploadFile = requestedFiles[fileIndex];
   file.fileName = name;
-  file.filePath = path;
   if (validateFileExtension(name, requestedFiles[fileIndex].fileExtensions)) {
     file.status = UploadStatus.SUCCESSFUL_UPLOAD;
   } else {
@@ -69,7 +76,6 @@ function uploadFile(fileIndex: number, name: string, path: string): void {
 function removeFile(fileIndex: number): void {
   let file: UploadFile = requestedFiles[fileIndex];
   file.fileName = undefined;
-  file.filePath = undefined;
   file.status = UploadStatus.NO_UPLOAD;
   emitter.emit('update');
 }

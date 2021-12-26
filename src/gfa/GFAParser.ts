@@ -1,30 +1,36 @@
-import { GFA, GFAContainment, GFAHeader, GFALink, GFAPath, GFASegment } from './GFA';
+import GFA, { emptyGFA, GFAContainment, GFAHeader, GFALink, GFAPath, GFASegment } from './GFA';
+import * as fs from 'fs';
+import * as readline from 'readline';
 
-class GfaParser {
-  readonly filePath: string;
+class GFAParser {
+  private filePath: string | undefined;
 
-  constructor(filePath: string) {
+  constructor(filePath?: string) {
     this.filePath = filePath;
   }
 
-  parse(): GFA {
+  get getFilePath(): string | undefined {
+    return this.filePath;
+  }
+
+  public parse(): GFA {
     const headers: GFAHeader[] = [];
     const segments: Record<string, GFASegment> = {};
     const links: Record<string, GFALink> = {};
     const containments: GFAContainment[] = [];
     const paths: GFAPath[] = [];
 
+    if (!this.filePath) return emptyGFA();
+
     let segmentIndex = 0;
     let linkIndex = 0;
-
-    const fs = require('fs');
-    const readline = require('readline');
 
     const rl = readline.createInterface({
       input: fs.createReadStream(this.filePath),
       output: process.stdout,
       terminal: false,
     });
+
 
     rl.on('line', (line: string) => {
         console.log(line);
@@ -109,13 +115,13 @@ class GfaParser {
     //   }
     });
 
-    for (const path of paths) {
-      for (let i = 0; i < path.segmentNames.length - 1; i++) {
-        segments[`${path.segmentNames[i].slice(0, -1)}`]?.paths.push(path);
-        links[`${path.segmentNames[i]}-${path.segmentNames[i + 1]}`].paths.push(path);
-      }
-      segments[`${path.segmentNames[path.segmentNames.length - 1].slice(0, -1)}`].paths.push(path);
-    }
+    // for (const path of paths) {
+    //   for (let i = 0; i < path.segmentNames.length - 1; i++) {
+    //     segments[`${path.segmentNames[i].slice(0, -1)}`]?.paths.push(path);
+    //     links[`${path.segmentNames[i]}-${path.segmentNames[i + 1]}`].paths.push(path);
+    //   }
+    //   segments[`${path.segmentNames[path.segmentNames.length - 1].slice(0, -1)}`].paths.push(path);
+    // }
     return {
       headers,
       segments: Object.entries(segments).map((value) => value[1]),
@@ -146,9 +152,7 @@ class GfaParser {
     return record
   }
 
-  get getFilePath(): string {
-    return this.filePath;
-  }
+  
 }
 
-export default GfaParser;
+export default GFAParser;

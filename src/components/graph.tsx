@@ -3,9 +3,6 @@ interface GraphProps {
 }
 
 const Graph: React.FC<GraphProps> = () => {
-  
-
-
   return (
     <div
       id={"graph"}

@@ -3,6 +3,7 @@ import pkg from '../../../package.json';
 import { Card, Button } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
 import FileManager, { UploadFile } from '../../data/FileManager';
+import GFAManager from '../../data/GFAManager'
 import { useEffect, useState } from 'react';
 import { url as urlPopulationView } from './PopulationView';
 
@@ -33,6 +34,7 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
             variant='primary'
             disabled={!FileManager.allRequiredFilesUploaded()}
             href={urlPopulationView}
+            onClick={() => GFAManager.prepareGFA()}
           >
             Visualize
           </Button>
