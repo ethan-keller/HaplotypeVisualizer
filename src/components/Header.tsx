@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = (props) => {
     //     <NavLink onClick={() => props.setShowAbout(true)}>About</NavLink>
     //   </Navbar>
     // </>
-    <Navbar bg='light' style={{marginLeft: '22px'}}>
+    <Navbar bg='light'>
       <Navbar.Brand>Haplotype Visualizer</Navbar.Brand>
       <Nav>
         <Nav.Link href='#home'>Home</Nav.Link>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Sidebar from '../../Sidebar';
 import AboutModal from '../AboutModal';
+import Graph from '../Graph';
 import Header from '../Header';
 
 interface PopulationViewProps {}
@@ -12,10 +13,14 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
   return (
     <>
       <Header setShowAbout={setShowAbout} setShowSettings={setShowSettings} />
-      <div className='flex-container'>
-        <div id='sidebar'>
+      <div className='container'>
+        <div className='sidebar'>
           <Sidebar />
         </div>
+        <div className='graph'>
+          <Graph />
+        </div>
+        <div className='navigator'>Nav</div>
       </div>
 
       {/* <Graph />

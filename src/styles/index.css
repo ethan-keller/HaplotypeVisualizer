@@ -1,33 +1,66 @@
+html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  width: 100%;
+  height: 100%;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-.flexcontainer {
-  display: flex;
-  flex-wrap: wrap;
-  height: auto;
-  bottom: 0;
-  position: absolute;
-  top: 3.5rem;
-  width: 100%;
-}
-
-#sidebar {
-  flex-basis: 16.2rem;
-  flex-grow: 1;
-  border-right: 1px solid grey;
-  padding: 20px;
+#root {
   height: 100%;
+}
+
+.container {
+  padding: 0;
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-auto-flow: row;
+  grid-template-areas:
+    'side graph graph graph graph graph'
+    'side graph graph graph graph graph'
+    'side graph graph graph graph graph'
+    'side navigator navigator navigator navigator navigator'
+    'side navigator navigator navigator navigator navigator';
+}
+
+.sidebar {
+  grid-area: side;
+  border-right: 1px solid grey;
+  padding-left: 1.2rem;
+  padding-top: 0.8rem;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.graph {
+  grid-area: graph;
+}
+
+.navigator {
+  border-top: 1px solid grey;
+  grid-area: navigator;
+}
+
+.navbar {
+  height: 3.5rem;
+}
+
+.navbar-brand {
+  margin-left: 1rem;
 }
