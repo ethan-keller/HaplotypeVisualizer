@@ -1,41 +1,41 @@
-import GFA from '../gfa/GFA';
-import GFAParser from '../gfa/GFAParser';
-import FileManager, { FileExtensions, UploadFile } from './FileManager';
+// import GFA from '../gfa/GFA';
+// import GFAParser from '../gfa/GFAParser';
 
-var gfa: GFA;
+// var gfa: GFA;
 
-function getGFA(): GFA {
-  return gfa;
-}
+// function getGFA(): GFA {
+//   return gfa;
+// }
 
-function prepareGFA(): void {
-  const gfaFile: UploadFile = getGfaFileFromFileManager();
-  if (!validateGfaFile(gfaFile)) return;
+// function prepareGFA(): void {
+//   const gfaFile: UploadFile = getGfaFileFromFileManager();
+//   if (!validateGfaFile(gfaFile)) return;
 
-  let parser: GFAParser = new GFAParser(gfaFile.fileName);
+//   let parser: GFAParser = new GFAParser(gfaFile.fileName);
 
-  // TODO: do this somewhere safe
-  gfa = parser.parse();
-}
+//   // TODO: do this somewhere safe
+//   gfa = parser.parse();
+// }
 
-function validateGfaFile(file: UploadFile): boolean {
-  return file.fileExtensions.includes(FileExtensions.GFA);
-}
+// function validateGfaFile(file: UploadFile): boolean {
+//   return file.fileExtensions.includes(FileExtensions.GFA);
+// }
 
-function isGfaEmpty(): boolean {
-  return gfa === undefined;
-}
+// function isGfaEmpty(): boolean {
+//   return gfa === undefined;
+// }
 
-function getGfaFileFromFileManager(): UploadFile {
-  return FileManager.getRequestedFiles().filter((file) =>
-    file.fileExtensions.includes(FileExtensions.GFA),
-  )[0];
-}
+// function getGfaFileFromFileManager(): UploadFile {
+//   return FileManager.getRequestedFiles().filter((file) =>
+//     file.fileExtensions.includes(FileExtensions.GFA),
+//   )[0];
+// }
 
-const GFAManager = {
-  getGFA,
-  prepareGFA,
-  isGfaEmpty,
-};
+// const GFAManager = {
+//   getGFA,
+//   prepareGFA,
+//   isGfaEmpty,
+// };
 
-export default GFAManager;
+// export default GFAManager;
+export default {}

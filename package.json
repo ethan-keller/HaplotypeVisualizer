@@ -15,6 +15,7 @@
     "@types/react": "^17.0.0",
     "@types/react-color": "^3.0.4",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.24.0",
     "bootstrap": "^5.1.1",
     "cytoscape": "^3.19.0",
     "cytoscape-layers": "^2.1.0",
@@ -33,7 +34,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api": "cd api && uvicorn main:api --reload",
+    "start-api": "cd server && uvicorn main:server --reload",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",

@@ -2,22 +2,30 @@
 import pkg from '../../../package.json';
 import { Card, Button } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
-import FileManager, { UploadFile } from '../../data/FileManager';
-import GFAManager from '../../data/GFAManager'
 import { useEffect, useState } from 'react';
 import { url as urlPopulationView } from './PopulationView';
+import { UploadFile } from '../../models/files';
+import FileCommunication from '../../communication/FileCommunication';
 
 interface WelcomeViewProps {}
 
 const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
-  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>(FileManager.getRequestedFiles());
+  const [error, setError] = useState<Error | undefined>(undefined);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
 
   // will execute on mount and unmount
   useEffect(() => {
-    FileManager.subscribe(() => setUploadFiles(FileManager.getRequestedFiles()));
-    return () => {
-      FileManager.unsubscribe(() => setUploadFiles(FileManager.getRequestedFiles()));
-    };
+    FileCommunication.getFiles().then(
+      (result: UploadFile[]) => {
+        setIsLoaded(true);
+        setUploadFiles(result);
+      },
+      (error: Error) => {
+        setIsLoaded(true);
+        setError(error);
+      },
+    );
   }, []);
 
   return (
@@ -29,12 +37,12 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
         <Card.Body>
           <Card.Title>Welcome!</Card.Title>
           <Card.Text>Upload the necessary files to start visualizing</Card.Text>
-          <UploadTable uploadFiles={uploadFiles} />
+          <UploadTable uploadFiles={!error ? uploadFiles : []} />
           <Button
             variant='primary'
-            disabled={!FileManager.allRequiredFilesUploaded()}
+            disabled={true}
             href={urlPopulationView}
-            onClick={() => GFAManager.prepareGFA()}
+            // onClick={() => GFAManager.prepareGFA()}
           >
             Visualize
           </Button>

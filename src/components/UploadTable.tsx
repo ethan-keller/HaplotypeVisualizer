@@ -1,15 +1,22 @@
 import { createRef, useMemo } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import FileManager, { UploadFile, UploadStatus } from '../data/FileManager';
+import FileManager from '../data/FileManager';
+import { UploadFile, UploadStatus } from '../models/files';
 
 interface UploadTableProps {
   uploadFiles: UploadFile[];
 }
 
-const statusToBootstrapMap = new Map<UploadStatus, string>([
+const statusToBootstrapClassMap = new Map<UploadStatus, string>([
   [UploadStatus.NO_UPLOAD, 'table-danger'],
   [UploadStatus.SUCCESSFUL_UPLOAD, 'table-success'],
   [UploadStatus.WARNING_UPLOAD, 'table-warning'],
+]);
+
+const statusToDescription = new Map<UploadStatus, string>([
+  [UploadStatus.NO_UPLOAD, 'No file uploaded'],
+  [UploadStatus.SUCCESSFUL_UPLOAD, 'Successfully uploaded'],
+  [UploadStatus.WARNING_UPLOAD, 'Unsuccessfully uploaded'],
 ]);
 
 const UploadTable: React.FC<UploadTableProps> = (props) => {
@@ -51,18 +58,20 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
           return (
             <tr key={'upload-table-row-' + i}>
               <td>
-                {uploadFile.fileDescription}
+                {uploadFile.description}
                 {uploadFile.required ? <b className='text-danger'>*</b> : ''}
               </td>
-              <td>{uploadFile.fileName ? uploadFile.fileName : '-'}</td>
-              <td className={statusToBootstrapMap.get(status)}>{status}</td>
+              <td>{uploadFile.name ? uploadFile.name : '-'}</td>
+              <td className={statusToBootstrapClassMap.get(status)}>
+                {statusToDescription.get(status)}
+              </td>
               <td>
                 <input
                   ref={inputRef}
                   onChange={() => handleUpload(i, inputRef)}
                   className='d-none'
                   type='file'
-                  accept={uploadFile.fileExtensions.join(',')}
+                  accept={uploadFile.file_extensions.join(',')}
                 />
                 {uploadFile.status !== UploadStatus.NO_UPLOAD ? (
                   <Button onClick={() => handleRemove(i)} variant='outline-danger' size='sm'>
