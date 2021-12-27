@@ -1,11 +1,12 @@
 //@ts-ignore
 import pkg from '../../../package.json';
-import { Card, Button } from 'react-bootstrap';
+import { Card, Button, Spinner } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
 import { useEffect, useState } from 'react';
 import { url as urlPopulationView } from './PopulationView';
 import { UploadFile } from '../../models/files';
 import FileCommunication from '../../communication/FileCommunication';
+import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface WelcomeViewProps {}
 
@@ -37,7 +38,11 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
         <Card.Body>
           <Card.Title>Welcome!</Card.Title>
           <Card.Text>Upload the necessary files to start visualizing</Card.Text>
-          <UploadTable uploadFiles={!error ? uploadFiles : []} />
+          {isLoaded ? (
+            <UploadTable uploadFiles={!error ? uploadFiles : []} />
+          ) : (
+            <SpinnerAnnotated message={"Waiting for the server to tell us which files you need"} />
+          )}
           <Button
             variant='primary'
             disabled={true}
