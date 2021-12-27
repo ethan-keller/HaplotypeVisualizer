@@ -3,4 +3,5 @@ import baseUrl from "./base"
 const filePathPrefix = '/files'
 const fileBaseUrl = baseUrl + filePathPrefix;
 
-export const getFiles = fileBaseUrl + '/getFiles';
+export const getFiles = fileBaseUrl + '/';
+export const updateFilePath = fileBaseUrl + '/update'
