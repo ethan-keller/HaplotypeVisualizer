@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Hplotype Visualizer",
+  "name": "Haplotype Visualizer: A haplotype visualization program",
   "icons": [
     {
       "src": "favicon.ico",
