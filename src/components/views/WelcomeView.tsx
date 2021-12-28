@@ -17,7 +17,7 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
 
   // will execute on mount and unmount
   useEffect(() => {
-    FileCommunication.getFiles().then(
+    FileCommunication.getAllFiles().then(
       (result: UploadFile[]) => {
         setIsLoaded(true);
         setUploadFiles(result);
