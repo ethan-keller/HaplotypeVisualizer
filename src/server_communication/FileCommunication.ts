@@ -4,7 +4,7 @@ import ErrorHandling from './ErrorHandling';
 
 class FileCommunication {
   public static async getFiles(): Promise<UploadFile[]> {
-    const response: Response = await fetch(endpoints.getFiles);
+    const response: Response = await fetch(endpoints.getAllFiles);
 
     if (ErrorHandling.successfulResponse(response.status)) {
       const files: UploadFile[] = await response.json();
