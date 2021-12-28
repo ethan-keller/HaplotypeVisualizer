@@ -7,6 +7,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.param_functions import Body
 from pydantic.types import FilePath
 from schemas.file import File
+from logic.files import validate_file_extension
 from server_data.data import files
 
 router = APIRouter(prefix="/files", tags=["files"])
@@ -42,7 +43,7 @@ def updateFilePath(path: FilePath, index: int = Query(..., ge=0, lt=len(files)))
     - **path**: File path
     - **index**: Index of the file
     """
-    if path.suffix not in files[index].file_extensions:
+    if not validate_file_extension(path, files[index].file_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"{path.suffix} files are not accepted for this entry"
         )
