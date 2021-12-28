@@ -1,10 +1,11 @@
 import { createRef, useMemo } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import FileManager from '../data/FileManager';
-import { UploadFile, UploadStatus } from '../models/files';
+import { UploadFile, UploadStatus } from '../models/file';
 
 interface UploadTableProps {
   uploadFiles: UploadFile[];
+  setUploadFiles: React.Dispatch<React.SetStateAction<UploadFile[]>>
 }
 
 const statusToBootstrapClassMap = new Map<UploadStatus, string>([
@@ -34,7 +35,10 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
     const file: File = inputRef.current?.files[0];
     if (!file) return;
 
-    FileManager.uploadFile(fileIndex, file.name, file.webkitRelativePath);
+    let newUploadFiles = props.uploadFiles.concat()
+    newUploadFiles[fileIndex].name = file.name;
+    newUploadFiles[fileIndex].path = "Don't know how to do this yet";
+    props.setUploadFiles(newUploadFiles);
   };
 
   const handleRemove = (fileIndex: number) => {

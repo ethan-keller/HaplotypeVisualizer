@@ -1,4 +1,4 @@
-import { UploadFile } from '../models/files';
+import { UploadFile } from '../models/file';
 import * as endpoints from '../endpoints_config/files_endpoints';
 import ErrorHandling from './ErrorHandling';
 
