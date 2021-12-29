@@ -2,6 +2,7 @@
 
 # server requested files
 *.gfa
+*.gfa2
 *.csv
 *.gff
 
