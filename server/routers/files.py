@@ -25,19 +25,20 @@ def getFiles(index: int = Query(..., ge=0, lt=len(files))):
     return files[index]
 
 
-@router.get("/all", response_model=List[File], summary="Get all needed files")
-def getFiles():
-    """
-    Get the list of all needed files.
-    """
-    return files
-
 @router.get("all_uploaded", response_model=bool, summary="Check if all required files are uploaded")
 def are_all_uploaded():
     """
     Check if all the required files are uploaded.
     """
     return FileLogic.are_required_files_uploaded()
+
+
+@router.get("/all", response_model=List[File], summary="Get all needed files")
+def getFiles():
+    """
+    Get the list of all needed files.
+    """
+    return files
 
 
 @router.put(
