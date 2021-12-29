@@ -61,6 +61,17 @@ class FileCommunication {
       return Promise.reject(new Error(response.statusText));
     }
   }
+
+  public static async areAllRequiredUploaded(): Promise<boolean> {
+    const response: Response = await fetch(endpoints.areAllRequiredUploaded);
+
+    if (ErrorHandling.successfulResponse(response.status)) {
+      const res: boolean = await response.json();
+      return res;
+    } else {
+      return Promise.reject(new Error(response.statusText));
+    }
+  }
 }
 
 export default FileCommunication;
