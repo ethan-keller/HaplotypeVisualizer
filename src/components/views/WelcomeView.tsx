@@ -2,33 +2,11 @@
 import pkg from '../../../package.json';
 import { Card, Button } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
-import { useEffect, useState } from 'react';
 import { url as urlPopulationView } from './PopulationView';
-import { UploadFile } from '../../models/file';
-import FileCommunication from '../../server_communication/FileCommunication';
-import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface WelcomeViewProps {}
 
 const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
-  const [error, setError] = useState<Error | undefined>(undefined);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
-  const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
-
-  // will execute on mount and unmount
-  useEffect(() => {
-    FileCommunication.getAllFiles().then(
-      (result: UploadFile[]) => {
-        setIsLoaded(true);
-        setUploadFiles(result);
-      },
-      (error: Error) => {
-        setIsLoaded(true);
-        setError(error);
-      },
-    );
-  }, []);
-
   return (
     <div style={{ height: '100vh' }} className='d-flex justify-content-center align-items-center'>
       <Card className='text-center'>
@@ -38,11 +16,7 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
         <Card.Body>
           <Card.Title>Welcome!</Card.Title>
           <Card.Text>Upload the necessary files to start visualizing</Card.Text>
-          {isLoaded ? (
-            <UploadTable setUploadFiles={setUploadFiles} uploadFiles={!error ? uploadFiles : []} />
-          ) : (
-            <SpinnerAnnotated message={"Waiting for the server to tell us which files you need"} />
-          )}
+          <UploadTable />
           <Button
             variant='primary'
             disabled={true}
