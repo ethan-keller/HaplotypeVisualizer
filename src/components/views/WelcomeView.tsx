@@ -1,12 +1,15 @@
 //@ts-ignore
 import pkg from '../../../package.json';
-import { Card, Button } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
+import { useState } from 'react';
 import { url as urlPopulationView } from './PopulationView';
 
 interface WelcomeViewProps {}
 
 const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
+  const [ready, setReady] = useState<boolean>(false);
+
   return (
     <div style={{ height: '100vh' }} className='d-flex justify-content-center align-items-center'>
       <Card className='text-center'>
@@ -16,10 +19,10 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
         <Card.Body>
           <Card.Title>Welcome!</Card.Title>
           <Card.Text>Upload the necessary files to start visualizing</Card.Text>
-          <UploadTable />
+          <UploadTable setReady={setReady} />
           <Button
             variant='primary'
-            disabled={true}
+            disabled={!ready}
             href={urlPopulationView}
             // onClick={() => GFAManager.prepareGFA()}
           >

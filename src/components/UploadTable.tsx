@@ -5,7 +5,9 @@ import FileCommunication from '../server_communication/FileCommunication';
 import ErrorCard from './ErrorCard';
 import SpinnerAnnotated from './SpinnerAnnotated';
 
-interface UploadTableProps {}
+interface UploadTableProps {
+  setReady: (ready: boolean) => void;
+}
 
 const statusToBootstrapClassMap = new Map<UploadStatus, string>([
   [UploadStatus.NO_UPLOAD, 'table-danger'],
@@ -24,6 +26,11 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
 
+  // will execute on mount and unmount
+  useEffect(() => {
+    updateUploadFiles();
+  }, []);
+
   const updateUploadFiles = () => {
     FileCommunication.getAllFiles().then(
       (result: UploadFile[]) => {
@@ -35,12 +42,19 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
         setError(error);
       },
     );
+    handleReady();
   };
 
-  // will execute on mount and unmount
-  useEffect(() => {
-    updateUploadFiles();
-  }, []);
+  const handleReady = () => {
+    FileCommunication.ready().then(
+      (result: boolean) => {
+        props.setReady(result);
+      },
+      (err: Error) => {
+        console.log(err);
+      },
+    );
+  };
 
   const uploadInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
     () => uploadFiles.map(() => createRef<HTMLInputElement>()),
@@ -70,7 +84,9 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
       .catch((err) => {
         console.log(err);
       })
-      .then(() => updateUploadFiles());
+      .then(() => {
+        updateUploadFiles();
+      });
   };
 
   const handleRemove = (fileIndex: number) => {
