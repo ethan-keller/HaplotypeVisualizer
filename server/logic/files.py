@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import FilePath
-from server.schemas.file import UploadStatus
+from schemas.file import UploadStatus
 from server_data.data import files
 
 
