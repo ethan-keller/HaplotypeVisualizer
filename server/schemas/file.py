@@ -12,7 +12,6 @@ class UploadStatus(Enum):
 
 class File(BaseModel):
     name: Optional[str] = None
-    path: Optional[FilePath] = None
     description: str
     status: UploadStatus
     required: bool
