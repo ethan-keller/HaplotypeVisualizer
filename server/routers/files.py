@@ -1,13 +1,11 @@
 from os import stat
 from typing import List
 
-from fastapi import APIRouter, Query, status
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import HTTPException
-from fastapi.param_functions import Body
-from pydantic.types import FilePath
-from schemas.file import File
 import logic.files as FileLogic
+from fastapi import APIRouter, Query, status
+from fastapi.exceptions import HTTPException
+from pydantic.types import FilePath
+from schemas.file import File, UploadStatus
 from server_data.data import files
 
 router = APIRouter(prefix="/files", tags=["files"])
@@ -42,32 +40,35 @@ def getFiles():
 
 
 @router.put(
-    "/update", responses=responses, summary="Update the file path and name for a specific needed file",
+    "/update", responses=responses, summary="Update the file path for a specific needed file",
 )
-def updateFile(path: FilePath, name: str, index: int = Query(..., ge=0, lt=len(files))):
+def updateFile(path: FilePath, index: int = Query(..., ge=0, lt=len(files))):
     """
-    Update the file path for one of the needed files.
+    Update the file information for one of the needed files.
     
     - **path**: File path
-    - **name**: Name of the file
     - **index**: Index of the file
     """
+    files[index].path = path
+    files[index].name = path.name
     # Maybe some other validation? File size etc?
     if not FileLogic.validate_file_extension(path, files[index].file_extensions):
+        files[index].status = UploadStatus.WARNING_UPLOAD
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"{path.suffix} files are not accepted for this entry"
         )
-    files[index].path = path
-    files[index].name = name
+    else:
+        files[index].status = UploadStatus.SUCCESSFUL_UPLOAD
 
 
-@router.delete("/remove", summary="Remove name and file path for a specific needed file")
+@router.delete("/remove", summary="Remove file information for a specific needed file")
 def removeFile(index: int = Query(..., ge=0, lt=len(files))):
     """
-    Remove the name and file path for one of the needed files.
+    Remove the file information for one of the needed files.
 
     **index**: Index of the file
     """
     files[index].path = None
     files[index].name = None
+    files[index].status = UploadStatus.NO_UPLOAD
 
