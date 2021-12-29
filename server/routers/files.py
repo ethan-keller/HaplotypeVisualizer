@@ -34,18 +34,21 @@ def getFiles():
 
 
 @router.put(
-    "/update", responses=responses, summary="Update the file path for a specific needed file",
+    "/update", responses=responses, summary="Update the file path and name for a specific needed file",
 )
-def updateFilePath(path: FilePath, index: int = Query(..., ge=0, lt=len(files))):
+def updateFilePath(path: FilePath, name: str, index: int = Query(..., ge=0, lt=len(files))):
     """
     Update the file path for one of the needed files.
     
     - **path**: File path
+    - **name**: Name of the file
     - **index**: Index of the file
     """
+    # Maybe some other validation? File size etc?
     if not validate_file_extension(path, files[index].file_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"{path.suffix} files are not accepted for this entry"
         )
     files[index].path = path
+    files[index].name = name
 

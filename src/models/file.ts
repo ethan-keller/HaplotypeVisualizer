@@ -3,8 +3,8 @@ export interface UploadFile {
   readonly status: UploadStatus;
   readonly required: boolean;
   readonly file_extensions: string[];
-  name?: string;
-  path?: string;
+  readonly name?: string;
+  readonly path?: string;
 }
 
 export enum UploadStatus {
