@@ -7,8 +7,7 @@ class FileCommunication {
     const response: Response = await fetch(endpoints.getAllFiles);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      const files: UploadFile[] = await response.json();
-      return files;
+      return await response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -20,8 +19,7 @@ class FileCommunication {
     const response: Response = await fetch(endpoints.getFile + '?' + new URLSearchParams(params));
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      const file: UploadFile = await response.json();
-      return file;
+      return await response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -33,15 +31,13 @@ class FileCommunication {
       index: index.toString(),
     };
 
-    console.log(endpoints.updateFile + '?' + new URLSearchParams(params));
     const response: Response = await fetch(
       endpoints.updateFile + '?' + new URLSearchParams(params),
       { method: 'PUT' },
     );
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      const res: string = await response.json();
-      return res;
+      return await response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -57,8 +53,7 @@ class FileCommunication {
     );
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      const res: string = await response.json();
-      return res;
+      return await response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -68,8 +63,7 @@ class FileCommunication {
     const response: Response = await fetch(endpoints.areAllRequiredUploaded);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      const res: boolean = await response.json();
-      return res;
+      return await response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
