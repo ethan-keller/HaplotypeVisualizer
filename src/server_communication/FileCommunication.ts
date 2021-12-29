@@ -25,9 +25,9 @@ class FileCommunication {
     }
   }
 
-  public static async updateFile(index: number, path: string): Promise<string> {
+  public static async updateFile(index: number, name: string): Promise<string> {
     const params = {
-      path: path,
+      name: name,
       index: index.toString(),
     };
 

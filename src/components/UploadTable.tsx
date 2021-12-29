@@ -64,7 +64,7 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
 
     FileCommunication.updateFile(
       fileIndex,
-      // TODO: for now file name is file path. The server then prepends with correct folder name to find file on server
+      // The server then prepends with correct folder name to find file on server
       file.name,
     )
       .catch((err) => {

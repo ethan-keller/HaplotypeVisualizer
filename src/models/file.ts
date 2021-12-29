@@ -4,7 +4,6 @@ export interface UploadFile {
   readonly required: boolean;
   readonly file_extensions: string[];
   readonly name?: string;
-  readonly path?: string;
 }
 
 export enum UploadStatus {
