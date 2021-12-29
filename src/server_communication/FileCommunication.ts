@@ -15,11 +15,9 @@ class FileCommunication {
   }
 
   public static async getFile(index: number): Promise<UploadFile> {
-    const params = { index: index };
+    const params = { index: index.toString() };
 
-    const response: Response = await fetch(endpoints.getFile, {
-      body: JSON.stringify(params),
-    });
+    const response: Response = await fetch(endpoints.getFile + '?' + new URLSearchParams(params));
 
     if (ErrorHandling.successfulResponse(response.status)) {
       const file: UploadFile = await response.json();
@@ -29,14 +27,17 @@ class FileCommunication {
     }
   }
 
-  public static async updateFile(name: string, path: string): Promise<string> {
+  public static async updateFile(index: number, path: string): Promise<string> {
     const params = {
-      name: name,
       path: path,
+      index: index.toString(),
     };
-    const response: Response = await fetch(endpoints.updateFile, {
-      body: JSON.stringify(params),
-    });
+
+    console.log(endpoints.updateFile + '?' + new URLSearchParams(params));
+    const response: Response = await fetch(
+      endpoints.updateFile + '?' + new URLSearchParams(params),
+      { method: 'PUT' },
+    );
 
     if (ErrorHandling.successfulResponse(response.status)) {
       const res: string = await response.json();
@@ -48,11 +49,12 @@ class FileCommunication {
 
   public static async removeFile(index: number): Promise<string> {
     const params = {
-      index: index,
+      index: index.toString(),
     };
-    const response: Response = await fetch(endpoints.removeFile, {
-      body: JSON.stringify(params),
-    });
+    const response: Response = await fetch(
+      endpoints.removeFile + '?' + new URLSearchParams(params),
+      { method: 'DELETE' },
+    );
 
     if (ErrorHandling.successfulResponse(response.status)) {
       const res: string = await response.json();
