@@ -36,7 +36,7 @@ def getFiles():
 @router.put(
     "/update", responses=responses, summary="Update the file path and name for a specific needed file",
 )
-def updateFilePath(path: FilePath, name: str, index: int = Query(..., ge=0, lt=len(files))):
+def updateFile(path: FilePath, name: str, index: int = Query(..., ge=0, lt=len(files))):
     """
     Update the file path for one of the needed files.
     
@@ -51,4 +51,15 @@ def updateFilePath(path: FilePath, name: str, index: int = Query(..., ge=0, lt=l
         )
     files[index].path = path
     files[index].name = name
+
+
+@router.delete("/delete", summary="Remove name and file path for a specific needed file")
+def removeFile(index: int = Query(..., ge=0, lt=len(files))):
+    """
+    Remove the name and file path for one of the needed files.
+
+    **index**: Index of the file
+    """
+    files[index].path = None
+    files[index].name = None
 
