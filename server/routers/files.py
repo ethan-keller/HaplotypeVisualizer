@@ -53,7 +53,7 @@ def updateFile(path: FilePath, name: str, index: int = Query(..., ge=0, lt=len(f
     files[index].name = name
 
 
-@router.delete("/delete", summary="Remove name and file path for a specific needed file")
+@router.delete("/remove", summary="Remove name and file path for a specific needed file")
 def removeFile(index: int = Query(..., ge=0, lt=len(files))):
     """
     Remove the name and file path for one of the needed files.

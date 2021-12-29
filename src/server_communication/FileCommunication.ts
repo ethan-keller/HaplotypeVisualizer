@@ -15,7 +15,11 @@ class FileCommunication {
   }
 
   public static async getFile(index: number): Promise<UploadFile> {
-    const response: Response = await fetch(endpoints.getFile);
+    const params = { index: index };
+
+    const response: Response = await fetch(endpoints.getFile, {
+      body: JSON.stringify(params),
+    });
 
     if (ErrorHandling.successfulResponse(response.status)) {
       const file: UploadFile = await response.json();
@@ -25,8 +29,30 @@ class FileCommunication {
     }
   }
 
-  public static async updateFilePath(): Promise<string> {
-    const response: Response = await fetch(endpoints.updateFilePath);
+  public static async updateFile(name: string, path: string): Promise<string> {
+    const params = {
+      name: name,
+      path: path,
+    };
+    const response: Response = await fetch(endpoints.updateFile, {
+      body: JSON.stringify(params),
+    });
+
+    if (ErrorHandling.successfulResponse(response.status)) {
+      const res: string = await response.json();
+      return res;
+    } else {
+      return Promise.reject(new Error(response.statusText));
+    }
+  }
+
+  public static async removeFile(index: number): Promise<string> {
+    const params = {
+      index: index,
+    };
+    const response: Response = await fetch(endpoints.removeFile, {
+      body: JSON.stringify(params),
+    });
 
     if (ErrorHandling.successfulResponse(response.status)) {
       const res: string = await response.json();
