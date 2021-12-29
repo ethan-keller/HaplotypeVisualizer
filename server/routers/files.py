@@ -1,18 +1,13 @@
+from os import stat
 from typing import List
 
 import logic.files as FileLogic
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
-from fastapi.param_functions import Path
-from pydantic.types import DirectoryPath, FilePath
 from schemas.file import File, UploadStatus
-from server_data.data import files
+from server_data.data import files, files_base_path
 
 router = APIRouter(prefix="/files", tags=["files"])
-
-responses = {status.HTTP_400_BAD_REQUEST: {"description": "Invalid file extension", "model": str}}
-
-base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\server\\server_data\\"
 
 
 @router.get("/", response_model=File, summary="Get a specific needed file")
@@ -43,7 +38,10 @@ def getFiles():
 
 
 @router.put(
-    "/update", responses=responses, summary="Update the file name for a specific needed file",
+    "/update",
+    response_model=str,
+    responses={status.HTTP_400_BAD_REQUEST: {"description": "Invalid file extension", "model": str}},
+    summary="Update the file name for a specific needed file",
 )
 def updateFile(name: str, index: int = Query(..., ge=0, lt=len(files))):
     """
@@ -55,7 +53,7 @@ def updateFile(name: str, index: int = Query(..., ge=0, lt=len(files))):
     files[index].name = name
     files[index].status = UploadStatus.WARNING_UPLOAD
 
-    file_path = base_path + name
+    file_path = files_base_path + name
     # TODO: Maybe some other validation? File size etc?
     # TODO: Different exceptions?
     if not FileLogic.file_exists(file_path):
@@ -72,7 +70,7 @@ def updateFile(name: str, index: int = Query(..., ge=0, lt=len(files))):
         files[index].status = UploadStatus.SUCCESSFUL_UPLOAD
 
 
-@router.delete("/remove", summary="Remove file information for a specific needed file")
+@router.delete("/remove", response_model=str, summary="Remove file information for a specific needed file")
 def removeFile(index: int = Query(..., ge=0, lt=len(files))):
     """
     Remove the file information for one of the needed files.
@@ -81,4 +79,23 @@ def removeFile(index: int = Query(..., ge=0, lt=len(files))):
     """
     files[index].name = None
     files[index].status = UploadStatus.NO_UPLOAD
+
+
+@router.put(
+    "/prepare",
+    responses={status.HTTP_424_FAILED_DEPENDENCY: {"description": "Files not ready for preparation", "model": str}},
+    response_model=str,
+    summary="Prepare the files for visualization",
+)
+def prepare():
+    """
+    Prepare the files for visualization (pre-processing, transformation, validation, data-structures etc).
+    """
+    try:
+        FileLogic.prepare_files()
+    except ValueError:
+        raise HTTPException(
+            status_code=status.HTTP_424_FAILED_DEPENDENCY,
+            detail="The needed file paths were not uploaded. Files are not ready for preparation",
+        )
 
