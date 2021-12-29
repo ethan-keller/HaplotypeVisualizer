@@ -59,8 +59,8 @@ class FileCommunication {
     }
   }
 
-  public static async areAllRequiredUploaded(): Promise<boolean> {
-    const response: Response = await fetch(endpoints.areAllRequiredUploaded);
+  public static async ready(): Promise<boolean> {
+    const response: Response = await fetch(endpoints.ready);
 
     if (ErrorHandling.successfulResponse(response.status)) {
       return await response.json();
