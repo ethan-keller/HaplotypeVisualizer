@@ -6,7 +6,7 @@ import ErrorCard from './ErrorCard';
 import SpinnerAnnotated from './SpinnerAnnotated';
 
 interface UploadTableProps {
-  setReady: (ready: boolean) => void;
+  setIsReady: (ready: boolean) => void;
 }
 
 const statusToBootstrapClassMap = new Map<UploadStatus, string>([
@@ -48,7 +48,7 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
   const handleReady = () => {
     FileCommunication.ready().then(
       (result: boolean) => {
-        props.setReady(result);
+        props.setIsReady(result);
       },
       (err: Error) => {
         console.log(err);

@@ -1,20 +1,22 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import NotFoundView from './views/NotFoundView';
-import PhenoView, { url as urlPheno } from './views/PhenoView';
-import PhenoCompareView, { url as urlPhenoCompare } from './views/PhenoCompareView';
-import PopulationView, { url as urlPopulation } from './views/PopulationView';
-import TrioView, { url as urlTrio } from './views/TrioView';
-import WelcomeView, { url as urlWelcome } from './views/WelcomeView';
+import NotFoundView from './components/views/NotFoundView';
+import PhenoView, { url as urlPheno } from './components/views/PhenoView';
+import PhenoCompareView, { url as urlPhenoCompare } from './components/views/PhenoCompareView';
+import PopulationView, { url as urlPopulation } from './components/views/PopulationView';
+import TrioView, { url as urlTrio } from './components/views/TrioView';
+import WelcomeView, { url as urlWelcome } from './components/views/WelcomeView';
 
 const AppRouter: React.FC = () => {
+  // TODO: ask server if files are ready
+  const isReady = false;
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* {TODO: change 'false' to a variable that checks if the required files are uploaded} */}
         <Route
           path='/'
           element={
-            false ? <Navigate replace to={urlPopulation} /> : <Navigate replace to={urlWelcome} />
+            isReady ? <Navigate replace to={urlPopulation} /> : <Navigate replace to={urlWelcome} />
           }
         />
         <Route element={<WelcomeView />} path={urlWelcome} />
