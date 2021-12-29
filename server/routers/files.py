@@ -7,7 +7,7 @@ from fastapi.exceptions import HTTPException
 from fastapi.param_functions import Body
 from pydantic.types import FilePath
 from schemas.file import File
-from logic.files import validate_file_extension
+import logic.files as FileLogic
 from server_data.data import files
 
 router = APIRouter(prefix="/files", tags=["files"])
@@ -32,6 +32,13 @@ def getFiles():
     """
     return files
 
+@router.get("all_uploaded", response_model=bool, summary="Check if all required files are uploaded")
+def are_all_uploaded():
+    """
+    Check if all the required files are uploaded.
+    """
+    return FileLogic.are_required_files_uploaded()
+
 
 @router.put(
     "/update", responses=responses, summary="Update the file path and name for a specific needed file",
@@ -45,7 +52,7 @@ def updateFile(path: FilePath, name: str, index: int = Query(..., ge=0, lt=len(f
     - **index**: Index of the file
     """
     # Maybe some other validation? File size etc?
-    if not validate_file_extension(path, files[index].file_extensions):
+    if not FileLogic.validate_file_extension(path, files[index].file_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"{path.suffix} files are not accepted for this entry"
         )
