@@ -1,10 +1,9 @@
 from typing import List
 
-from fastapi.param_functions import Path
-
 import logic.files as FileLogic
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
+from fastapi.param_functions import Path
 from pydantic.types import DirectoryPath, FilePath
 from schemas.file import File, UploadStatus
 from server_data.data import files
@@ -26,11 +25,12 @@ def getFiles(index: int = Query(..., ge=0, lt=len(files))):
     return files[index]
 
 
-@router.get("all_uploaded", response_model=bool, summary="Check if all required files are uploaded")
+@router.get("/ready", response_model=bool, summary="Check if all files are ready")
 def are_all_uploaded():
     """
-    Check if all the required files are uploaded.
+    Check if the server has all the necessary information to start visualizing
     """
+    # TODO: Could potentially add other checks
     return FileLogic.are_required_files_uploaded()
 
 
