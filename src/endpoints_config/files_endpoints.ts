@@ -8,3 +8,4 @@ export const getAllFiles = fileBaseUrl + '/all';
 export const ready = fileBaseUrl + '/ready'
 export const updateFile = fileBaseUrl + '/update'
 export const removeFile = fileBaseUrl + '/remove'
+export const prepareFiles = fileBaseUrl + '/prepare'
