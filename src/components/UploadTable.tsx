@@ -99,7 +99,7 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
 
   return isLoaded ? (
     <>
-      {!error ?? <ErrorCard message={'Something went wrong. Please try again'} />}
+      {error ? <ErrorCard message={'Something went wrong. Please try again'} /> : null}
       <Table className='align-middle' bordered hover>
         <thead>
           <tr>
