@@ -1,4 +1,3 @@
-from os import stat
 from typing import List
 
 import logic.files as FileLogic
@@ -84,7 +83,7 @@ def removeFile(index: int = Query(..., ge=0, lt=len(files))):
 @router.put(
     "/prepare",
     responses={status.HTTP_424_FAILED_DEPENDENCY: {"description": "Files not ready for preparation", "model": str}},
-    response_model=str,
+    response_model=bool,
     summary="Prepare the files for visualization",
 )
 def prepare():
@@ -93,6 +92,7 @@ def prepare():
     """
     try:
         FileLogic.prepare_files()
+        return True
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_424_FAILED_DEPENDENCY,

@@ -68,6 +68,18 @@ class FileCommunication {
       return Promise.reject(new Error(response.statusText));
     }
   }
+
+  public static async prepareFiles(): Promise<boolean> {
+    const response: Response = await fetch(endpoints.prepareFiles, {
+      method: 'PUT',
+    });
+
+    if (ErrorHandling.successfulResponse(response.status)) {
+      return await response.json();
+    } else {
+      return Promise.reject(new Error(response.statusText));
+    }
+  }
 }
 
 export default FileCommunication;

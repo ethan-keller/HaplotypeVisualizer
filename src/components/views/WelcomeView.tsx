@@ -3,12 +3,29 @@ import pkg from '../../../package.json';
 import { Button, Card } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
 import { url as urlPopulationView } from './PopulationView';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import FileCommunication from '../../server_communication/FileCommunication';
+import { useNavigate } from 'react-router';
 
 interface WelcomeViewProps {}
 
 const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
   const [isReady, setIsReady] = useState<boolean>(false);
+  const navigate = useNavigate()
+
+  // Only redirect if files are ready for visualization
+  const handleStartVisualize = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    FileCommunication.prepareFiles().then(
+      (response: boolean) => {
+        if (response) navigate(urlPopulationView);
+        else console.log("Files are not ready for visualization")
+      },
+      (err: Error) => {
+        console.log(err);
+      },
+    );
+  };
 
   return (
     <div style={{ height: '100vh' }} className='d-flex justify-content-center align-items-center'>
@@ -23,8 +40,8 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
           <Button
             variant='primary'
             disabled={!isReady}
+            onClick={handleStartVisualize}
             href={urlPopulationView}
-            // onClick={() => GFAManager.prepareGFA()}
           >
             Visualize
           </Button>
