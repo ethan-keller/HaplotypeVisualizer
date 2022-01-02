@@ -1,5 +1,5 @@
 import { UploadFile } from '../models/file';
-import * as endpoints from '../endpoints_config/files_endpoints';
+import * as endpoints from '../endpoints_config/FileEndpoints';
 import ErrorHandling from './ErrorHandling';
 
 class FileCommunication {
