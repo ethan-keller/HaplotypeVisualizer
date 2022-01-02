@@ -1,7 +1,6 @@
 from typing import List
 
 from gfapy.gfa import Gfa
-
 from schemas.file import File, UploadStatus
 
 files_base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\server\\server_data\\"

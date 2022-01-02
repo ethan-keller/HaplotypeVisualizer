@@ -1829,7 +1829,14 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/cytoscape@^3.14.17", "@types/cytoscape@^3.19.0":
+"@types/cytoscape-dagre@2.3.0":
+  "integrity" "sha512-1WwDnCcdySVwhxhHWHxRFlWoz7InlXlA9O9gQjtBkk1Sf7hW0+uaRxS6nr1TLBSPZRX0QNpYGvGqh13NuFEDaA=="
+  "resolved" "https://registry.npmjs.org/@types/cytoscape-dagre/-/cytoscape-dagre-2.3.0.tgz"
+  "version" "2.3.0"
+  dependencies:
+    "@types/cytoscape" "*"
+
+"@types/cytoscape@*", "@types/cytoscape@^3.14.17", "@types/cytoscape@^3.19.0":
   "integrity" "sha512-naM/VSuE9FVVmj4ef3FZDEiDltqvm7jnOnbnWDRWfGB4jN/9b2XfYnOGGK5i6E24AlN2mUR+tGTORYPPp5i3Qw=="
   "resolved" "https://registry.npmjs.org/@types/cytoscape/-/cytoscape-3.19.2.tgz"
   "version" "3.19.2"
@@ -2043,11 +2050,6 @@
     "@types/d3-timer" "*"
     "@types/d3-transition" "*"
     "@types/d3-zoom" "*"
-
-"@types/dagre@^0.7.45":
-  "integrity" "sha512-ku3y+F8sPqmiB5Ugl22NpukI2dLAViJiWwdtueXLeuF4fxZozl+bytPSFVlLu/gDgaKiwobu3LBXXRWktIMiIA=="
-  "resolved" "https://registry.npmjs.org/@types/dagre/-/dagre-0.7.46.tgz"
-  "version" "0.7.46"
 
 "@types/eslint@^7.28.2":
   "integrity" "sha512-VNcvioYDH8/FxaeTKkM4/TiTwt6pBV9E3OfGmvaw8tPl0rrHCJ4Ll15HRT+pMiFAf/MLQvAzC+6RzUMEL9Ceng=="
@@ -4403,6 +4405,13 @@
   "resolved" "https://registry.npmjs.org/cyclist/-/cyclist-1.0.1.tgz"
   "version" "1.0.1"
 
+"cytoscape-dagre@^2.3.2":
+  "integrity" "sha512-dL9+RvGkatSlIdOKXiFwHpnpTo8ydFMqIYzZFkImJXNbDci3feyYxR46wFoaG9GFiWimc6XD9Lm0x29b1wvWpw=="
+  "resolved" "https://registry.npmjs.org/cytoscape-dagre/-/cytoscape-dagre-2.3.2.tgz"
+  "version" "2.3.2"
+  dependencies:
+    "dagre" "^0.8.5"
+
 "cytoscape-layers@^2.1.0":
   "integrity" "sha512-88KLh3O+pRv6Is3SBvtXn3qcr/MOHZ8BGrab4U2iXQs+09vRTZa8wmPyVmB8JbeBMG9m2WG5hjxsnBOsO952/w=="
   "resolved" "https://registry.npmjs.org/cytoscape-layers/-/cytoscape-layers-2.2.0.tgz"
@@ -4410,7 +4419,7 @@
   dependencies:
     "@types/cytoscape" "^3.19.0"
 
-"cytoscape@^3.19.0", "cytoscape@^3.20.0":
+"cytoscape@^3.19.0", "cytoscape@^3.2.22", "cytoscape@^3.20.0":
   "integrity" "sha512-V2OUoav8ltY9UPgdjuhQOqkkWT28IbJODioWCjcnLqmjym9lMpnD0ie0vdQCdAiZapjbTGAv8aoKmmSuVcC1gA=="
   "resolved" "https://registry.npmjs.org/cytoscape/-/cytoscape-3.20.0.tgz"
   "version" "3.20.0"
