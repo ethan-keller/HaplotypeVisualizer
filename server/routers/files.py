@@ -29,7 +29,7 @@ def are_all_uploaded():
 
 
 @router.get("/all", response_model=List[File], summary="Get all needed files")
-def getFiles():
+def getAllFiles():
     """
     Get the list of all needed files.
     """
