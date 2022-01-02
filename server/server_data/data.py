@@ -1,4 +1,3 @@
-from enum import Enum
 from typing import List
 
 from gfapy.gfa import Gfa
@@ -13,4 +12,6 @@ files: List[File] = [
     File(description="GFF file", status=UploadStatus.NO_UPLOAD, required=False, file_extensions=[".gff"]),
 ]
 
-gfa: Gfa = None
+
+class GfaManager:
+    gfa: Gfa = None
