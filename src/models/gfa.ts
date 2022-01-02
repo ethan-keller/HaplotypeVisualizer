@@ -3,7 +3,7 @@
 
 export interface GfaElement {
   // TODO: change any to union of more specific types
-  readonly optionals?: { key: string; value: any };
+  readonly optionals?: Record<string, any>;
 }
 
 export interface GfaSegment extends GfaElement {
