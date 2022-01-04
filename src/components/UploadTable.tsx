@@ -155,7 +155,7 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
       </Table>
     </>
   ) : (
-    <SpinnerAnnotated message={'Waiting for the server to tell us which files you need'} />
+    <SpinnerAnnotated message='Waiting for the server to tell us which files you need' />
   );
 };
 

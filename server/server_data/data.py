@@ -11,6 +11,6 @@ files: List[File] = [
     File(description="GFF file", status=UploadStatus.NO_UPLOAD, required=False, file_extensions=[".gff"]),
 ]
 
-
+# TODO: Handle case where user deletes gfa file (--> delete the gfa object?)
 class GfaManager:
     gfa: Gfa = None

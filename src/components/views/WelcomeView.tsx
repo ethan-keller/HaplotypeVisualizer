@@ -1,27 +1,32 @@
 //@ts-ignore
 import pkg from '../../../package.json';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Spinner } from 'react-bootstrap';
 import UploadTable from '../UploadTable';
 import { url as urlPopulationView } from './PopulationView';
 import React, { useState } from 'react';
 import FileCommunication from '../../server_communication/FileCommunication';
 import { useNavigate } from 'react-router';
+import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface WelcomeViewProps {}
 
 const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
   const [isReady, setIsReady] = useState<boolean>(false);
-  const navigate = useNavigate()
+  const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const navigate = useNavigate();
 
-  // Only redirect if files are ready for visualization
   const handleStartVisualize = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    setIsLoaded(false);
     FileCommunication.prepareFiles().then(
       (response: boolean) => {
+        setIsLoaded(true);
+        // only redirect if files are ready for visualization
         if (response) navigate(urlPopulationView);
-        else console.log("Files are not ready for visualization")
+        else console.log('Files are not ready for visualization');
       },
       (err: Error) => {
+        setIsLoaded(true);
         console.log(err);
       },
     );
@@ -37,13 +42,11 @@ const WelcomeView: React.FC<WelcomeViewProps> = (props) => {
           <Card.Title>Welcome!</Card.Title>
           <Card.Text>Upload the necessary files to start visualizing</Card.Text>
           <UploadTable setIsReady={setIsReady} />
-          <Button
-            variant='primary'
-            disabled={!isReady}
-            onClick={handleStartVisualize}
-            href={urlPopulationView}
-          >
-            Visualize
+          <Button variant='primary' disabled={!isReady} onClick={handleStartVisualize}>
+            Visualize{' '}
+            {isLoaded ? null : (
+              <Spinner style={{ width: '1rem', height: '1rem' }} animation='border' />
+            )}
           </Button>
         </Card.Body>
         <Card.Footer className='text-muted'>v{pkg.version}</Card.Footer>
