@@ -7,7 +7,7 @@ class GfaCommunication {
     const response: Response = await fetch(endpoints.getSegments);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -17,7 +17,7 @@ class GfaCommunication {
     const response: Response = await fetch(endpoints.getLinks);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -27,7 +27,7 @@ class GfaCommunication {
     const response: Response = await fetch(endpoints.getPaths);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }

@@ -7,7 +7,7 @@ class FileCommunication {
     const response: Response = await fetch(endpoints.getAllFiles);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -19,7 +19,7 @@ class FileCommunication {
     const response: Response = await fetch(endpoints.getFile + '?' + new URLSearchParams(params));
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -37,7 +37,7 @@ class FileCommunication {
     );
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -53,7 +53,7 @@ class FileCommunication {
     );
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -63,7 +63,7 @@ class FileCommunication {
     const response: Response = await fetch(endpoints.ready);
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
@@ -75,7 +75,7 @@ class FileCommunication {
     });
 
     if (ErrorHandling.successfulResponse(response.status)) {
-      return await response.json();
+      return response.json();
     } else {
       return Promise.reject(new Error(response.statusText));
     }
