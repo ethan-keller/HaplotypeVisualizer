@@ -1,12 +1,11 @@
 //@ts-ignore
 import pkg from '../../../package.json';
 import { Button, Card, Spinner } from 'react-bootstrap';
-import UploadTable from '../UploadTable';
-import { url as urlPopulationView } from './PopulationView';
+import UploadTable from './UploadTable';
+import { url as urlPopulationView } from '../popuview/PopulationView';
 import React, { useState } from 'react';
 import FileCommunication from '../../server_communication/FileCommunication';
 import { useNavigate } from 'react-router';
-import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface WelcomeViewProps {}
 

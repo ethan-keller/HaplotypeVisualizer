@@ -2,9 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import NotFoundView from './components/views/NotFoundView';
 import PhenoView, { url as urlPheno } from './components/views/PhenoView';
 import PhenoCompareView, { url as urlPhenoCompare } from './components/views/PhenoCompareView';
-import PopulationView, { url as urlPopulation } from './components/views/PopulationView';
+import PopulationView, { url as urlPopulation } from './components/popuview/PopulationView';
 import TrioView, { url as urlTrio } from './components/views/TrioView';
-import WelcomeView, { url as urlWelcome } from './components/views/WelcomeView';
+import WelcomeView, { url as urlWelcome } from './components/welcome/WelcomeView';
 
 const AppRouter: React.FC = () => {
   // TODO: ask server if files are ready

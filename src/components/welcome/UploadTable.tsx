@@ -1,9 +1,9 @@
 import React, { createRef, useEffect, useMemo, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { UploadFile, UploadStatus } from '../models/file';
-import FileCommunication from '../server_communication/FileCommunication';
-import ErrorCard from './ErrorCard';
-import SpinnerAnnotated from './SpinnerAnnotated';
+import { UploadFile, UploadStatus } from '../../models/file';
+import FileCommunication from '../../server_communication/FileCommunication';
+import ErrorCard from '../ErrorCard';
+import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface UploadTableProps {
   setIsReady: (ready: boolean) => void;

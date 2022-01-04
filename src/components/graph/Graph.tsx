@@ -1,10 +1,10 @@
 import cytoscape from 'cytoscape';
 import { useEffect, useState } from 'react';
-import { createCytoscape, GraphSettings } from '../logic/graph';
-import GfaCommunication from '../server_communication/GfaCommunication';
-import '../styles/graph.css';
-import ErrorCard from './ErrorCard';
-import SpinnerAnnotated from './SpinnerAnnotated';
+import { createCytoscape, GraphSettings } from '../../logic/graph';
+import GfaCommunication from '../../server_communication/GfaCommunication';
+import '../../styles/graph.css';
+import ErrorCard from '../ErrorCard';
+import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface GraphProps {
   // segments: GfaSegment[];

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Sidebar from '../Sidebar';
-import AboutModal from '../AboutModal';
-import Graph from '../Graph';
+import Sidebar from './Sidebar';
+import AboutModal from '../modals/AboutModal';
+import Graph from '../graph/Graph';
 import Header from '../Header';
 
 interface PopulationViewProps {}
