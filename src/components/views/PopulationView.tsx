@@ -20,12 +20,11 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
         <div className='graph'>
           <Graph />
         </div>
-        <div className='navigator'>Nav</div>
+        <div className='navigator'>
+          {/* <Navigator /> */}
+          Nav
+        </div>
       </div>
-
-      {/* <Graph />
-      <SideBar />
-      <Navigator /> */}
       {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}
     </>
   );

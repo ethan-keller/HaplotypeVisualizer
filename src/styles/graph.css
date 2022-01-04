@@ -1,3 +1,7 @@
+.graph {
+    background-color: whitesmoke;
+}
+
 .node rect {
     stroke: #333;
     fill: #fff;
@@ -8,8 +12,8 @@
     pointer-events: none;
 }
 
-.edgePath path {
+/* .edgePath path {
     stroke: #333;
     stroke-width: 2px;
     fill: #333;
-}
+} */

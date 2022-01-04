@@ -2,6 +2,7 @@ import cytoscape from 'cytoscape';
 import { Color } from 'd3';
 import dagre, { DagreLayoutOptions } from 'cytoscape-dagre';
 import { GfaLink, GfaSegment } from '../models/gfa';
+import { Singular, Css } from 'cytoscape';
 
 export interface GraphSettings {
   drawPaths: boolean;
@@ -12,83 +13,84 @@ export interface GraphSettings {
   enabledPaths: boolean[];
 }
 cytoscape.use(dagre);
-export function createCytoscape(settings: GraphSettings, segments: GfaSegment[], links: GfaLink[]) {
-  return cytoscape({
-    container: document.getElementById('graph'),
-    autounselectify: false,
-    layout: {
-      name: 'dagre',
-      rankDir: 'LR',
-      fit: false,
-      nodeDimensionsIncludeLabels: false,
-      nodeSep: 35,
-    } as DagreLayoutOptions,
-    style: [
-      {
-        selector: 'node',
-        style: {
-          shape: 'rectangle',
-          width: 'data(width)',
-          height: 'data(height)',
-          'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
-          'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
-          'background-gradient-stop-positions': settings.drawPaths
-            ? 'data(stopPositions)'
-            : undefined,
-          label: settings.drawPaths ? 'data(id)' : undefined,
-        } as any,
-      },
-      {
-        selector: 'edge',
-        style: {
-          'target-arrow-shape': 'triangle',
-          'curve-style': 'bezier',
-          width: 'data(width)',
-        },
-      },
-      {
-        selector: ':selected',
-        style: {
-          'background-color': 'blue',
-          'line-color': 'blue',
-          'target-arrow-color': 'blue',
-          'overlay-padding': '5px',
-          'overlay-color': 'rgb(0,100,0)',
-          'overlay-opacity': 0.25,
-        },
-      },
-      {
-        selector: ':active',
-        style: {
-          'overlay-padding': '5px',
-          'overlay-color': 'rgb(0,100,0)',
-          'overlay-opacity': 0.25,
-        },
-      },
-    ],
-    elements: {
-      nodes: segments.map((segment: GfaSegment) => {
-        return {
-          data: {
-            id: segment.name,
-            width:
-              2 * Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
-            height: 10,
+export function createCytoscape(
+  settings: GraphSettings,
+  segments: GfaSegment[],
+  links: GfaLink[],
+): Promise<cytoscape.Core> {
+  return new Promise((resolve, reject) => {
+    resolve(
+      cytoscape({
+        container: document.getElementById('graph'),
+        autounselectify: false,
+        layout: {
+          name: 'dagre',
+          rankDir: 'LR',
+          fit: true,
+          nodeDimensionsIncludeLabels: false,
+          nodeSep: 35,
+        } as DagreLayoutOptions,
+        style: [
+          // TODO: memoize style
+          {
+            selector: 'node',
+            style: {
+              shape: 'rectangle',
+              width: 'data(width)',
+              height: 'data(height)',
+              'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
+              // TODO: try with line gradient (if it works remove 'as any')
+              'background-gradient-stop-colors': settings.drawPaths
+                ? 'data(stopColors)'
+                : undefined,
+              'background-gradient-stop-positions': settings.drawPaths
+                ? 'data(stopPositions)'
+                : undefined,
+              label: settings.drawPaths ? 'data(id)' : undefined,
+            } as any,
           },
-        };
-      }),
-      edges: links.map((link: GfaLink) => {
-        return {
-          data: {
-            source: link.from_segment,
-            target: link.to_segment,
-            width: settings.linkWidth,
+          {
+            selector: 'edge',
+            style: {
+              'target-arrow-shape': 'triangle',
+              'curve-style': 'bezier',
+              width: (ele: Singular) => ele.data('width'),
+            },
           },
-        };
+          // TODO: add special core styling
+          // {
+          //   selector: 'core',
+          //   style: {
+          //     'active-bg-color': 'blue'
+          //   }
+          // }
+        ],
+        elements: {
+          nodes: segments.map((segment: GfaSegment) => {
+            return {
+              data: {
+                id: segment.name,
+                width:
+                  2 *
+                  Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
+                height: 10,
+              },
+            };
+          }),
+          edges: links.map((link: GfaLink) => {
+            return {
+              data: {
+                source: link.from_segment,
+                target: link.to_segment,
+                width: settings.linkWidth,
+              },
+            };
+          }),
+        },
+        minZoom: 0.1,
+        maxZoom: 4,
       }),
-    },
-    minZoom: 0.1,
-    maxZoom: 4,
+    );
   });
 }
 
