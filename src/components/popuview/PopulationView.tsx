@@ -4,7 +4,7 @@ import AboutModal from '../modals/AboutModal';
 import Graph from '../graph/Graph';
 import Header from '../Header';
 import GfaCommunication from '../../server_communication/GfaCommunication';
-import Gfa, { GfaLink, GfaPath, GfaSegment } from '../../models/gfa';
+import Gfa from '../../models/gfa';
 
 interface PopulationViewProps {}
 

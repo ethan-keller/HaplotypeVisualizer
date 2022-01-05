@@ -1,5 +1,5 @@
 import cytoscape from 'cytoscape';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createCytoscape, GraphSettings } from '../../logic/graph';
 import Gfa from '../../models/gfa';
 import '../../styles/graph.css';
