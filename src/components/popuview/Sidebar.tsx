@@ -1,6 +1,9 @@
-import { Button, FormGroup, FormText } from "react-bootstrap";
+import { Button, FormGroup, FormText } from 'react-bootstrap';
+import Gfa from '../../models/gfa';
 
-interface SidebarProps {}
+interface SidebarProps {
+  gfa?: Gfa;
+}
 
 const Sidebar: React.FC<SidebarProps> = (props) => {
   return (
@@ -11,15 +14,13 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
     >
       <h5>Test</h5>
       <FormGroup>
-        <FormText>Nodes: xxx</FormText>
-        <br/>
-        <FormText>Edges: xxx</FormText>
-        <br/>
-        <FormText>Paths: xxx</FormText>
-        <br/>
-        <FormText>Total length: xxx</FormText>
+        <FormText>segments: {props.gfa ? props.gfa.segments.length : '-'}</FormText>
+        <br />
+        <FormText>links: {props.gfa ? props.gfa.links.length : '-'}</FormText>
+        <br />
+        <FormText>paths: {props.gfa ? props.gfa.paths.length : '-'}</FormText>
       </FormGroup>
-      
+
       <br />
 
       <Button>More info</Button>
@@ -29,7 +30,6 @@ const Sidebar: React.FC<SidebarProps> = (props) => {
       <br />
 
       <h5>Display</h5>
-    
     </div>
   );
 };

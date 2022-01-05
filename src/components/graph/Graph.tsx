@@ -1,14 +1,13 @@
 import cytoscape from 'cytoscape';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createCytoscape, GraphSettings } from '../../logic/graph';
-import GfaCommunication from '../../server_communication/GfaCommunication';
+import Gfa from '../../models/gfa';
 import '../../styles/graph.css';
 import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface GraphProps {
-  // segments: GfaSegment[];
-  // links: GfaLink[];
+  gfa?: Gfa;
   // settings: GraphSettings;
 }
 
@@ -28,30 +27,31 @@ const Graph: React.FC<GraphProps> = (props) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
   useEffect(() => {
-    updateGraph();
-  }, []);
+    setError(undefined);
 
-  // TODO: This code is blocking and don't know why yet
-  const updateGraph = () => {
-    // Promise.all([GfaCommunication.getSegments(), GfaCommunication.getLinks()]).then(
-    //   ([segments, links]) => {
-    //     console.log("Server responded")
-    //     createCytoscape(settings, segments, links).then((result: cytoscape.Core) => {
-    //       console.log('cytoscape created')
-    //       setCy(result);
-    //       console.log('cytoscape is set')
-    //       setIsLoaded(true);
-    //       console.log('Loading done')
-    //       console.log('Now rendering')
-    //     });
-    //   },
-    //   (err: Error) => {
-    //     setIsLoaded(true);
-    //     setError(err);
-    //     console.log(err);
-    //   },
-    // );
-  };
+    // TODO: This code is blocking and don't know why yet
+    const updateGraph = () => {
+      createCytoscape(settings, props.gfa).then(
+        (result: cytoscape.Core | undefined) => {
+          if (result) {
+            console.log('cytoscape created');
+            setCy(result);
+            console.log('cytoscape is set');
+            setIsLoaded(true);
+            console.log('Loading done');
+            console.log('Now rendering');
+          }
+        },
+        (err: Error) => {
+          setIsLoaded(true);
+          setError(err);
+          console.log(err);
+        },
+      );
+    };
+
+    updateGraph();
+  }, [props.gfa]);
 
   return (
     <div

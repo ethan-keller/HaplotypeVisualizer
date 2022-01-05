@@ -24,3 +24,9 @@ export interface GfaPath extends GfaElement {
   readonly segment_names: string[];
   // TODO: overlaps
 }
+
+export default interface Gfa {
+  readonly segments: GfaSegment[];
+  readonly links: GfaLink[];
+  readonly paths: GfaPath[];
+}

@@ -1,8 +1,8 @@
 import cytoscape from 'cytoscape';
 import { Color } from 'd3';
 import dagre, { DagreLayoutOptions } from 'cytoscape-dagre';
-import { GfaLink, GfaSegment } from '../models/gfa';
-import { Singular, Css } from 'cytoscape';
+import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
+import { Singular } from 'cytoscape';
 
 export interface GraphSettings {
   drawPaths: boolean;
@@ -13,12 +13,9 @@ export interface GraphSettings {
   enabledPaths: boolean[];
 }
 cytoscape.use(dagre);
-export function createCytoscape(
-  settings: GraphSettings,
-  segments: GfaSegment[],
-  links: GfaLink[],
-): Promise<cytoscape.Core> {
+export function createCytoscape(settings: GraphSettings, gfa?: Gfa): Promise<cytoscape.Core | undefined> {
   return new Promise((resolve, reject) => {
+    if (!gfa) resolve(undefined);
     resolve(
       cytoscape({
         container: document.getElementById('graph'),
@@ -66,7 +63,7 @@ export function createCytoscape(
           // }
         ],
         elements: {
-          nodes: segments.map((segment: GfaSegment) => {
+          nodes: gfa!.segments.map((segment: GfaSegment) => {
             return {
               data: {
                 id: segment.name,
@@ -77,7 +74,7 @@ export function createCytoscape(
               },
             };
           }),
-          edges: links.map((link: GfaLink) => {
+          edges: gfa!.links.map((link: GfaLink) => {
             return {
               data: {
                 source: link.from_segment,
