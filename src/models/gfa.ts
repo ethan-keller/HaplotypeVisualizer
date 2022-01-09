@@ -3,11 +3,11 @@
 
 export interface GfaElement {
   // TODO: change any to union of more specific types
+  readonly name: string;
   readonly optionals?: Record<string, any>;
 }
 
 export interface GfaSegment extends GfaElement {
-  readonly name: string;
   readonly sequence: string;
 }
 
@@ -20,7 +20,6 @@ export interface GfaLink extends GfaElement {
 }
 
 export interface GfaPath extends GfaElement {
-  readonly name: string;
   readonly segment_names: string[];
   // TODO: overlaps
 }

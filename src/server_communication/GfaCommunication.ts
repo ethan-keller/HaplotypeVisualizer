@@ -1,8 +1,18 @@
 import ErrorHandling from './ErrorHandling';
 import * as endpoints from '../endpoints_config/GfaEndpoints';
-import { GfaLink, GfaPath, GfaSegment } from '../models/gfa';
+import Gfa, { GfaLink, GfaPath, GfaSegment } from '../models/gfa';
 
 class GfaCommunication {
+  public static async getGfa(): Promise<Gfa[]> {
+    const response: Response = await fetch(endpoints.getGfa);
+
+    if (ErrorHandling.successfulResponse(response.status)) {
+      return response.json();
+    } else {
+      return Promise.reject(new Error(response.statusText));
+    }
+  }
+
   public static async getSegments(): Promise<GfaSegment[]> {
     const response: Response = await fetch(endpoints.getSegments);
 
