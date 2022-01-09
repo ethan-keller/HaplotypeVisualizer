@@ -17,7 +17,7 @@
     "axios": "^0.24.0",
     "bootstrap": "^5.1.1",
     "cytoscape": "^3.19.0",
-    "cytoscape-layers": "^2.1.0",
+    "cytoscape-layers": "^2.2.0",
     "d3": "^7.0.0",
     "dagre": "^0.8.5",
     "eslint-plugin-prettier": "^4.0.0",

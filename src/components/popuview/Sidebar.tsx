@@ -1,8 +1,10 @@
 import { Button, FormGroup, FormText } from 'react-bootstrap';
 import Gfa from '../../models/gfa';
+import { GraphSettings } from '../graph/Graph';
 
 interface SidebarProps {
   gfa?: Gfa;
+  setSettings: (settings: GraphSettings) => void
 }
 
 const Sidebar: React.FC<SidebarProps> = (props) => {

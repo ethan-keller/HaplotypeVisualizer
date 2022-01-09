@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Sidebar from './Sidebar';
 import AboutModal from '../modals/AboutModal';
-import Graph from '../graph/Graph';
+import Graph, { GraphSettings } from '../graph/Graph';
 import Header from '../Header';
 import GfaCommunication from '../../server_communication/GfaCommunication';
 import Gfa from '../../models/gfa';
@@ -13,6 +13,7 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
   const [showSettings, setShowSettings] = useState(false);
 
   const [gfa, setGfa] = useState<Gfa>();
+  const [graphSettings, setGraphSettings] = useState<GraphSettings>(defaultGraphSettings);
 
   const updateData = () => {
     Promise.all([
@@ -38,10 +39,10 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
       <Header setShowAbout={setShowAbout} setShowSettings={setShowSettings} />
       <div className='container'>
         <div className='sidebar'>
-          <Sidebar gfa={gfa} />
+          <Sidebar gfa={gfa} setSettings={setGraphSettings} />
         </div>
         <div className='graph'>
-          <Graph gfa={gfa} />
+          <Graph gfa={gfa} settings={graphSettings} />
         </div>
         <div className='navigator'>
           {/* <Navigator /> */}
@@ -51,6 +52,12 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
       {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}
     </>
   );
+};
+
+const defaultGraphSettings: GraphSettings = {
+  drawPaths: false,
+  linkThickness: 1,
+  segmentThickness: 1,
 };
 
 export default PopulationView;

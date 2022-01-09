@@ -1,9 +1,11 @@
-import cytoscape from 'cytoscape';
+import cytoscape, { EdgeSingular } from 'cytoscape';
 import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
 import dagre from '.';
 import { GraphSettings } from '../components/graph/Graph';
+import Layers from 'cytoscape-layers'
 
 cytoscape.use(dagre);
+cytoscape.use(Layers as (cytoscape: any) => void);
 
 const layoutSettings = {
   name: 'dagre',
@@ -33,14 +35,14 @@ const edgeStyle = {
   width: 'data(width)',
 };
 
-const cytoscapeNodes = (segments: GfaSegment[]) => {
+const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
   return segments.map((segment: GfaSegment) => {
     return {
       data: {
         id: segment.name,
         width:
           120 * Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
-        height: 10,
+        height: settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
       },
     };
   });
@@ -52,13 +54,42 @@ const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
       data: {
         source: link.from_segment,
         target: link.to_segment,
-        width: settings.linkWidth,
+        width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
       },
     };
   });
 };
 
 // const coreStyle = {};
+
+
+export const renderPaths = (layers: any) => {
+  layers.renderPerEdge(layers.append("canvas"), (ctx: CanvasRenderingContext2D, edge: EdgeSingular, path: Path2D) => {
+    if (edge.scratch("gradient_cache_key") !== path) {
+      const length = Math.sqrt((edge.sourceEndpoint().y - edge.targetEndpoint().y) ** 2 + (edge.targetEndpoint().x - edge.sourceEndpoint().x) ** 2);
+      if (length > 0) {
+        const [x1, y1] = [edge.midpoint().x - edge.width() / 2 / length * (edge.sourceEndpoint().y - edge.targetEndpoint().y), edge.midpoint().y - edge.width() / 2 / length * (edge.targetEndpoint().x - edge.sourceEndpoint().x)];
+        const [x2, y2] = [edge.midpoint().x + edge.width() / 2 / length * (edge.sourceEndpoint().y - edge.targetEndpoint().y), edge.midpoint().y + edge.width() / 2 / length * (edge.targetEndpoint().x - edge.sourceEndpoint().x)];
+        const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+        const stopColors: string[] = edge.data("stopColors");
+        const stopPositions = edge.data("stopPositions");
+        stopColors.forEach((color, index) => {
+          //console.log("color: " + color + "\n index: " + index + "\n\n")
+          gradient.addColorStop(stopPositions[index], color)
+        })
+        edge.scratch("gradient_cache_key", path);
+        edge.scratch("gradient_cache_value", gradient);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = edge.width();
+        ctx.stroke(path);
+      }
+    } else {
+      ctx.strokeStyle = edge.scratch("gradient_cache_value");
+      ctx.lineWidth = edge.width();
+      ctx.stroke(path);
+    }
+  });
+}
 
 export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cytoscape.Core> {
   return new Promise((resolve, reject) => {
@@ -85,7 +116,7 @@ export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cyto
           // }
         ],
         elements: {
-          nodes: cytoscapeNodes(gfa.segments),
+          nodes: cytoscapeNodes(gfa.segments, settings),
           edges: cytoscapeEdges(gfa.links, settings),
         },
         minZoom: 0.1,
@@ -108,48 +139,4 @@ export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cyto
 //   cy.on('zoom', (e) => props.setZoom(e.cy.zoom()));
 //   cy.on('unselect', (_) => onFeatureClick(undefined));
 //   cy.on('select', (e) => onFeatureClick(e.target.data('feature')));
-// }
-
-// function renderPaths(layers: any) {
-//   layers.renderPerEdge(
-//     layers.append('canvas'),
-//     (ctx: CanvasRenderingContext2D, edge: EdgeSingular, path: Path2D) => {
-//       if (edge.scratch('gradient_cache_key') !== path) {
-//         const length = Math.sqrt(
-//           (edge.sourceEndpoint().y - edge.targetEndpoint().y) ** 2 +
-//             (edge.targetEndpoint().x - edge.sourceEndpoint().x) ** 2,
-//         );
-//         if (length > 0) {
-//           const [x1, y1] = [
-//             edge.midpoint().x -
-//               (edge.width() / 2 / length) * (edge.sourceEndpoint().y - edge.targetEndpoint().y),
-//             edge.midpoint().y -
-//               (edge.width() / 2 / length) * (edge.targetEndpoint().x - edge.sourceEndpoint().x),
-//           ];
-//           const [x2, y2] = [
-//             edge.midpoint().x +
-//               (edge.width() / 2 / length) * (edge.sourceEndpoint().y - edge.targetEndpoint().y),
-//             edge.midpoint().y +
-//               (edge.width() / 2 / length) * (edge.targetEndpoint().x - edge.sourceEndpoint().x),
-//           ];
-//           const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
-//           const stopColors: string[] = edge.data('stopColors');
-//           const stopPositions = edge.data('stopPositions');
-//           stopColors.forEach((color, index) => {
-//             //console.log("color: " + color + "\n index: " + index + "\n\n")
-//             gradient.addColorStop(stopPositions[index], color);
-//           });
-//           edge.scratch('gradient_cache_key', path);
-//           edge.scratch('gradient_cache_value', gradient);
-//           ctx.strokeStyle = gradient;
-//           ctx.lineWidth = edge.width();
-//           ctx.stroke(path);
-//         }
-//       } else {
-//         ctx.strokeStyle = edge.scratch('gradient_cache_value');
-//         ctx.lineWidth = edge.width();
-//         ctx.stroke(path);
-//       }
-//     },
-//   );
 // }

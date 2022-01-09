@@ -4398,7 +4398,7 @@
   "resolved" "https://registry.npmjs.org/cyclist/-/cyclist-1.0.1.tgz"
   "version" "1.0.1"
 
-"cytoscape-layers@^2.1.0":
+"cytoscape-layers@^2.2.0":
   "integrity" "sha512-88KLh3O+pRv6Is3SBvtXn3qcr/MOHZ8BGrab4U2iXQs+09vRTZa8wmPyVmB8JbeBMG9m2WG5hjxsnBOsO952/w=="
   "resolved" "https://registry.npmjs.org/cytoscape-layers/-/cytoscape-layers-2.2.0.tgz"
   "version" "2.2.0"
