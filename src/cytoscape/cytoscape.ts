@@ -4,48 +4,77 @@ import dagre from '.';
 import { GraphSettings } from '../components/graph/Graph';
 
 cytoscape.use(dagre);
-export function createCytoscape(
-  settings: GraphSettings,
-  gfa: Gfa,
-): Promise<cytoscape.Core | undefined> {
+
+const layoutSettings = {
+  name: 'dagre',
+  rankDir: 'LR',
+  align: 'UL',
+  fit: true,
+  nodeDimensionsIncludeLabels: false,
+  nodeSep: 35,
+};
+
+const nodeStyle = (settings: GraphSettings) => {
+  return {
+    shape: 'rectangle',
+    width: 'data(width)',
+    height: 'data(height)',
+    'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
+    // TODO: try with line gradient (if it works remove 'as any')
+    'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
+    'background-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
+    label: settings.drawPaths ? 'data(id)' : undefined,
+  };
+};
+
+const edgeStyle = {
+  'target-arrow-shape': 'triangle',
+  'curve-style': 'bezier',
+  width: 'data(width)',
+};
+
+const cytoscapeNodes = (segments: GfaSegment[]) => {
+  return segments.map((segment: GfaSegment) => {
+    return {
+      data: {
+        id: segment.name,
+        width:
+          120 * Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
+        height: 10,
+      },
+    };
+  });
+};
+
+const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
+  return links.map((link: GfaLink) => {
+    return {
+      data: {
+        source: link.from_segment,
+        target: link.to_segment,
+        width: settings.linkWidth,
+      },
+    };
+  });
+};
+
+// const coreStyle = {};
+
+export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cytoscape.Core> {
   return new Promise((resolve, reject) => {
     resolve(
       cytoscape({
         container: document.getElementById('graph'),
-        layout: {
-          name: 'dagre',
-          rankDir: 'LR',
-          align: 'UL',
-          fit: true,
-          nodeDimensionsIncludeLabels: false,
-          nodeSep: 35,
-        } as any,
+        layout: layoutSettings as any,
         style: [
           // TODO: memoize style
           {
             selector: 'node',
-            style: {
-              shape: 'rectangle',
-              width: 'data(width)',
-              height: 'data(height)',
-              'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
-              // TODO: try with line gradient (if it works remove 'as any')
-              'background-gradient-stop-colors': settings.drawPaths
-                ? 'data(stopColors)'
-                : undefined,
-              'background-gradient-stop-positions': settings.drawPaths
-                ? 'data(stopPositions)'
-                : undefined,
-              label: settings.drawPaths ? 'data(id)' : undefined,
-            } as any,
+            style: nodeStyle(settings) as any,
           },
           {
             selector: 'edge',
-            style: {
-              'target-arrow-shape': 'triangle',
-              'curve-style': 'bezier',
-              width: 'data(width)',
-            },
+            style: edgeStyle,
           },
           // TODO: add special core styling
           // {
@@ -56,26 +85,8 @@ export function createCytoscape(
           // }
         ],
         elements: {
-          nodes: gfa.segments.map((segment: GfaSegment) => {
-            return {
-              data: {
-                id: segment.name,
-                width:
-                  120 *
-                  Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
-                height: 10,
-              },
-            };
-          }),
-          edges: gfa.links.map((link: GfaLink) => {
-            return {
-              data: {
-                source: link.from_segment,
-                target: link.to_segment,
-                width: settings.linkWidth,
-              },
-            };
-          }),
+          nodes: cytoscapeNodes(gfa.segments),
+          edges: cytoscapeEdges(gfa.links, settings),
         },
         minZoom: 0.1,
         maxZoom: 4,

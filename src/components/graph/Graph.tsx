@@ -31,7 +31,6 @@ const settings: GraphSettings = {
 };
 
 const Graph: React.FC<GraphProps> = (props) => {
-  // cytoscape state
   const [cy, setCy] = useState<cytoscape.Core>();
   const [error, setError] = useState<Error | undefined>(undefined);
   const [isLoaded, setIsLoaded] = useState<boolean>(false);
@@ -45,12 +44,8 @@ const Graph: React.FC<GraphProps> = (props) => {
       createCytoscape(settings, props.gfa).then(
         (result: cytoscape.Core | undefined) => {
           if (result) {
-            console.log('cytoscape created');
             setCy(result);
-            console.log('cytoscape is set');
             setIsLoaded(true);
-            console.log('Loading done');
-            console.log('Now rendering');
           }
         },
         (err: Error) => {
