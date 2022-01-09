@@ -1,7 +1,8 @@
-from typing import List
+from typing import List, Optional
 
-from gfapy.gfa import Gfa
+from gfapy.gfa import Gfa as GfaPy
 from schemas.file import File, UploadStatus
+from schemas.gfa import Gfa
 
 files_base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\server\\server_data\\"
 
@@ -13,4 +14,5 @@ files: List[File] = [
 
 # TODO: Handle case where user deletes gfa file (--> delete the gfa object?)
 class GfaManager:
-    gfa: Gfa = None
+    __gfa: GfaPy = None
+    gfa: Optional[Gfa] = None

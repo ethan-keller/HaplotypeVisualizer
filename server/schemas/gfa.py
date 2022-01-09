@@ -1,9 +1,11 @@
 from enum import IntEnum
 from typing import Any, Dict, List, Optional
+
 from pydantic import BaseModel
 
 segment_optional_fields = ["LN", "RC", "FC", "KC", "SH", "UR"]
 link_optional_fields = ["MQ", "NM", "RC", "FC", "KC", "ID"]
+
 
 class GFA_ELEMENT(IntEnum):
     SEGMENT = 0
@@ -13,12 +15,18 @@ class GFA_ELEMENT(IntEnum):
 
 class GfaElement(BaseModel):
     # TODO: change any to union of more specific types
+    name: str
     optional_fields: Optional[Dict[str, Any]] = None
 
 
+class GfaPath(GfaElement):
+    segment_names: List[str]
+    # TODO: overlaps
+
+
 class GfaSegment(GfaElement):
-    name: str
     sequence: str
+    paths: List[GfaPath]
 
 
 class GfaLink(GfaElement):
@@ -26,11 +34,12 @@ class GfaLink(GfaElement):
     from_orient: str
     to_segment: str
     to_orient: str
+    paths: List[GfaPath]
     # TODO: overlap
 
 
-class GfaPath(GfaElement):
-    name: str
-    segment_names: List[str]
-    # TODO: overlaps
+class Gfa(BaseModel):
+    segments: List[GfaSegment]
+    links: List[GfaLink]
+    paths: List[GfaPath]
 

@@ -1,17 +1,26 @@
 from typing import Any, Dict, List, Union
-from fastapi import APIRouter, status
-from fastapi import status
-from fastapi.exceptions import HTTPException
-import logic.gfa as GfaLogic
-from errors.PydanticConversionError import PydanticConversionError
-from schemas.gfa import GfaSegment
-from schemas.gfa import GfaLink, GfaPath
-from server_data.data import GfaManager
 
+from fastapi import APIRouter, status
+from fastapi.exceptions import HTTPException
+from schemas.gfa import Gfa, GfaLink, GfaPath, GfaSegment
+from server_data.data import GfaManager
 
 router = APIRouter(prefix="/gfa", tags=["gfa"])
 
-responses: Dict[Union[int, str], Dict[str, Any]] = {status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Pydantic conversion went wrong", "model": str}}
+responses: Dict[Union[int, str], Dict[str, Any]] = {
+    status.HTTP_400_BAD_REQUEST: {"description": "Could not find a gfa object", "model": str}
+}
+
+
+@router.get("/", response_model=Gfa, responses=responses, summary="Gets the full GFA object")
+def getGfa():
+    """
+    Gets the full GFA object.
+    """
+    if GfaManager.gfa:
+        return GfaManager.gfa
+    else:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a gfa object")
 
 
 @router.get(
@@ -21,10 +30,12 @@ def getSegments():
     """
     Gets the segments from the GFA object.
     """
-    try:
-        return GfaLogic.convert_segments_to_pydantic(GfaManager.gfa.segments)
-    except PydanticConversionError:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Pydantic conversion went wrong")
+    if GfaManager.gfa:
+        return GfaManager.gfa.segments
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segments from a non-existent gfa object"
+        )
 
 
 @router.get(
@@ -34,10 +45,12 @@ def getLinks():
     """
     Gets the links from the GFA object.
     """
-    try:
-        return GfaLogic.convert_links_to_pydantic(GfaManager.gfa.dovetails)
-    except PydanticConversionError:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Pydantic conversion went wrong")
+    if GfaManager.gfa:
+        return GfaManager.gfa.links
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve links from a non-existent gfa object"
+        )
 
 
 @router.get(
@@ -47,8 +60,9 @@ def getPaths():
     """
     Gets the paths from the GFA object.
     """
-    try:
-        return GfaLogic.convert_paths_to_pydantic(GfaManager.gfa.paths)
-    except PydanticConversionError:
-        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Pydantic conversion went wrong")
-
+    if GfaManager.gfa:
+        return GfaManager.gfa.paths
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
+        )

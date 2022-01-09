@@ -1,17 +1,41 @@
 from typing import Any, Dict, List, Optional
-from gfapy import Gfa
-from gfapy.line.line import Line
-from schemas.file import FileIndex
-from schemas.gfa import GfaLink, GfaPath, GfaSegment, segment_optional_fields, link_optional_fields
-from schemas.gfa import GFA_ELEMENT
-from server_data.data import files, GfaManager, files_base_path
+
 from errors.PydanticConversionError import PydanticConversionError
+from gfapy.line.line import Line
+from gfapy import Gfa as GfaPy
+from schemas.file import FileIndex
+from schemas.gfa import GFA_ELEMENT, Gfa, GfaLink, GfaPath, GfaSegment, link_optional_fields, segment_optional_fields
+from server_data.data import GfaManager, files, files_base_path
 
 
 def prepare_gfa() -> None:
     file_name = files[FileIndex.GFA].name
     if file_name:
-        GfaManager.gfa = Gfa.from_file(files_base_path + file_name)
+        read_gfa = GfaPy.from_file(files_base_path + file_name)
+        GfaManager.__gfa = read_gfa
+
+        segments = convert_segments_to_pydantic(read_gfa.segments)
+        links = convert_links_to_pydantic(read_gfa.dovetails)
+        paths = convert_paths_to_pydantic(read_gfa.paths)
+
+        segmentMap: Dict[str, GfaSegment] = {}
+        for segment in segments:
+            segmentMap[segment.name] = segment
+
+        linkMap: Dict[str, GfaLink] = {}
+        for link in links:
+            linkMap[link.name] = link
+
+        for path in paths:
+            for i in range(len(path.segment_names) - 1):
+                segmentMap[path.segment_names[i]].paths.append(path)
+                linkMap[get_link_name(path.segment_names[i], path.segment_names[i + 1])].paths.append(path)
+
+        GfaManager.gfa = Gfa(
+            segments=convert_segments_to_pydantic(read_gfa.segments),
+            links=convert_links_to_pydantic(read_gfa.dovetails),
+            paths=paths,
+        )
     else:
         raise ValueError("Since the GFA file path has not been uploaded, the GFA file cannot be prepared")
 
@@ -34,6 +58,7 @@ def _convert_segment_to_pydantic(segment: Line) -> GfaSegment:
         name=segment.name,
         sequence=str(segment.sequence),
         optional_fields=_convert_optional_fields_to_pydantic(segment, GFA_ELEMENT.SEGMENT),
+        paths=[],
     )
 
 
@@ -52,11 +77,13 @@ def _convert_link_to_pydantic(link: Line) -> GfaLink:
         raise PydanticConversionError(str(Line), str(GfaLink), "'link' is None")
 
     return GfaLink(
+        name=get_link_name(link.from_segment.name, link.to_segment.name),
         from_segment=link.from_segment.name,
         from_orient=link.from_orient,
         to_segment=link.to_segment.name,
         to_orient=link.to_orient,
         optional_fields=_convert_optional_fields_to_pydantic(link, GFA_ELEMENT.LINK),
+        paths=[],
     )
 
 
@@ -90,7 +117,7 @@ def _convert_optional_fields_to_pydantic(line: Line, element_type: GFA_ELEMENT) 
         return None
 
 
-def _fields_to_dict(line: Line, fields: List[str]):
+def _fields_to_dict(line: Line, fields: List[str]) -> Optional[Dict[str, Any]]:
     optional_field_dict = {}
     for field in fields:
         value = line.get(field)
@@ -101,3 +128,7 @@ def _fields_to_dict(line: Line, fields: List[str]):
         return None
     else:
         return optional_field_dict
+
+
+def get_link_name(from_segment: str, to_segment: str) -> str:
+    return f"{from_segment}-{to_segment}"
