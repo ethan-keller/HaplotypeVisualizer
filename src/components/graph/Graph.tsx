@@ -54,6 +54,7 @@ export interface GraphSettings {
   drawPaths: boolean;
   linkThickness: number;
   segmentThickness: number;
+  pathColors: string[];
 }
 
 export default Graph;

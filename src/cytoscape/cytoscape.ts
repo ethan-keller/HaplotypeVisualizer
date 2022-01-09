@@ -1,4 +1,4 @@
-import cytoscape, { EdgeSingular } from 'cytoscape';
+import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
 import dagre from '.';
 import { GraphSettings } from '../components/graph/Graph';
@@ -46,7 +46,7 @@ const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
       },
     };
-  });
+  }) as NodeDefinition[];
 };
 
 const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
@@ -58,7 +58,7 @@ const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
         width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
       },
     };
-  });
+  }) as EdgeDefinition[];
 };
 
 // const coreStyle = {};
