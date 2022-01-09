@@ -1,8 +1,7 @@
-import cytoscape from 'cytoscape';
+import cytoscape, { Singular } from 'cytoscape';
 import { Color } from 'd3';
-import dagre, { DagreLayoutOptions } from 'cytoscape-dagre';
 import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
-import { Singular } from 'cytoscape';
+import dagre from '../cytoscape';
 
 export interface GraphSettings {
   drawPaths: boolean;
@@ -13,20 +12,22 @@ export interface GraphSettings {
   enabledPaths: boolean[];
 }
 cytoscape.use(dagre);
-export function createCytoscape(settings: GraphSettings, gfa?: Gfa): Promise<cytoscape.Core | undefined> {
+export function createCytoscape(
+  settings: GraphSettings,
+  gfa: Gfa,
+): Promise<cytoscape.Core | undefined> {
   return new Promise((resolve, reject) => {
-    if (!gfa) resolve(undefined);
     resolve(
       cytoscape({
         container: document.getElementById('graph'),
-        autounselectify: false,
         layout: {
           name: 'dagre',
           rankDir: 'LR',
+          align: 'UL',
           fit: true,
           nodeDimensionsIncludeLabels: false,
           nodeSep: 35,
-        } as DagreLayoutOptions,
+        } as any,
         style: [
           // TODO: memoize style
           {
@@ -51,7 +52,7 @@ export function createCytoscape(settings: GraphSettings, gfa?: Gfa): Promise<cyt
             style: {
               'target-arrow-shape': 'triangle',
               'curve-style': 'bezier',
-              width: (ele: Singular) => ele.data('width'),
+              width: 'data(width)',
             },
           },
           // TODO: add special core styling
@@ -63,18 +64,18 @@ export function createCytoscape(settings: GraphSettings, gfa?: Gfa): Promise<cyt
           // }
         ],
         elements: {
-          nodes: gfa!.segments.map((segment: GfaSegment) => {
+          nodes: gfa.segments.map((segment: GfaSegment) => {
             return {
               data: {
                 id: segment.name,
                 width:
-                  2 *
+                  120 *
                   Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
                 height: 10,
               },
             };
           }),
-          edges: gfa!.links.map((link: GfaLink) => {
+          edges: gfa.links.map((link: GfaLink) => {
             return {
               data: {
                 source: link.from_segment,
@@ -86,6 +87,11 @@ export function createCytoscape(settings: GraphSettings, gfa?: Gfa): Promise<cyt
         },
         minZoom: 0.1,
         maxZoom: 4,
+        autoungrabify: true,
+        selectionType: 'single',
+        hideEdgesOnViewport: true,
+        hideLabelsOnViewport: true,
+        wheelSensitivity: 0.5,
       }),
     );
   });

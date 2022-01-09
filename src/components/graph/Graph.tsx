@@ -31,6 +31,7 @@ const Graph: React.FC<GraphProps> = (props) => {
 
     // TODO: This code is blocking and don't know why yet
     const updateGraph = () => {
+      if (!props.gfa) return;
       createCytoscape(settings, props.gfa).then(
         (result: cytoscape.Core | undefined) => {
           if (result) {
