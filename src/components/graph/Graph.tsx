@@ -1,10 +1,20 @@
 import cytoscape from 'cytoscape';
 import { useEffect, useState } from 'react';
-import { createCytoscape, GraphSettings } from '../../logic/graph';
+import { Color } from 'react-color';
+import { createCytoscape } from '../../cytoscape/cytoscape';
 import Gfa from '../../models/gfa';
 import '../../styles/graph.css';
 import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
+
+export interface GraphSettings {
+  drawPaths: boolean;
+  drawLabels: boolean;
+  segmentWidth: number;
+  linkWidth: number;
+  pathColors: Color[];
+  enabledPaths: boolean[];
+}
 
 interface GraphProps {
   gfa?: Gfa;

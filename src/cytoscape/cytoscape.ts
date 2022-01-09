@@ -1,16 +1,8 @@
-import cytoscape, { Singular } from 'cytoscape';
-import { Color } from 'd3';
+import cytoscape from 'cytoscape';
 import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
-import dagre from '../cytoscape';
+import dagre from '.';
+import { GraphSettings } from '../components/graph/Graph';
 
-export interface GraphSettings {
-  drawPaths: boolean;
-  drawLabels: boolean;
-  segmentWidth: number;
-  linkWidth: number;
-  pathColors: Color[];
-  enabledPaths: boolean[];
-}
 cytoscape.use(dagre);
 export function createCytoscape(
   settings: GraphSettings,
