@@ -27,15 +27,13 @@ def prepare_gfa() -> None:
             linkMap[link.name] = link
 
         for path in paths:
-            for i in range(len(path.segment_names) - 1):
-                segmentMap[path.segment_names[i]].paths.append(path)
-                linkMap[get_link_name(path.segment_names[i], path.segment_names[i + 1])].paths.append(path)
+            s_names = path.segment_names
+            for i in range(len(s_names) - 1):
+                segmentMap[s_names[i]].paths.append(path)
+                linkMap[get_link_name(s_names[i], s_names[i + 1])].paths.append(path)
+            segmentMap[s_names[len(s_names) - 1]].paths.append(path)
 
-        GfaManager.gfa = Gfa(
-            segments=convert_segments_to_pydantic(read_gfa.segments),
-            links=convert_links_to_pydantic(read_gfa.dovetails),
-            paths=paths,
-        )
+        GfaManager.gfa = Gfa(segments=list(segmentMap.values()), links=list(linkMap.values()), paths=paths)
     else:
         raise ValueError("Since the GFA file path has not been uploaded, the GFA file cannot be prepared")
 

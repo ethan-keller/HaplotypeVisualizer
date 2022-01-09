@@ -3,7 +3,7 @@ import * as endpoints from '../endpoints_config/GfaEndpoints';
 import Gfa, { GfaLink, GfaPath, GfaSegment } from '../models/gfa';
 
 class GfaCommunication {
-  public static async getGfa(): Promise<Gfa[]> {
+  public static async getGfa(): Promise<Gfa> {
     const response: Response = await fetch(endpoints.getGfa);
 
     if (ErrorHandling.successfulResponse(response.status)) {

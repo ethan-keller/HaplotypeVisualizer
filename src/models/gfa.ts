@@ -9,6 +9,7 @@ export interface GfaElement {
 
 export interface GfaSegment extends GfaElement {
   readonly sequence: string;
+  readonly paths: GfaPath[];
 }
 
 export interface GfaLink extends GfaElement {
@@ -16,6 +17,7 @@ export interface GfaLink extends GfaElement {
   readonly from_orient: string;
   readonly to_segment: string;
   readonly to_orient: string;
+  readonly paths: GfaPath[];
   // TODO: overlap
 }
 

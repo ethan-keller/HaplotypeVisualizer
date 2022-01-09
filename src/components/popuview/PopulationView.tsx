@@ -16,13 +16,10 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
   const [graphSettings, setGraphSettings] = useState<GraphSettings>(defaultGraphSettings);
 
   const updateData = () => {
-    Promise.all([
-      GfaCommunication.getSegments(),
-      GfaCommunication.getLinks(),
-      GfaCommunication.getPaths(),
-    ]).then(
-      ([s, l, p]) => {
-        setGfa({ segments: s.concat(), links: l.concat(), paths: p.concat() });
+    GfaCommunication.getGfa().then(
+      (data: Gfa) => {
+        setGfa({ segments: data.segments.concat(), links: data.links.concat(), paths: data.paths.concat() });
+        console.log(data)
       },
       (err: Error) => {
         console.log(err);
@@ -55,9 +52,9 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
 };
 
 const defaultGraphSettings: GraphSettings = {
-  drawPaths: false,
-  linkThickness: 1,
-  segmentThickness: 1,
+  drawPaths: true,
+  linkThickness: 1.5,
+  segmentThickness: 10,
 };
 
 export default PopulationView;
