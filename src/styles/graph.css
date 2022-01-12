@@ -2,15 +2,15 @@
     background-color: white;
 }
 
-.node rect {
+/* .node rect {
     stroke: #333;
     fill: #fff;
-}
+} */
 
 
-.node text {
+/* .node text {
     pointer-events: none;
-}
+} */
 
 /* .edgePath path {
     stroke: #333;

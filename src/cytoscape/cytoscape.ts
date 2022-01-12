@@ -29,10 +29,17 @@ const nodeStyle = (settings: GraphSettings) => {
   };
 };
 
-const edgeStyle = {
-  'target-arrow-shape': 'triangle',
-  'curve-style': 'bezier',
-  width: 'data(width)',
+const edgeStyle = (settings: GraphSettings) => {
+  return {
+    'target-arrow-shape': 'triangle',
+    'arrow-scale': 0.8,
+    'curve-style': 'bezier',
+    width: 'data(width)',
+    'line-gradient-direction': 'to-bottom',
+    'line-fill': 'linear-gradient',
+    'line-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
+    'line-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
+  };
 };
 
 const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
@@ -44,6 +51,14 @@ const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
           120 * Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
+        stopColors: segment.paths.flatMap((_, i) => [
+          settings.pathColors[i],
+          settings.pathColors[i],
+        ]),
+        stopPositions: segment.paths.flatMap((_, i, array) => [
+          (i / array.length) * 100,
+          ((i + 1) / array.length) * 100,
+        ]),
       },
     };
   }) as NodeDefinition[];
@@ -56,6 +71,11 @@ const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
         source: link.from_segment,
         target: link.to_segment,
         width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
+        stopColors: link.paths.flatMap((_, i) => [settings.pathColors[i], settings.pathColors[i]]),
+        stopPositions: link.paths.flatMap((_, i, array) => [
+          (i / array.length) * 100,
+          ((i + 1) / array.length) * 100,
+        ]),
       },
     };
   }) as EdgeDefinition[];
@@ -77,7 +97,7 @@ export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cyto
           },
           {
             selector: 'edge',
-            style: edgeStyle,
+            style: edgeStyle(settings),
           },
           // TODO: add special core styling
           // {
