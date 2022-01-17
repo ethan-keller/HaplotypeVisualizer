@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/sidebar/Sidebar';
 import Graph, { GraphSettings } from '../components/graph/Graph';
 import Header from '../components/Header';
 import GfaCommunication from '../server_communication/GfaCommunication';
 import Gfa from '../models/gfa';
 import '../styles/popuview.css';
-import SidebarSection from '../components/sidebar/SidebarSection';
-import { Form, Table } from 'react-bootstrap';
 import PopulationViewSidebar from '../components/PopulationViewSidebar';
 
 interface PopulationViewProps {}
