@@ -5,12 +5,9 @@ import AboutModal from '../components/modals/AboutModal';
 interface PhenoGraphViewProps {}
 
 const PhenoGraphView: React.FC<PhenoGraphViewProps> = (props) => {
-  const [showAbout, setShowAbout] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-
   return (
     <>
-      <Header setShowAbout={setShowAbout} setShowSettings={setShowSettings} />
+      <Header />
       <div className='container'>
         <div className='sidebar'>
           {/* <Sidebar setSettings={function (settings: GraphSettings): void {
@@ -27,7 +24,6 @@ const PhenoGraphView: React.FC<PhenoGraphViewProps> = (props) => {
           Nav
         </div>
       </div>
-      {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}
     </>
   );
 };

@@ -24,6 +24,10 @@ code {
   min-height: 100%;
 }
 
+.sidebar {
+  width: 100%
+}
+
 .navbar {
   height: 3.5rem;
 }

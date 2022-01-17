@@ -13,13 +13,14 @@
       'side graph graph graph graph graph'
       'side graph graph graph graph graph'
       'side graph graph graph graph graph'
-      'side navigator navigator navigator navigator navigator';
+      'side nav nav nav nav nav';
   }
   
   .sidebar {
     grid-area: side;
     border-right: 1px solid grey;
-    padding-left: 1.2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
     padding-top: 0.8rem;
     overflow-y: auto;
     overflow-x: hidden;
@@ -31,5 +32,5 @@
   
   .navigator {
     border-top: 1px solid grey;
-    grid-area: navigator;
+    grid-area: nav;
   }

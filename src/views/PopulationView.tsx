@@ -1,20 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import Sidebar from '../components/Sidebar';
-import AboutModal from '../components/modals/AboutModal';
+import Sidebar from '../components/sidebar/Sidebar';
 import Graph, { GraphSettings } from '../components/graph/Graph';
 import Header from '../components/Header';
 import GfaCommunication from '../server_communication/GfaCommunication';
 import Gfa from '../models/gfa';
 import '../styles/popuview.css';
+import SidebarSection from '../components/sidebar/SidebarSection';
+import { Form, Table } from 'react-bootstrap';
+import PopulationViewSidebar from '../components/PopulationViewSidebar';
 
 interface PopulationViewProps {}
 
-const PopulationView: React.FC<PopulationViewProps> = (props) => {
-  const [showAbout, setShowAbout] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
+// default graph settings
+const defaultGraphSettings: GraphSettings = {
+  drawPaths: true,
+  linkThickness: 1.5,
+  segmentThickness: 10,
+  pathColors: ['#FF5733', '#32B243', '#99B2DF'],
+};
 
+const PopulationView: React.FC<PopulationViewProps> = (props) => {
+  // state: gfa graph
   const [gfa, setGfa] = useState<Gfa>();
+  // state: graph settings
   const [graphSettings, setGraphSettings] = useState<GraphSettings>(defaultGraphSettings);
+
+  // update data when component mounted
+  useEffect(() => {
+    updateData();
+  }, []);
 
   const updateData = () => {
     GfaCommunication.getGfa().then(
@@ -31,35 +45,18 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
     );
   };
 
-  useEffect(() => {
-    updateData();
-  }, []);
-
   return (
     <>
-      <Header setShowAbout={setShowAbout} setShowSettings={setShowSettings} />
+      <Header />
       <div className='container'>
-        <div className='sidebar'>
-          <Sidebar gfa={gfa} setSettings={setGraphSettings} />
-        </div>
-        <div className='graph'>
-          <Graph gfa={gfa} settings={graphSettings} />
-        </div>
-        <div className='navigator'>
-          {/* <Navigator /> */}
-          Nav
-        </div>
+        <PopulationViewSidebar />
+
+        <Graph gfa={gfa} settings={graphSettings} />
+
+        <div className='navigator'>Nav</div>
       </div>
-      {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}
     </>
   );
-};
-
-const defaultGraphSettings: GraphSettings = {
-  drawPaths: true,
-  linkThickness: 1.5,
-  segmentThickness: 10,
-  pathColors: ['#FF5733', '#32B243', '#99B2DF'],
 };
 
 export default PopulationView;

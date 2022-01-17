@@ -38,6 +38,7 @@ const Graph: React.FC<GraphProps> = (props) => {
 
   return (
     <div
+      className='graph'
       id={'graph'}
       style={{
         width: '100%',
