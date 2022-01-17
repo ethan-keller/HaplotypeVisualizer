@@ -1,20 +1,22 @@
 import React, { createRef, useEffect, useMemo, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { UploadFile, UploadStatus } from '../../models/file';
-import FileCommunication from '../../server_communication/FileCommunication';
-import ErrorCard from '../ErrorCard';
-import SpinnerAnnotated from '../SpinnerAnnotated';
+import { UploadFile, UploadStatus } from '../models/file';
+import FileCommunication from '../server_communication/FileCommunication';
+import ErrorCard from './ErrorCard';
+import SpinnerAnnotated from './SpinnerAnnotated';
 
 interface UploadTableProps {
   setIsReady: (ready: boolean) => void;
 }
 
+// map to translate upload statuses to bootstrap class names
 const statusToBootstrapClassMap = new Map<UploadStatus, string>([
   [UploadStatus.NO_UPLOAD, 'table-danger'],
   [UploadStatus.SUCCESSFUL_UPLOAD, 'table-success'],
   [UploadStatus.WARNING_UPLOAD, 'table-warning'],
 ]);
 
+// map to translate statuses to string status descriptions
 const statusToDescription = new Map<UploadStatus, string>([
   [UploadStatus.NO_UPLOAD, 'No file uploaded'],
   [UploadStatus.SUCCESSFUL_UPLOAD, 'Successfully uploaded'],
@@ -22,11 +24,14 @@ const statusToDescription = new Map<UploadStatus, string>([
 ]);
 
 const UploadTable: React.FC<UploadTableProps> = (props) => {
-  const [error, setError] = useState<Error | undefined>(undefined);
-  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  // state: files to be uploaded
   const [uploadFiles, setUploadFiles] = useState<UploadFile[]>([]);
+  // state: has an answer been received from server (loading)
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
+  // state: error from server
+  const [error, setError] = useState<Error | undefined>(undefined);
 
-  // will execute on mount and unmount
+  // update upload files when component mounted
   useEffect(() => {
     updateUploadFiles();
   }, []);
@@ -45,6 +50,7 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
     handleReady();
   };
 
+  // tell props.setIsReady if ready for visualization
   const handleReady = () => {
     FileCommunication.ready().then(
       (result: boolean) => {
@@ -56,45 +62,50 @@ const UploadTable: React.FC<UploadTableProps> = (props) => {
     );
   };
 
+  // create refs for upload inputs
   const uploadInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
     () => uploadFiles.map(() => createRef<HTMLInputElement>()),
     [uploadFiles],
   );
 
+  // dispatch the click of a button to a input element via its ref
   const dispatchUploadClick = (inputRef: React.RefObject<HTMLInputElement>) => {
     inputRef.current?.click();
   };
 
+  // reset the input
   const resetInputFile = (inputRef: React.RefObject<HTMLInputElement>) => {
     if (!inputRef.current) return;
     if (!inputRef.current.files) return;
     inputRef.current.value = '';
   };
 
+  // handle upload click
   const handleUpload = (fileIndex: number, inputRef: React.RefObject<HTMLInputElement>) => {
     if (!inputRef.current?.files) return;
     const file: File = inputRef.current?.files[0];
     if (!file) return;
 
-    FileCommunication.updateFile(
-      fileIndex,
-      // The server then prepends with correct folder name to find file on server
-      file.name,
-    )
-      .catch((err) => {
-        console.log(err);
-      })
-      .then(() => {
+    FileCommunication.updateFile(fileIndex, file.name).then(
+      () => {
         updateUploadFiles();
-      });
+      },
+      (err: Error) => {
+        console.log(err);
+      },
+    );
   };
 
+  // handle remove click
   const handleRemove = (fileIndex: number) => {
-    FileCommunication.removeFile(fileIndex)
-      .catch((err) => {
+    FileCommunication.removeFile(fileIndex).then(
+      () => {
+        updateUploadFiles();
+      },
+      (err: Error) => {
         console.log(err);
-      })
-      .then(() => updateUploadFiles());
+      },
+    );
   };
 
   return isLoaded ? (

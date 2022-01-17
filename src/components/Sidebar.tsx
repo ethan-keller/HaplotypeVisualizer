@@ -1,6 +1,6 @@
 import { Button, FormGroup, FormText } from 'react-bootstrap';
-import Gfa from '../../models/gfa';
-import { GraphSettings } from '../graph/Graph';
+import Gfa from '../models/gfa';
+import { GraphSettings } from './graph/Graph';
 
 interface SidebarProps {
   gfa?: Gfa;

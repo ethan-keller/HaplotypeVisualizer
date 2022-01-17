@@ -4405,7 +4405,12 @@
   dependencies:
     "@types/cytoscape" "^3.19.0"
 
-"cytoscape@^3.19.0", "cytoscape@^3.20.0":
+"cytoscape-navigator@^2.0.1":
+  "integrity" "sha512-csflZi8BaUmEr1f6y2xKg9CufpU18Du9CzwA3ybjISClaJcuKMJkIDHLE3sg6GKOdxBVUcHX6aeR5gjTQ66Z6w=="
+  "resolved" "https://registry.npmjs.org/cytoscape-navigator/-/cytoscape-navigator-2.0.1.tgz"
+  "version" "2.0.1"
+
+"cytoscape@^2.6.0 || ^3.0.0", "cytoscape@^3.19.0", "cytoscape@^3.20.0":
   "integrity" "sha512-V2OUoav8ltY9UPgdjuhQOqkkWT28IbJODioWCjcnLqmjym9lMpnD0ie0vdQCdAiZapjbTGAv8aoKmmSuVcC1gA=="
   "resolved" "https://registry.npmjs.org/cytoscape/-/cytoscape-3.20.0.tgz"
   "version" "3.20.0"

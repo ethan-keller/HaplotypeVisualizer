@@ -2,10 +2,8 @@ import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
 import dagre from '.';
 import { GraphSettings } from '../components/graph/Graph';
-import Layers from 'cytoscape-layers';
 
 cytoscape.use(dagre);
-cytoscape.use(Layers as (cytoscape: any) => void);
 
 const layoutSettings = {
   name: 'dagre',
@@ -22,7 +20,6 @@ const nodeStyle = (settings: GraphSettings) => {
     width: 'data(width)',
     height: 'data(height)',
     'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
-    // TODO: try with line gradient (if it works remove 'as any')
     'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
     'background-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
     label: settings.drawPaths ? 'data(id)' : undefined,
@@ -35,7 +32,7 @@ const edgeStyle = (settings: GraphSettings) => {
     'arrow-scale': 0.8,
     'curve-style': 'bezier',
     width: 'data(width)',
-    'line-gradient-direction': 'to-bottom',
+    // 'line-gradient-direction': 'to-bottom',
     'line-fill': 'linear-gradient',
     'line-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
     'line-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
