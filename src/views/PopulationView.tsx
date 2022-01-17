@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import GfaCommunication from '../server_communication/GfaCommunication';
 import Gfa from '../models/gfa';
 import '../styles/popuview.css';
-import PopulationViewSidebar from '../components/PopulationViewSidebar';
+import PopulationViewSidebar from '../components/sidebar/PopulationViewSidebar';
 
 interface PopulationViewProps {}
 

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from '../components/Header';
-import AboutModal from '../components/modals/AboutModal';
+import PhenoGraphSidebar from '../components/sidebar/PhenoGraphSidebar';
 
 interface PhenoGraphViewProps {}
 
@@ -9,19 +9,16 @@ const PhenoGraphView: React.FC<PhenoGraphViewProps> = (props) => {
     <>
       <Header />
       <div className='container'>
-        <div className='sidebar'>
-          {/* <Sidebar setSettings={function (settings: GraphSettings): void {
-            throw new Error('Function not implemented.');
-          } } /> */}
-        </div>
+        <PhenoGraphSidebar />
+
         <div className='graph'>
           <div style={{ height: '100%', width: '100%', backgroundColor: '#edecc2' }}>
             <p>Graph of the samples that contain selected phenotypes</p>
           </div>
         </div>
-        <div className='navigator'>
-          {/* <Navigator /> */}
-          Nav
+
+        <div className='navigator' style={{ backgroundColor: '#dbebb7' }}>
+          Navigator
         </div>
       </div>
     </>

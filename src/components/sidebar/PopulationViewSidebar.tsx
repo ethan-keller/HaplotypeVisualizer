@@ -1,6 +1,6 @@
 import { Table, Form, Button } from 'react-bootstrap';
-import Sidebar from './sidebar/Sidebar';
-import SidebarSection from './sidebar/SidebarSection';
+import Sidebar from './Sidebar';
+import SidebarSection from './SidebarSection';
 
 interface PopulationViewSidebarProps {}
 
@@ -12,15 +12,15 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           <tbody>
             <tr>
               <td>Nodes</td>
-              <td>1233</td>
+              <td>-</td>
             </tr>
             <tr>
               <td>Edges</td>
-              <td>44555</td>
+              <td>-</td>
             </tr>
             <tr>
               <td>Paths</td>
-              <td>3</td>
+              <td>-</td>
             </tr>
           </tbody>
         </Table>
