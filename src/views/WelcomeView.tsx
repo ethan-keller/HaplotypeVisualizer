@@ -1,6 +1,6 @@
 import React from 'react';
 import WelcomeCard from '../components/WelcomeCard';
-import '../styles/welcomeview.css';
+import '../styles/welcome-view.css';
 
 interface WelcomeViewProps {}
 

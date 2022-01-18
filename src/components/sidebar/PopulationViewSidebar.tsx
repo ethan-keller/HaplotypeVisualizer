@@ -6,7 +6,7 @@ interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   return (
-    <Sidebar>
+    <Sidebar title='Population view'>
       <SidebarSection title='Graph information'>
         <Table style={{fontWeight: 100}} borderless size='sm'>
           <tbody>

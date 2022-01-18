@@ -2,31 +2,12 @@ import { Table, Form, Button, FloatingLabel } from 'react-bootstrap';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
 
-interface PhenoGraphSidebarProps {}
+interface PhenoTableSidebarProps {}
 
-const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
+const PhenoTableSidebar: React.FC<PhenoTableSidebarProps> = (props) => {
   return (
-    <Sidebar title='Phenotype Graph'>
-      <SidebarSection title='Graph information'>
-        <Table style={{ fontWeight: 100 }} borderless size='sm'>
-          <tbody>
-            <tr>
-              <td>Nodes</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>Edges</td>
-              <td>-</td>
-            </tr>
-            <tr>
-              <td>Paths</td>
-              <td>-</td>
-            </tr>
-          </tbody>
-        </Table>
-        <Button size='sm'>More graph information</Button>
-      </SidebarSection>
-      <SidebarSection title='Phenotype options'>
+    <Sidebar title='Phenotype table'>
+      <SidebarSection title='Phenotypes'>
         <FloatingLabel label='Select phenotypes'>
           {/* Add multiple select options */}
           <Form.Select size='sm'>
@@ -36,7 +17,8 @@ const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
           </Form.Select>
         </FloatingLabel>
       </SidebarSection>
-      <SidebarSection title='Exclude options'>
+
+      <SidebarSection title='Samples'>
         <FloatingLabel label='Exclude samples'>
           {/* Add multiple select options */}
           <Form.Select size='sm'>
@@ -46,8 +28,10 @@ const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
           </Form.Select>
         </FloatingLabel>
       </SidebarSection>
+
+
     </Sidebar>
   );
 };
 
-export default PhenoGraphSidebar;
+export default PhenoTableSidebar;

@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from '../components/Header';
 import PhenoGraphSidebar from '../components/sidebar/PhenoGraphSidebar';
+import '../styles/pheno-graph-view.css'
 
 interface PhenoGraphViewProps {}
 
