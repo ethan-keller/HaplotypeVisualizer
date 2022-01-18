@@ -36,7 +36,7 @@ const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
           </Form.Select>
         </FloatingLabel>
       </SidebarSection>
-      <SidebarSection title='Exlcude options'>
+      <SidebarSection title='Exclude options'>
         <FloatingLabel label='Exclude samples'>
           {/* Add multiple select options */}
           <Form.Select size='sm'>
