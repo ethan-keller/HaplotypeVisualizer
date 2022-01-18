@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
 import { url as urlPhenoGraphView } from '../views/PhenoGraphView';
 import { url as urlPopulationView } from '../views/PopulationView';
+import { url as urlPhenoTableView } from '../views/PhenoTableView';
 import AboutModal from './modals/AboutModal';
 
 interface HeaderProps {}
@@ -22,6 +23,7 @@ const Header: React.FC<HeaderProps> = (props) => {
           <Nav.Link href='#settings'>Settings</Nav.Link>
           <Nav.Link href='#about'>About</Nav.Link>
           <Nav.Link href={urlPhenoGraphView}>PhenoGraph</Nav.Link>
+          <Nav.Link href={urlPhenoTableView}>PhenoTable</Nav.Link>
         </Nav>
       </Navbar>
       {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}

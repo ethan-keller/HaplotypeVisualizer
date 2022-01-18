@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import NotFoundView from './components/NotFoundView';
-import PhenoView, { url as urlPheno } from './components/PhenoView';
+import PhenoTableView, { url as urlPhenoTable } from './views/PhenoTableView';
 import PhenoGraphView, { url as urlPhenoGraph } from './views/PhenoGraphView';
 import PopulationView, { url as urlPopulation } from './views/PopulationView';
 import TrioView, { url as urlTrio } from './components/TrioView';
@@ -21,7 +21,7 @@ const AppRouter: React.FC = () => {
         />
         <Route element={<WelcomeView />} path={urlWelcome} />
         <Route element={<PopulationView />} path={urlPopulation} />
-        <Route element={<PhenoView />} path={urlPheno} />
+        <Route element={<PhenoTableView />} path={urlPhenoTable} />
         <Route element={<PhenoGraphView />} path={urlPhenoGraph} />
         <Route element={<TrioView />} path={urlTrio} />
         <Route element={<NotFoundView />} path='*' />
