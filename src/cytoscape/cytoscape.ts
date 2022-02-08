@@ -1,7 +1,7 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
-import Gfa, { GfaLink, GfaSegment } from '../models/gfa';
-import dagre from '.';
+import dagre from './index';
 import { GraphSettings } from '../components/graph/Graph';
+import Gfa, { GfaLink, GfaSegment } from '../types/gfa';
 
 cytoscape.use(dagre);
 

@@ -1,7 +1,7 @@
 import cytoscape from 'cytoscape';
 import { useEffect, useState } from 'react';
 import { createCytoscape } from '../../cytoscape/cytoscape';
-import Gfa from '../../models/gfa';
+import Gfa from '../../types/gfa';
 import '../../styles/graph.css';
 import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';

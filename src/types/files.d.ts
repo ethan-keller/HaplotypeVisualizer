@@ -1,4 +1,4 @@
-export interface UploadFile {
+interface File {
   readonly description: string;
   readonly status: UploadStatus;
   readonly required: boolean;
@@ -6,7 +6,7 @@ export interface UploadFile {
   readonly name?: string;
 }
 
-export enum UploadStatus {
+enum UploadStatus {
   NO_UPLOAD = 0,
   SUCCESSFUL_UPLOAD = 1,
   WARNING_UPLOAD = 2,
