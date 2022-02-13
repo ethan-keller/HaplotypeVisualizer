@@ -1,8 +1,8 @@
 import { Card } from 'react-bootstrap';
 // @ts-ignore
 import pkg from '../../package.json';
-import VisualizeButton from './VisualizeButton';
-import FileTable from './FileTable';
+import VisualizeButton from './file_table/VisualizeButton';
+import FileTable from './file_table/FileTable';
 
 interface WelcomeCardProps {
   description: string;

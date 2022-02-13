@@ -1,9 +1,9 @@
 import React, { createRef, useMemo } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { File, FileStatus } from '../types/files';
-import ErrorCard from './ErrorCard';
-import SpinnerAnnotated from './SpinnerAnnotated';
-import filesApi from '../api/files';
+import { File, FileStatus } from '../../types/files';
+import ErrorCard from '../ErrorCard';
+import SpinnerAnnotated from '../SpinnerAnnotated';
+import filesApi from '../../api/files';
 
 interface FileTableProps {}
 

@@ -1,6 +1,6 @@
 import { Button, Spinner } from 'react-bootstrap';
-import filesApi from '../api/files';
-import { url as urlPopulationView } from '../views/PopulationView';
+import filesApi from '../../api/files';
+import { url as urlPopulationView } from '../../views/PopulationView';
 import { useNavigate } from 'react-router';
 
 interface VisualizeButtonProps {
