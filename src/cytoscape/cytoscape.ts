@@ -1,13 +1,14 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
-import dagre from './index';
 import { GraphSettings } from '../components/graph/Graph';
 import Gfa, { GfaLink, GfaSegment } from '../types/gfa';
+import dagre from 'cytoscape-dagre';
 
 cytoscape.use(dagre);
 
-const layoutSettings = {
+const layoutSettings: dagre.DagreLayoutOptions = {
   name: 'dagre',
   rankDir: 'LR',
+  //@ts-ignore 'align' is not in type declaration but it is in source code
   align: 'UL',
   fit: true,
   nodeDimensionsIncludeLabels: false,
@@ -85,7 +86,7 @@ export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cyto
     resolve(
       cytoscape({
         container: document.getElementById('graph'),
-        layout: layoutSettings as any,
+        layout: layoutSettings,
         style: [
           // TODO: memoize style
           {

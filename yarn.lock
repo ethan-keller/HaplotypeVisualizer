@@ -1765,7 +1765,14 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
-"@types/cytoscape@^3.14.17", "@types/cytoscape@^3.19.0":
+"@types/cytoscape-dagre@^2.3.0":
+  "integrity" "sha512-1WwDnCcdySVwhxhHWHxRFlWoz7InlXlA9O9gQjtBkk1Sf7hW0+uaRxS6nr1TLBSPZRX0QNpYGvGqh13NuFEDaA=="
+  "resolved" "https://registry.npmjs.org/@types/cytoscape-dagre/-/cytoscape-dagre-2.3.0.tgz"
+  "version" "2.3.0"
+  dependencies:
+    "@types/cytoscape" "*"
+
+"@types/cytoscape@*", "@types/cytoscape@^3.14.17", "@types/cytoscape@^3.19.0":
   "integrity" "sha512-naM/VSuE9FVVmj4ef3FZDEiDltqvm7jnOnbnWDRWfGB4jN/9b2XfYnOGGK5i6E24AlN2mUR+tGTORYPPp5i3Qw=="
   "resolved" "https://registry.npmjs.org/@types/cytoscape/-/cytoscape-3.19.2.tgz"
   "version" "3.19.2"
@@ -4291,6 +4298,13 @@
   "resolved" "https://registry.npmjs.org/cyclist/-/cyclist-1.0.1.tgz"
   "version" "1.0.1"
 
+"cytoscape-dagre@^2.4.0":
+  "integrity" "sha512-jfOtKzKduCnruBs3YMHS9kqWjZKqvp6loSJwlotPO5pcU4wLUhkx7ZBIyW3VWZXa8wfkGxv/zhWoBxWtYrUxKQ=="
+  "resolved" "https://registry.npmjs.org/cytoscape-dagre/-/cytoscape-dagre-2.4.0.tgz"
+  "version" "2.4.0"
+  dependencies:
+    "dagre" "^0.8.5"
+
 "cytoscape-layers@^2.2.0":
   "integrity" "sha512-88KLh3O+pRv6Is3SBvtXn3qcr/MOHZ8BGrab4U2iXQs+09vRTZa8wmPyVmB8JbeBMG9m2WG5hjxsnBOsO952/w=="
   "resolved" "https://registry.npmjs.org/cytoscape-layers/-/cytoscape-layers-2.2.0.tgz"
@@ -4303,7 +4317,7 @@
   "resolved" "https://registry.npmjs.org/cytoscape-navigator/-/cytoscape-navigator-2.0.1.tgz"
   "version" "2.0.1"
 
-"cytoscape@^2.6.0 || ^3.0.0", "cytoscape@^3.19.0", "cytoscape@^3.20.0":
+"cytoscape@^2.6.0 || ^3.0.0", "cytoscape@^3.19.0", "cytoscape@^3.2.22", "cytoscape@^3.20.0":
   "integrity" "sha512-V2OUoav8ltY9UPgdjuhQOqkkWT28IbJODioWCjcnLqmjym9lMpnD0ie0vdQCdAiZapjbTGAv8aoKmmSuVcC1gA=="
   "resolved" "https://registry.npmjs.org/cytoscape/-/cytoscape-3.20.0.tgz"
   "version" "3.20.0"
