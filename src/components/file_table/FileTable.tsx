@@ -73,13 +73,23 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                     remove
                   </Button>
                 ) : (
-                  <Button
-                    onClick={() => dispatchSelectClick(inputRef)}
-                    variant='outline-primary'
-                    size='sm'
-                  >
-                    select
-                  </Button>
+                  <>
+                    <Button
+                      onClick={() => dispatchSelectClick(inputRef)}
+                      variant='outline-primary'
+                      size='sm'
+                    >
+                      local
+                    </Button>
+                    {' '}
+                    <Button
+                      onClick={() => dispatchSelectClick(inputRef)}
+                      variant='outline-primary'
+                      size='sm'
+                    >
+                      cluster
+                    </Button>
+                  </>
                 )}
               </td>
             </tr>
