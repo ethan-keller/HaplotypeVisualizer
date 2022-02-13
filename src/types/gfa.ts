@@ -36,5 +36,5 @@ interface GfaPath extends GfaElement {
 
 type GfaOptional = 'VN' | 'LN' | 'RC' | 'FC' | 'KC' | 'SH' | 'UR' | 'MQ' | 'NM' | 'ID';
 
-export {GfaElement, GfaHeader, GfaSegment, GfaLink, GfaOptional, GfaPath};
+export type {GfaElement, GfaHeader, GfaSegment, GfaLink, GfaOptional, GfaPath};
 export default Gfa

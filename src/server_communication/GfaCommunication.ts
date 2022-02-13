@@ -1,6 +1,6 @@
 import ErrorHandling from './ErrorHandling';
 import * as endpoints from '../endpoints_config/GfaEndpoints';
-import Gfa, { GfaLink, GfaPath, GfaSegment } from '../models/gfa';
+import Gfa, { GfaLink, GfaPath, GfaSegment } from '../types/gfa';
 
 class GfaCommunication {
   public static async getGfa(): Promise<Gfa> {

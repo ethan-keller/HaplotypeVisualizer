@@ -3,20 +3,20 @@ from typing import List
 import logic.files as FileLogic
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
-from schemas.file import File, UploadStatus
+from schemas.file import File, FileStatus
 from server_data.data import files, files_base_path
 
 router = APIRouter(prefix="/files", tags=["files"])
 
 
 @router.get("/", response_model=File, summary="Get a specific needed file")
-def getFiles(index: int = Query(..., ge=0, lt=len(files))):
+def getFiles(id: int = Query(..., ge=0, lt=len(files))):
     """
-    Get a specific needed files by index.
+    Get a specific needed files by id.
 
-    - **index**: Index of the file
+    - **id**: Id of the file
     """
-    return files[index]
+    return files[id]
 
 
 @router.get("/ready", response_model=bool, summary="Check if all files are ready")
@@ -42,15 +42,15 @@ def getAllFiles():
     responses={status.HTTP_400_BAD_REQUEST: {"description": "Invalid file extension", "model": str}},
     summary="Update the file name for a specific needed file",
 )
-def updateFile(name: str, index: int = Query(..., ge=0, lt=len(files))):
+def updateFile(name: str, id: int = Query(..., ge=0, lt=len(files))):
     """
     Update the file information for one of the needed files.
     
     - **name**: File name
-    - **index**: Index of the file
+    - **id**: Id of the file
     """
-    files[index].name = name
-    files[index].status = UploadStatus.WARNING_UPLOAD
+    files[id].name = name
+    files[id].status = FileStatus.WARNING
 
     file_path = files_base_path + name
     # TODO: Maybe some other validation? File size etc?
@@ -60,30 +60,29 @@ def updateFile(name: str, index: int = Query(..., ge=0, lt=len(files))):
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"{file_path} is either not a file or non-existent"
         )
 
-    if not FileLogic.validate_file_extension(file_path, files[index].file_extensions):
+    if not FileLogic.validate_file_extension(file_path, files[id].file_extensions):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"{FileLogic.get_extension(file_path)} files are not accepted for this entry",
         )
     else:
-        files[index].status = UploadStatus.SUCCESSFUL_UPLOAD
+        files[id].status = FileStatus.SUCCESFUL
 
 
-@router.delete("/remove", response_model=str, summary="Remove file information for a specific needed file")
-def removeFile(index: int = Query(..., ge=0, lt=len(files))):
+@router.put("/clear", summary="Clear file information for a specific needed file")
+def removeFile(id: int = Query(..., ge=0, lt=len(files))):
     """
-    Remove the file information for one of the needed files.
+    Clear the file information for one of the needed files.
 
-    **index**: Index of the file
+    **id**: Id of the file
     """
-    files[index].name = None
-    files[index].status = UploadStatus.NO_UPLOAD
+    files[id].name = None
+    files[id].status = FileStatus.NO_FILE
 
 
 @router.put(
     "/prepare",
     responses={status.HTTP_424_FAILED_DEPENDENCY: {"description": "Files not ready for preparation", "model": str}},
-    response_model=bool,
     summary="Prepare the files for visualization",
 )
 def prepare():
@@ -92,7 +91,6 @@ def prepare():
     """
     try:
         FileLogic.prepare_files()
-        return True
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_424_FAILED_DEPENDENCY,

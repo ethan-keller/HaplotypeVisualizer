@@ -18,5 +18,5 @@ interface Position {
   y: number;
 }
 
-export { Node, Edge, Position };
+export type { Node, Edge, Position };
 export default Graph;

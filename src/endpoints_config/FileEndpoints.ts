@@ -1,11 +1,11 @@
-import baseUrl from "./base"
+import baseUrl from './base';
 
-const filePathPrefix = '/files'
-const fileBaseUrl = baseUrl + filePathPrefix;
+const filePathPrefix = '/files';
+export const fileBaseUrl = baseUrl + filePathPrefix;
 
-export const getFile = fileBaseUrl + '/'
-export const getAllFiles = fileBaseUrl + '/all';
-export const ready = fileBaseUrl + '/ready'
-export const updateFile = fileBaseUrl + '/update'
-export const removeFile = fileBaseUrl + '/remove'
-export const prepareFiles = fileBaseUrl + '/prepare'
+export const getFile = '/';
+export const getAllFiles = '/all';
+export const ready = '/ready';
+export const updateFile = '/update';
+export const clearFile = '/clear';
+export const prepareFiles = '/prepare';

@@ -5,14 +5,14 @@ from gfapy.line.line import Line
 from gfapy import Gfa as GfaPy
 from schemas.file import FileIndex
 from schemas.gfa import GFA_ELEMENT, Gfa, GfaLink, GfaPath, GfaSegment, link_optional_fields, segment_optional_fields
-from server_data.data import GfaManager, files, files_base_path
+from server_data.data import DataManager, files, files_base_path
 
 
 def prepare_gfa() -> None:
     file_name = files[FileIndex.GFA].name
     if file_name:
         read_gfa = GfaPy.from_file(files_base_path + file_name)
-        GfaManager.__gfa = read_gfa
+        DataManager.__gfa = read_gfa
 
         segments = convert_segments_to_pydantic(read_gfa.segments)
         links = convert_links_to_pydantic(read_gfa.dovetails)
@@ -33,7 +33,7 @@ def prepare_gfa() -> None:
                 linkMap[get_link_name(s_names[i], s_names[i + 1])].paths.append(path)
             segmentMap[s_names[len(s_names) - 1]].paths.append(path)
 
-        GfaManager.gfa = Gfa(segments=list(segmentMap.values()), links=list(linkMap.values()), paths=paths)
+        DataManager.gfa = Gfa(segments=list(segmentMap.values()), links=list(linkMap.values()), paths=paths)
     else:
         raise ValueError("Since the GFA file path has not been uploaded, the GFA file cannot be prepared")
 

@@ -1,7 +1,6 @@
 from os.path import isfile, splitext
 from typing import List
-
-from schemas.file import UploadStatus
+from schemas.file import FileStatus
 from server_data.data import files
 
 from logic.gfa import prepare_gfa
@@ -17,7 +16,7 @@ def validate_file_extension(path: str, accepted_extensions: List[str]) -> bool:
 
 def are_required_files_uploaded() -> bool:
     for file in files:
-        if file.required and file.status is not UploadStatus.SUCCESSFUL_UPLOAD:
+        if file.required and file.status is not FileStatus.SUCCESFUL:
             return False
     return True
 
