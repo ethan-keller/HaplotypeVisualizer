@@ -19,12 +19,12 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   );
 
   // dispatch the click of a button to a input element via its ref
-  const dispatchSelectClick = (inputRef: React.RefObject<HTMLInputElement>) => {
+  const dispatchImportClick = (inputRef: React.RefObject<HTMLInputElement>) => {
     inputRef.current?.click();
   };
 
-  // handle select click
-  const handleSelect = (fileIndex: number, inputRef: React.RefObject<HTMLInputElement>) => {
+  // handle import click
+  const handleImport = (fileIndex: number, inputRef: React.RefObject<HTMLInputElement>) => {
     if (!inputRef.current?.files) return;
     const file = inputRef.current?.files[0];
     if (!file) return;
@@ -43,7 +43,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
           <th>File description</th>
           <th>File name</th>
           <th>Status</th>
-          <th>Select/Remove</th>
+          <th>Import/Remove</th>
         </tr>
       </thead>
       <tbody>
@@ -51,7 +51,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
           const status = file.status;
           const inputRef = inputRefs[i];
           return (
-            <tr key={'upload-table-row-' + i}>
+            <tr key={'file-table-row-' + i}>
               <td>
                 {file.description}
                 {file.required ? <b className='text-danger'>*</b> : ''}
@@ -63,7 +63,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
               <td>
                 <input
                   ref={inputRef}
-                  onChange={() => handleSelect(i, inputRef)}
+                  onChange={() => handleImport(i, inputRef)}
                   className='d-none'
                   type='file'
                   accept={file.file_extensions.join(',')}
@@ -75,7 +75,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                 ) : (
                   <>
                     <Button
-                      onClick={() => dispatchSelectClick(inputRef)}
+                      onClick={() => dispatchImportClick(inputRef)}
                       variant='outline-primary'
                       size='sm'
                     >
@@ -83,7 +83,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                     </Button>
                     {' '}
                     <Button
-                      onClick={() => dispatchSelectClick(inputRef)}
+                      onClick={() => dispatchImportClick(inputRef)}
                       variant='outline-primary'
                       size='sm'
                     >

@@ -1,54 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import Graph, { GraphSettings } from '../components/graph/Graph';
+import React from 'react';
+import Graph from '../components/graph/Graph';
 import Header from '../components/Header';
-import GfaCommunication from '../server_communication/GfaCommunication';
-import Gfa from '../types/gfa';
 import '../styles/popu-view.css';
 import PopulationViewSidebar from '../components/sidebar/PopulationViewSidebar';
 
 interface PopulationViewProps {}
 
-// default graph settings
-const defaultGraphSettings: GraphSettings = {
-  drawPaths: true,
-  linkThickness: 1.5,
-  segmentThickness: 10,
-  pathColors: ['#FF5733', '#32B243', '#99B2DF'],
-};
-
 const PopulationView: React.FC<PopulationViewProps> = (props) => {
-  // state: gfa graph
-  const [gfa, setGfa] = useState<Gfa>();
-  // state: graph settings
-  const [graphSettings, setGraphSettings] = useState<GraphSettings>(defaultGraphSettings);
-
-  // update data when component mounted
-  useEffect(() => {
-    updateData();
-  }, []);
-
-  const updateData = () => {
-    GfaCommunication.getGfa().then(
-      (data: Gfa) => {
-        setGfa({
-          segments: data.segments.concat(),
-          links: data.links.concat(),
-          paths: data.paths.concat(),
-        });
-      },
-      (err: Error) => {
-        console.log(err);
-      },
-    );
-  };
-
   return (
     <>
       <Header />
       <div className='container'>
         <PopulationViewSidebar />
 
-        <Graph gfa={gfa} settings={graphSettings} />
+        <Graph />
 
         <div className='navigator'>Nav</div>
       </div>

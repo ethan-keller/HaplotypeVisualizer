@@ -1,7 +1,7 @@
 import baseUrl from "./base"
 
 const gfaPathPrefix = '/gfa'
-const gfaBaseUrl = baseUrl + gfaPathPrefix;
+export const gfaBaseUrl = baseUrl + gfaPathPrefix;
 
 export const getGfa = gfaBaseUrl + '/'
 export const getSegments = gfaBaseUrl + '/segments'
