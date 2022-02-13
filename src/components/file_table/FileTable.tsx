@@ -12,19 +12,19 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   const [clearFile] = filesApi.useClearFileMutation();
   const [updateFile] = filesApi.useUpdateFileMutation();
 
-  // create refs for upload inputs
-  const uploadInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
+  // create refs for inputs
+  const inputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
     () => (files ? files.map(() => createRef<HTMLInputElement>()) : []),
     [files],
   );
 
   // dispatch the click of a button to a input element via its ref
-  const dispatchUploadClick = (inputRef: React.RefObject<HTMLInputElement>) => {
+  const dispatchSelectClick = (inputRef: React.RefObject<HTMLInputElement>) => {
     inputRef.current?.click();
   };
 
-  // handle upload click
-  const handleUpload = (fileIndex: number, inputRef: React.RefObject<HTMLInputElement>) => {
+  // handle select click
+  const handleSelect = (fileIndex: number, inputRef: React.RefObject<HTMLInputElement>) => {
     if (!inputRef.current?.files) return;
     const file = inputRef.current?.files[0];
     if (!file) return;
@@ -43,13 +43,13 @@ const FileTable: React.FC<FileTableProps> = (props) => {
           <th>File description</th>
           <th>File name</th>
           <th>Status</th>
-          <th>Upload/Remove</th>
+          <th>Select/Remove</th>
         </tr>
       </thead>
       <tbody>
         {files.map((file, i) => {
           const status = file.status;
-          const inputRef = uploadInputRefs[i];
+          const inputRef = inputRefs[i];
           return (
             <tr key={'upload-table-row-' + i}>
               <td>
@@ -63,7 +63,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
               <td>
                 <input
                   ref={inputRef}
-                  onChange={() => handleUpload(i, inputRef)}
+                  onChange={() => handleSelect(i, inputRef)}
                   className='d-none'
                   type='file'
                   accept={file.file_extensions.join(',')}
@@ -74,11 +74,11 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                   </Button>
                 ) : (
                   <Button
-                    onClick={() => dispatchUploadClick(inputRef)}
+                    onClick={() => dispatchSelectClick(inputRef)}
                     variant='outline-primary'
                     size='sm'
                   >
-                    upload
+                    select
                   </Button>
                 )}
               </td>
@@ -108,9 +108,9 @@ const statusToBootstrapClassMap = new Map<FileStatus, string>([
 
 // map to translate statuses to string status descriptions
 const statusToDescription = new Map<FileStatus, string>([
-  [FileStatus.NO_FILE, 'No file uploaded'],
-  [FileStatus.SUCCESSFUL, 'Successfully uploaded'],
-  [FileStatus.WARNING, 'Unsuccessfully uploaded'],
+  [FileStatus.NO_FILE, 'No file selected'],
+  [FileStatus.SUCCESSFUL, 'Successfully selected'],
+  [FileStatus.WARNING, 'Unsuccessfully selected'],
 ]);
 
 export default FileTable;
