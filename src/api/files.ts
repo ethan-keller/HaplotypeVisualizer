@@ -10,7 +10,7 @@ import {
 } from '../endpoints_config/FileEndpoints';
 import { File, GetFileParams, UpdateFileParams, ClearFileParams } from '../types/files';
 
-export const filesApi = createApi({
+const filesApi = createApi({
   reducerPath: 'filesApi',
   baseQuery: fetchBaseQuery({ baseUrl: fileBaseUrl }),
   tagTypes: ['File'],
