@@ -4,6 +4,7 @@ import logic.files as FileLogic
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
 from schemas.file import File, FileStatus
+from server_data.data import LayoutManager
 from server_data.data import files, files_base_path
 
 router = APIRouter(prefix="/files", tags=["files"])
@@ -91,6 +92,7 @@ def prepare():
     """
     try:
         FileLogic.prepare_files()
+        LayoutManager.layout = None
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_424_FAILED_DEPENDENCY,

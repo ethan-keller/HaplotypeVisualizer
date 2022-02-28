@@ -3,6 +3,7 @@ from typing import List, Optional
 from gfapy.gfa import Gfa as GfaPy
 from schemas.file import File, FileStatus
 from schemas.gfa import Gfa
+from schemas.layout import Layout
 
 files_base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\server\\server_data\\"
 
@@ -16,3 +17,6 @@ files: List[File] = [
 class DataManager:
     __gfa: GfaPy = None
     gfa: Optional[Gfa] = None
+
+class LayoutManager:
+    layout: Layout
