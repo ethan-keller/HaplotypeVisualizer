@@ -57,6 +57,7 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
 axios
   .get(getGfa)
   .then((res) => res.data)
+  // TODO: handle error and communicate it to client
   .then((gfa: Gfa) => {
     let positions: Record<string, cytoscape.Position> = {};
     createCytoscape(gfa)

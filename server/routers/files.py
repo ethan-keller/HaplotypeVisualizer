@@ -4,6 +4,8 @@ import logic.files as FileLogic
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
 from schemas.file import File, FileStatus
+from schemas.file import FileIndex
+from server_data.data import DataManager
 from server_data.data import LayoutManager
 from server_data.data import files, files_base_path
 
@@ -79,6 +81,7 @@ def removeFile(id: int = Query(..., ge=0, lt=len(files))):
     """
     files[id].name = None
     files[id].status = FileStatus.NO_FILE
+    FileLogic.clear_file_data(id)
 
 
 @router.put(
@@ -92,7 +95,6 @@ def prepare():
     """
     try:
         FileLogic.prepare_files()
-        LayoutManager.layout = None
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_424_FAILED_DEPENDENCY,
