@@ -1,7 +1,5 @@
 import json
-from typing import Dict
 from fastapi import APIRouter
-from pydantic import Json
 from schemas.layout import Layout
 from subprocess import check_output
 
