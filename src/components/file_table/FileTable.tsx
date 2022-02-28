@@ -80,8 +80,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                       size='sm'
                     >
                       local
-                    </Button>
-                    {' '}
+                    </Button>{' '}
                     <Button
                       onClick={() => dispatchImportClick(inputRef)}
                       variant='outline-primary'
@@ -118,9 +117,9 @@ const statusToBootstrapClassMap = new Map<FileStatus, string>([
 
 // map to translate statuses to string status descriptions
 const statusToDescription = new Map<FileStatus, string>([
-  [FileStatus.NO_FILE, 'No file selected'],
-  [FileStatus.SUCCESSFUL, 'Successfully selected'],
-  [FileStatus.WARNING, 'Unsuccessfully selected'],
+  [FileStatus.NO_FILE, 'No file imported'],
+  [FileStatus.SUCCESSFUL, 'Successfully imported'],
+  [FileStatus.WARNING, 'Unsuccessfully imported'],
 ]);
 
 export default FileTable;

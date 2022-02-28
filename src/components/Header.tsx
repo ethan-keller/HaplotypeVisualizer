@@ -20,10 +20,10 @@ const Header: React.FC<HeaderProps> = (props) => {
         <Nav>
           {/* <Nav.Link href='#pheno'>Pheno</Nav.Link>
         <Nav.Link href='#trio'>Trio</Nav.Link> */}
-          <Nav.Link href='#settings'>Settings</Nav.Link>
-          <Nav.Link href='#about'>About</Nav.Link>
           <Nav.Link href={urlPhenoGraphView}>PhenoGraph</Nav.Link>
           <Nav.Link href={urlPhenoTableView}>PhenoTable</Nav.Link>
+          <Nav.Link href='#settings'>Settings</Nav.Link>
+          <Nav.Link href='#about'>About</Nav.Link>
         </Nav>
       </Navbar>
       {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}

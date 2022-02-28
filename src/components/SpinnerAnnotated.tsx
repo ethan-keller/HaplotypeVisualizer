@@ -7,7 +7,7 @@ interface SpinnerAnnotatedProps {
 const SpinnerAnnotated: React.FC<SpinnerAnnotatedProps> = (props) => {
   return (
     <>
-      <Card className='text-center'>
+      <Card className='text-center' style={{width: '100%'}}>
         <Card.Body>
           <Card.Text>{props.message}</Card.Text>
           <Spinner animation='border' />
