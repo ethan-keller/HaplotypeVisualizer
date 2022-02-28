@@ -8,6 +8,7 @@
 
 # dependencies
 /node_modules
+/server/graph_layout/node_modules
 /.pnp
 .pnp.js
 
