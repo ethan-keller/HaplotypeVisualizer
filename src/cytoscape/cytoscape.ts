@@ -1,25 +1,18 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
-import { GraphSettings } from '../components/graph/Graph';
-import Gfa, { GfaLink, GfaSegment } from '../types/gfa';
 import dagre from 'cytoscape-dagre';
+import Layout, { Position } from '../types/layout';
+import Graph, { GraphSettings } from '../types/graph';
+import { GfaLink, GfaSegment } from '../types/gfa';
 
 cytoscape.use(dagre);
-
-const layoutSettings: dagre.DagreLayoutOptions = {
-  name: 'dagre',
-  rankDir: 'LR',
-  //@ts-ignore 'align' is not in type declaration but it is in source code
-  align: 'UL',
-  fit: true,
-  nodeDimensionsIncludeLabels: false,
-  nodeSep: 35,
-};
 
 const nodeStyle = (settings: GraphSettings) => {
   return {
     shape: 'rectangle',
-    width: 'data(width)',
-    height: 'data(height)',
+    // width: 'data(width)',
+    // height: 'data(height)',
+    width: 10,
+    height: 10,
     'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
     'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
     'background-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
@@ -32,7 +25,8 @@ const edgeStyle = (settings: GraphSettings) => {
     'target-arrow-shape': 'triangle',
     'arrow-scale': 0.8,
     'curve-style': 'bezier',
-    width: 'data(width)',
+    // width: 'data(width)',
+    width: 1,
     // 'line-gradient-direction': 'to-bottom',
     'line-fill': 'linear-gradient',
     'line-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
@@ -40,7 +34,9 @@ const edgeStyle = (settings: GraphSettings) => {
   };
 };
 
-const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
+// const coreStyle = {};
+
+export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
   return segments.map((segment: GfaSegment) => {
     return {
       data: {
@@ -62,7 +58,7 @@ const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
   }) as NodeDefinition[];
 };
 
-const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
+export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
   return links.map((link: GfaLink) => {
     return {
       data: {
@@ -79,45 +75,52 @@ const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
   }) as EdgeDefinition[];
 };
 
-// const coreStyle = {};
+function createLayoutWithPositions(
+  positions: Record<string, Position>,
+): cytoscape.PresetLayoutOptions {
+  return {
+    name: 'preset',
+    positions: positions,
+  };
+}
 
-export function createCytoscape(settings: GraphSettings, gfa: Gfa): Promise<cytoscape.Core> {
-  return new Promise((resolve, reject) => {
-    resolve(
-      cytoscape({
-        container: document.getElementById('graph'),
-        layout: layoutSettings,
-        style: [
-          // TODO: memoize style
-          {
-            selector: 'node',
-            style: nodeStyle(settings) as any,
-          },
-          {
-            selector: 'edge',
-            style: edgeStyle(settings),
-          },
-          // TODO: add special core styling
-          // {
-          //   selector: 'core',
-          //   style: {
-          //     'active-bg-color': 'blue'
-          //   }
-          // }
-        ],
-        elements: {
-          nodes: cytoscapeNodes(gfa.segments, settings),
-          edges: cytoscapeEdges(gfa.links, settings),
-        },
-        minZoom: 0.1,
-        maxZoom: 4,
-        autoungrabify: true,
-        selectionType: 'single',
-        hideEdgesOnViewport: true,
-        hideLabelsOnViewport: true,
-        wheelSensitivity: 0.5,
-      }),
-    );
+export function createCytoscape(
+  graph: Graph,
+  settings: GraphSettings,
+  layout: Layout,
+): cytoscape.Core {
+  return cytoscape({
+    container: document.getElementById('graph'),
+    layout: createLayoutWithPositions(layout.positions),
+    elements: {
+      nodes: graph.nodes,
+      edges: graph.edges,
+    },
+    style: [
+      // TODO: memoize style
+      {
+        selector: 'node',
+        style: nodeStyle(settings),
+      },
+      {
+        selector: 'edge',
+        style: edgeStyle(settings),
+      },
+      // TODO: add special core styling
+      // {
+      //   selector: 'core',
+      //   style: {
+      //     'active-bg-color': 'blue'
+      //   }
+      // }
+    ],
+    minZoom: 0.1,
+    maxZoom: 4,
+    autoungrabify: true,
+    selectionType: 'single',
+    hideEdgesOnViewport: true,
+    hideLabelsOnViewport: true,
+    wheelSensitivity: 0.5,
   });
 }
 

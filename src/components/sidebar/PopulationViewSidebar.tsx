@@ -8,7 +8,7 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   return (
     <Sidebar title='Population view'>
       <SidebarSection title='Graph information'>
-        <Table style={{fontWeight: 100}} borderless size='sm'>
+        <Table style={{ fontWeight: 100 }} borderless size='sm'>
           <tbody>
             <tr>
               <td>Nodes</td>
@@ -24,10 +24,18 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
             </tr>
           </tbody>
         </Table>
-				<Button size='sm'>More graph information</Button>
+        <Button size='sm'>More graph information</Button>
       </SidebarSection>
       <SidebarSection title='Layout options'>
-        <Form.Text>More</Form.Text>
+        <Form.Check label='Draw paths' />
+        <>
+          <Form.Label>Link thickness</Form.Label>
+          <Form.Range />
+        </>
+        <>
+          <Form.Label>Segment thickness</Form.Label>
+          <Form.Range />
+        </>
       </SidebarSection>
     </Sidebar>
   );
