@@ -1,17 +1,19 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
-import filesReducer from './slices/files';
 import filesApi from './api/files';
 import gfaApi from './api/gfa';
+import layoutApi from './api/layout';
+import graphSettingsReducer from './slices/graphSettings';
 
 export const store = configureStore({
   reducer: {
-    files: filesReducer,
+    graphSettings: graphSettingsReducer,
     [filesApi.reducerPath]: filesApi.reducer,
     [gfaApi.reducerPath]: gfaApi.reducer,
+    [layoutApi.reducerPath]: layoutApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(filesApi.middleware).concat(gfaApi.middleware),
+    getDefaultMiddleware().concat([filesApi.middleware, gfaApi.middleware, layoutApi.middleware]),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
