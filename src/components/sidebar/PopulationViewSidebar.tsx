@@ -1,10 +1,14 @@
 import { Table, Form, Button } from 'react-bootstrap';
+import gfaApi from '../../api/gfa';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
 
 interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
+  // TODO: make lightweight graph info endpoint
+  const {data: gfa} = gfaApi.useGetGfaQuery();
+
   return (
     <Sidebar title='Population view'>
       <SidebarSection title='Graph information'>
@@ -12,15 +16,15 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           <tbody>
             <tr>
               <td>Nodes</td>
-              <td>-</td>
+              <td>{gfa ? gfa.segments.length : '-'}</td>
             </tr>
             <tr>
               <td>Edges</td>
-              <td>-</td>
+              <td>{gfa ? gfa.links.length : '-'}</td>
             </tr>
             <tr>
               <td>Paths</td>
-              <td>-</td>
+              <td>{gfa ? gfa.paths.length : '-'}</td>
             </tr>
           </tbody>
         </Table>
