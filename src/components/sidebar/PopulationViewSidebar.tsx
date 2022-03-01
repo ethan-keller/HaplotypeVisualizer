@@ -1,5 +1,6 @@
 import { Table, Form, Button } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
+import { useAppSelector } from '../../store';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
 
@@ -7,7 +8,8 @@ interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   // TODO: make lightweight graph info endpoint
-  const {data: gfa} = gfaApi.useGetGfaQuery();
+  const { data: gfa } = gfaApi.useGetGfaQuery();
+  const graphSettings = useAppSelector((state) => state.graphSettings);
 
   return (
     <Sidebar title='Population view'>
@@ -31,7 +33,7 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
         <Button size='sm'>More graph information</Button>
       </SidebarSection>
       <SidebarSection title='Layout options'>
-        <Form.Check label='Draw paths' />
+        <Form.Check label='Draw paths' checked={graphSettings.drawPaths} />
         <>
           <Form.Label>Link thickness</Form.Label>
           <Form.Range />

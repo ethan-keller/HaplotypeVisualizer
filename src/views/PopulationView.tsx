@@ -36,7 +36,7 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
 
         <div className='pp-v-graph'>
           {isLoading ? (
-            <SpinnerAnnotated message='Waiting on GFA file' />
+            <SpinnerAnnotated message='Loading graph' />
           ) : layout && graph && graphSettings ? (
             <GraphComponent graph={graph} settings={graphSettings} layout={layout} />
           ) : null}
