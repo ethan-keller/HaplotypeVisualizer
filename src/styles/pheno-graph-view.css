@@ -1,4 +1,4 @@
-.container {
+.ph-g-container {
   flex: 1;
   padding: 0;
   max-width: 100%;
@@ -16,7 +16,7 @@
     'side navigator navigator navigator navigator navigator';
 }
 
-.sidebar {
+.ph-g-sidebar {
   grid-area: side;
   border-right: 1px solid grey;
   padding-left: 1.2rem;
@@ -25,11 +25,11 @@
   overflow-x: hidden;
 }
 
-.graph {
+.ph-g-graph {
   grid-area: graph;
 }
 
-.navigator {
+.ph-g-navigator {
   border-top: 1px solid grey;
   grid-area: navigator;
 }

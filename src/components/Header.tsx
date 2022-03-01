@@ -3,6 +3,7 @@ import { Nav, Navbar } from 'react-bootstrap';
 import { url as urlPhenoGraphView } from '../views/PhenoGraphView';
 import { url as urlWelcomeView } from '../views/WelcomeView';
 import { url as urlPhenoTableView } from '../views/PhenoTableView';
+import { url as urlPopulationView } from '../views/PopulationView';
 import AboutModal from './modals/AboutModal';
 
 interface HeaderProps {}
@@ -20,6 +21,7 @@ const Header: React.FC<HeaderProps> = (props) => {
         <Nav>
           {/* <Nav.Link href='#pheno'>Pheno</Nav.Link>
         <Nav.Link href='#trio'>Trio</Nav.Link> */}
+          <Nav.Link href={urlPopulationView}>PopuView</Nav.Link>
           <Nav.Link href={urlPhenoGraphView}>PhenoGraph</Nav.Link>
           <Nav.Link href={urlPhenoTableView}>PhenoTable</Nav.Link>
           <Nav.Link href='#settings'>Settings</Nav.Link>

@@ -1,6 +1,7 @@
 import Header from '../components/Header';
+import PhenoTable from '../components/PhenoTable';
 import PhenoTableSidebar from '../components/sidebar/PhenoTableSidebar';
-// import '../styles/pheno-table-view.css';
+import '../styles/pheno-table-view.css';
 
 interface PhenoTableViewProps {}
 
@@ -8,9 +9,14 @@ const PhenoTableView: React.FC<PhenoTableViewProps> = (props) => {
   return (
     <>
       <Header />
-      <div className='container'>
-        <PhenoTableSidebar />
-        <div className='table' style={{backgroundColor: '#c7edb4'}}>Big table with phenotype-sample matrix</div>
+      <div className='ph-t-container'>
+        <div className='ph-t-sidebar'>
+          <PhenoTableSidebar />
+        </div>
+
+        <div className='ph-t-table'>
+          <PhenoTable />
+        </div>
       </div>
     </>
   );

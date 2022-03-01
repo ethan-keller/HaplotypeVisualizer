@@ -1,4 +1,4 @@
-.container {
+.pp-v-container {
   flex: 1;
   padding: 0;
   max-width: 100%;
@@ -16,7 +16,7 @@
     'side nav nav nav nav nav';
 }
 
-.sidebar {
+.pp-v-sidebar {
   grid-area: side;
   border-right: 1px solid grey;
   padding-left: 1rem;
@@ -26,11 +26,11 @@
   overflow-x: hidden;
 }
 
-.graph {
+.pp-v-graph {
   grid-area: graph;
 }
 
-.navigator {
+.pp-v-navigator {
   border-top: 1px solid grey;
   grid-area: nav;
 }

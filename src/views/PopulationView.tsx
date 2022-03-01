@@ -29,10 +29,12 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
   return (
     <>
       <Header />
-      <div className='container'>
-        <PopulationViewSidebar />
+      <div className='pp-v-container'>
+        <div className='pp-v-sidebar'>
+          <PopulationViewSidebar />
+        </div>
 
-        <div className='graph'>
+        <div className='pp-v-graph'>
           {isLoading ? (
             <SpinnerAnnotated message='Waiting on GFA file' />
           ) : layout && graph && graphSettings ? (
@@ -40,7 +42,7 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
           ) : null}
         </div>
 
-        <div className='navigator'>Nav</div>
+        <div className='pp-v-navigator'>Nav</div>
       </div>
     </>
   );
