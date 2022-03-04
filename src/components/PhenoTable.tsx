@@ -1,5 +1,6 @@
 import { Table } from 'react-bootstrap';
 import phenoApi from '../api/pheno';
+import ErrorCard from './ErrorCard';
 import SpinnerAnnotated from './SpinnerAnnotated';
 
 interface PhenoTableProps {}
@@ -7,10 +8,12 @@ interface PhenoTableProps {}
 const PhenoTable: React.FC<PhenoTableProps> = (props) => {
   const { data: phenoTable, isLoading } = phenoApi.useGetPhenoTableQuery();
 
-  return isLoading ? (
+  return !isLoading && !phenoTable ? (
+    <ErrorCard message='No phenotype table imported' />
+  ) : isLoading ? (
     <SpinnerAnnotated message='Loading the phenotype table' />
   ) : phenoTable ? (
-    <Table striped bordered hover >
+    <Table striped bordered hover>
       <thead>
         <tr>
           {phenoTable.phenotypes[0]
