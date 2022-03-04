@@ -1,6 +1,7 @@
 import { Table, Form, Button } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { useAppSelector } from '../../store';
+import GraphInfoModal from '../modals/GraphInfoModal';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
 
@@ -8,7 +9,7 @@ interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   // TODO: make lightweight graph info endpoint
-  const { data: gfa } = gfaApi.useGetGfaQuery();
+  const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);
 
   return (
@@ -18,21 +19,25 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           <tbody>
             <tr>
               <td>Nodes</td>
-              <td>{gfa ? gfa.segments.length : '-'}</td>
+              <td>{gfaInfo ? gfaInfo.n_segments : '-'}</td>
             </tr>
             <tr>
               <td>Edges</td>
-              <td>{gfa ? gfa.links.length : '-'}</td>
+              <td>{gfaInfo ? gfaInfo.n_links : '-'}</td>
             </tr>
             <tr>
               <td>Paths</td>
-              <td>{gfa ? gfa.paths.length : '-'}</td>
+              <td>{gfaInfo ? gfaInfo.n_paths : '-'}</td>
             </tr>
           </tbody>
         </Table>
+        <GraphInfoModal onHide={() => console.log()} />
         <Button size='sm'>More graph information</Button>
       </SidebarSection>
       <SidebarSection title='Layout options'>
+        <Button size='sm'>Edit layout</Button>
+      </SidebarSection>
+      <SidebarSection title='Styling options'>
         <Form.Check label='Draw paths' checked={graphSettings.drawPaths} />
         <>
           <Form.Label>Link thickness</Form.Label>

@@ -34,7 +34,13 @@ interface GfaPath extends GfaElement {
   // TODO: overlaps
 }
 
+interface GfaInfo {
+  readonly n_segments: number;
+  readonly n_links: number;
+  readonly n_paths: number;
+}
+
 type GfaOptional = 'VN' | 'LN' | 'RC' | 'FC' | 'KC' | 'SH' | 'UR' | 'MQ' | 'NM' | 'ID';
 
-export type {GfaElement, GfaHeader, GfaSegment, GfaLink, GfaOptional, GfaPath};
-export default Gfa
+export type { GfaElement, GfaHeader, GfaSegment, GfaLink, GfaOptional, GfaPath, GfaInfo };
+export default Gfa;

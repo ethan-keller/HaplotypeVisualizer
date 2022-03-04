@@ -43,3 +43,8 @@ class Gfa(BaseModel):
     links: List[GfaLink]
     paths: List[GfaPath]
 
+class GfaInfo(BaseModel):
+    # TODO:  add more
+    n_segments: int
+    n_links: int
+    n_paths: int
