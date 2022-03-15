@@ -4,6 +4,8 @@ from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 from schemas.gfa import Gfa, GfaLink, GfaPath, GfaSegment, GfaInfo
 from server_data.data import DataManager
+from utils.plots import compute_histogram
+
 
 router = APIRouter(prefix="/gfa", tags=["gfa"])
 
@@ -79,4 +81,23 @@ def get_graph_info():
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
+        )
+
+
+@router.get(
+    "/gfa_hist", response_model=List[float], responses=responses, summary="Gets segment length histogram values"
+)
+def get_hist_values():
+    """
+    For the visualization of segment lengths, this endpoint returns the computed histogram values.
+    """
+    if DataManager.gfa:
+        segment_lengths = list(map(
+            lambda segment: segment.optionals["LN"] if segment.optionals else len(segment.sequence),
+            DataManager.gfa.segments,
+        ))
+        return compute_histogram(segment_lengths)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could compute histogram values from a non-existent gfa object"
         )
