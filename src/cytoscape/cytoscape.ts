@@ -93,7 +93,6 @@ export function createCytoscape(
       edges: graph.edges,
     },
     style: [
-      // TODO: memoize style
       {
         selector: 'node',
         style: nodeStyle(settings),
@@ -102,13 +101,6 @@ export function createCytoscape(
         selector: 'edge',
         style: edgeStyle(settings),
       },
-      // TODO: add special core styling
-      // {
-      //   selector: 'core',
-      //   style: {
-      //     'active-bg-color': 'blue'
-      //   }
-      // }
     ],
     minZoom: 0.1,
     maxZoom: 4,
@@ -120,43 +112,6 @@ export function createCytoscape(
   });
 }
 
-const layoutSettings: dagre.DagreLayoutOptions = {
-  name: 'dagre',
-  rankDir: 'LR',
-  //@ts-ignore 'align' is not in type declaration but it is in source code
-  align: 'UL',
-  fit: true,
-  nodeSep: 35,
-};
-
-
-// export const renderPaths = (layers: any) => {
-//   layers.renderPerEdge(layers.append("canvas"), (ctx: CanvasRenderingContext2D, edge: EdgeSingular, path: Path2D) => {
-//     if (edge.scratch("gradient_cache_key") !== path) {
-//       const length = Math.sqrt((edge.sourceEndpoint().y - edge.targetEndpoint().y) ** 2 + (edge.targetEndpoint().x - edge.sourceEndpoint().x) ** 2);
-//       if (length > 0) {
-//         const [x1, y1] = [edge.midpoint().x - edge.width() / 2 / length * (edge.sourceEndpoint().y - edge.targetEndpoint().y), edge.midpoint().y - edge.width() / 2 / length * (edge.targetEndpoint().x - edge.sourceEndpoint().x)];
-//         const [x2, y2] = [edge.midpoint().x + edge.width() / 2 / length * (edge.sourceEndpoint().y - edge.targetEndpoint().y), edge.midpoint().y + edge.width() / 2 / length * (edge.targetEndpoint().x - edge.sourceEndpoint().x)];
-//         const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
-//         const stopColors: string[] = edge.data("stopColors");
-//         const stopPositions = edge.data("stopPositions");
-//         stopColors.forEach((color, index) => {
-//           //console.log("color: " + color + "\n index: " + index + "\n\n")
-//           gradient.addColorStop(stopPositions[index], color)
-//         })
-//         edge.scratch("gradient_cache_key", path);
-//         edge.scratch("gradient_cache_value", gradient);
-//         ctx.strokeStyle = gradient;
-//         ctx.lineWidth = edge.width();
-//         ctx.stroke(path);
-//       }
-//     } else {
-//       ctx.strokeStyle = edge.scratch("gradient_cache_value");
-//       ctx.lineWidth = edge.width();
-//       ctx.stroke(path);
-//     }
-//   });
-// }
 
 // function setEventListeners(
 //   cy: cytoscape.Core,
