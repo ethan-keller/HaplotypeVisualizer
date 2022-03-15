@@ -16,7 +16,7 @@ class GFA_ELEMENT(IntEnum):
 class GfaElement(BaseModel):
     # TODO: change any to union of more specific types
     name: str
-    optional_fields: Optional[Dict[str, Any]] = None
+    optionals: Optional[Dict[str, Any]] = None
 
 
 class GfaPath(GfaElement):

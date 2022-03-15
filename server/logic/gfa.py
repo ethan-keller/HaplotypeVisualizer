@@ -55,7 +55,7 @@ def _convert_segment_to_pydantic(segment: Line) -> GfaSegment:
     return GfaSegment(
         name=segment.name,
         sequence=str(segment.sequence),
-        optional_fields=_convert_optional_fields_to_pydantic(segment, GFA_ELEMENT.SEGMENT),
+        optionals=_convert_optional_fields_to_pydantic(segment, GFA_ELEMENT.SEGMENT),
         paths=[],
     )
 
@@ -80,7 +80,7 @@ def _convert_link_to_pydantic(link: Line) -> GfaLink:
         from_orient=link.from_orient,
         to_segment=link.to_segment.name,
         to_orient=link.to_orient,
-        optional_fields=_convert_optional_fields_to_pydantic(link, GFA_ELEMENT.LINK),
+        optionals=_convert_optional_fields_to_pydantic(link, GFA_ELEMENT.LINK),
         paths=[],
     )
 

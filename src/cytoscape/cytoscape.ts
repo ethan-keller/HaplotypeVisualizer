@@ -9,14 +9,12 @@ cytoscape.use(dagre);
 const nodeStyle = (settings: GraphSettings) => {
   return {
     shape: 'rectangle',
-    // width: 'data(width)',
-    // height: 'data(height)',
-    width: 10,
-    height: 10,
+    width: 'data(width)',
+    height: 'data(height)',
     'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
     'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
     'background-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
-    label: settings.drawPaths ? 'data(id)' : undefined,
+    // label: settings.drawPaths ? 'data(height)' : undefined,
   };
 };
 
@@ -25,8 +23,7 @@ const edgeStyle = (settings: GraphSettings) => {
     'target-arrow-shape': 'triangle',
     'arrow-scale': 0.8,
     'curve-style': 'bezier',
-    // width: 'data(width)',
-    width: 1,
+    width: 'data(width)',
     // 'line-gradient-direction': 'to-bottom',
     'line-fill': 'linear-gradient',
     'line-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
@@ -41,8 +38,7 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
     return {
       data: {
         id: segment.name,
-        width:
-          120 * Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
+        width: 2 * Math.cbrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
         stopColors: segment.paths.flatMap((_, i) => [
@@ -123,6 +119,16 @@ export function createCytoscape(
     wheelSensitivity: 0.5,
   });
 }
+
+const layoutSettings: dagre.DagreLayoutOptions = {
+  name: 'dagre',
+  rankDir: 'LR',
+  //@ts-ignore 'align' is not in type declaration but it is in source code
+  align: 'UL',
+  fit: true,
+  nodeSep: 35,
+};
+
 
 // export const renderPaths = (layers: any) => {
 //   layers.renderPerEdge(layers.append("canvas"), (ctx: CanvasRenderingContext2D, edge: EdgeSingular, path: Path2D) => {

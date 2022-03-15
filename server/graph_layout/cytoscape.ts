@@ -7,8 +7,11 @@ import process from 'process';
 
 cytoscape.use(dagre);
 
-const segmentThickness = 10;
+// TODO: sync to redux store values
+const drawPaths = true;
 const linkThickness = 1.5;
+const segmentThickness = 10;
+const pathColors = ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#073B4C'];
 
 const layoutSettings: dagre.DagreLayoutOptions = {
   name: 'dagre',
@@ -25,8 +28,8 @@ const cytoscapeNodes = (segments: GfaSegment[]) => {
       data: {
         id: segment.name,
         width:
-          120 * Math.sqrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
-        height: segmentThickness * Math.max(segment.paths.length, 1),
+          2 * Math.cbrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
+        height: segmentThickness * (drawPaths ? Math.max(segment.paths.length, 1) : 1),
       },
     };
   }) as NodeDefinition[];
@@ -38,7 +41,7 @@ const cytoscapeEdges = (links: GfaLink[]) => {
       data: {
         source: link.from_segment,
         target: link.to_segment,
-        width: linkThickness * Math.max(link.paths.length, 1),
+        width: linkThickness * (drawPaths ? Math.max(link.paths.length, 1) : 1),
       },
     };
   }) as EdgeDefinition[];
@@ -51,6 +54,25 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
       nodes: cytoscapeNodes(gfa.segments),
       edges: cytoscapeEdges(gfa.links),
     },
+    style: [
+      {
+        selector: 'node',
+        style: {
+          shape: 'rectangle',
+          width: 'data(width)',
+          height: 'data(height)',
+        },
+      },
+      {
+        selector: 'edge',
+        style: {
+          'target-arrow-shape': 'triangle',
+          'arrow-scale': 0.8,
+          'curve-style': 'bezier',
+          width: 'data(width)',
+        },
+      },
+    ],
   });
 }
 
@@ -70,19 +92,3 @@ axios
   .catch((err) => {
     throw new Error(err);
   });
-
-// fetch(getGfa)
-//   .then((res) => res.json())
-//   .then((gfa: Gfa) => {
-//     var positions: Record<string, cytoscape.Position>;
-//     createCytoscape(gfa)
-//       .nodes()
-//       .forEach((node) => {
-//         positions[node.id()] = node.position();
-//       });
-//   })
-//   .catch((err) => {
-//     throw new Error(err);
-//   });
-
-// fetch("www.google.com").then(() => console.log("HI"))

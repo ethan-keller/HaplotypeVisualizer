@@ -1,4 +1,3 @@
-import React from 'react';
 import GraphComponent from '../components/graph/Graph';
 import Header from '../components/Header';
 import '../styles/popu-view.css';
@@ -8,6 +7,7 @@ import layoutApi from '../api/layout';
 import gfaApi from '../api/gfa';
 import { useAppSelector } from '../store';
 import { cytoscapeEdges, cytoscapeNodes } from '../cytoscape/cytoscape';
+import Navigator from '../components/Navigator';
 
 interface PopulationViewProps {}
 
@@ -42,7 +42,9 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
           ) : null}
         </div>
 
-        <div className='pp-v-navigator'>Nav</div>
+        <div className='pp-v-navigator'>
+          <Navigator />
+        </div>
       </div>
     </>
   );
