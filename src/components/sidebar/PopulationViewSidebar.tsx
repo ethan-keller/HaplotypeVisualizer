@@ -8,11 +8,14 @@ import SidebarSection from './SidebarSection';
 import { updateDrawPaths } from '../../slices/graphSettings';
 import RangeSegmentThickness from '../range/RangeSegmentThickness';
 import RangeLinkThickness from '../range/RangeLinkThickness';
+import EditLayoutModal from '../modals/EditLayoutModal';
 
 interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
+  const [showEditLayout, setShowEditLayout] = useState<boolean>(false);
+
   const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);
   const dispatch = useAppDispatch();
@@ -36,15 +39,12 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
             </tr>
           </tbody>
         </Table>
-
-        {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
         <Button onClick={() => setShowInfo(true)} size='sm'>
           More graph information
         </Button>
+        {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
       </SidebarSection>
-      <SidebarSection title='Layout options'>
-        <Button size='sm'>Edit layout</Button>
-      </SidebarSection>
+
       <SidebarSection title='Styling options'>
         <Form.Check
           type='switch'
@@ -52,9 +52,15 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           checked={graphSettings.drawPaths}
           onChange={(e) => dispatch(updateDrawPaths(e.target.checked))}
         />
-
         <RangeSegmentThickness />
         <RangeLinkThickness />
+      </SidebarSection>
+
+      <SidebarSection title='Layout options'>
+        <Button onClick={() => setShowEditLayout(true)} size='sm'>
+          Edit layout
+        </Button>
+        {showEditLayout ? <EditLayoutModal onHide={() => setShowEditLayout(false)} /> : false}
       </SidebarSection>
     </Sidebar>
   );
