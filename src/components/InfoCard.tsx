@@ -1,4 +1,5 @@
 import { Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
+import { useAppSelector } from '../store';
 import { getSegmentLength, GfaFeature } from '../types/gfa';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
 import VerticalSpacer from './VerticalSpacer';
@@ -9,6 +10,7 @@ interface InfoCardProps {
 
 const InfoCard: React.FC<InfoCardProps> = (props) => {
   const f = props.data;
+  const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   return (
     <Card style={{ border: 0 }}>
       <Card.Body>
@@ -35,7 +37,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
         </Card.Text>
         <ListGroup>
           {f.paths.map((path, i) => (
-            <ListGroupItem key={'path_' + i}>{path.name}</ListGroupItem>
+            <ListGroupItem key={'path_' + i} style={{backgroundColor: pathColors[i] + '60'}}>{path.name}</ListGroupItem>
           ))}
         </ListGroup>
 
