@@ -36,6 +36,6 @@ export const graphSettingsSlice = createSlice({
   },
 });
 
-export const { updateDrawPaths } = graphSettingsSlice.actions;
+export const { updateDrawPaths, updateLinkThickness, updateSegmentThickness } = graphSettingsSlice.actions;
 
 export default graphSettingsSlice.reducer;

@@ -6,6 +6,8 @@ import GraphInfoModal from '../modals/GraphInfoModal';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
 import { updateDrawPaths } from '../../slices/graphSettings';
+import RangeSegmentThickness from '../range/RangeSegmentThickness';
+import RangeLinkThickness from '../range/RangeLinkThickness';
 
 interface PopulationViewSidebarProps {}
 
@@ -50,14 +52,9 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           checked={graphSettings.drawPaths}
           onChange={(e) => dispatch(updateDrawPaths(e.target.checked))}
         />
-        <>
-          <Form.Label>Link thickness</Form.Label>
-          <Form.Range />
-        </>
-        <>
-          <Form.Label>Segment thickness</Form.Label>
-          <Form.Range />
-        </>
+
+        <RangeSegmentThickness />
+        <RangeLinkThickness />
       </SidebarSection>
     </Sidebar>
   );
