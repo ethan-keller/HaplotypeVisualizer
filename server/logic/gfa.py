@@ -129,4 +129,4 @@ def _fields_to_dict(line: Line, fields: List[str]) -> Optional[Dict[str, Any]]:
 
 
 def get_link_name(from_segment: str, to_segment: str) -> str:
-    return f"{from_segment}-{to_segment}"
+    return f"{from_segment}->{to_segment}"
