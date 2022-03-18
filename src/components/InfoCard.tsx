@@ -1,4 +1,4 @@
-import { Button, Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
+import { Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
 import { getSegmentLength, GfaFeature } from '../types/gfa';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
 import VerticalSpacer from './VerticalSpacer';
@@ -19,7 +19,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
 
         {f.type === 'segment' ? (
           <>
-            <Card.Text style={{fontWeight: 100}}>
+            <Card.Text style={{ fontWeight: 100 }}>
               {'length: ' + getSegmentLength(f)}
               <br />
               {'sequence: ' + truncateIfLongerThan(f.sequence, 20)}
@@ -34,8 +34,8 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
           <b>{f.paths.length}</b> paths through this {f.type}
         </Card.Text>
         <ListGroup>
-          {f.paths.map((path) => (
-            <ListGroupItem>{path.name}</ListGroupItem>
+          {f.paths.map((path, i) => (
+            <ListGroupItem key={'path_' + i}>{path.name}</ListGroupItem>
           ))}
         </ListGroup>
 

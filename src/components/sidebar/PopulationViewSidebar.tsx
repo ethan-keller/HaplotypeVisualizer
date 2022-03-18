@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Table, Form, Button } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
-import { useAppSelector } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 import GraphInfoModal from '../modals/GraphInfoModal';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
+import { updateDrawPaths } from '../../slices/graphSettings';
 
 interface PopulationViewSidebarProps {}
 
@@ -12,6 +13,7 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);
+  const dispatch = useAppDispatch();
 
   return (
     <Sidebar title='Population view'>
@@ -34,13 +36,20 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
         </Table>
 
         {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
-        <Button onClick={() => setShowInfo(true)} size='sm'>More graph information</Button>
+        <Button onClick={() => setShowInfo(true)} size='sm'>
+          More graph information
+        </Button>
       </SidebarSection>
       <SidebarSection title='Layout options'>
         <Button size='sm'>Edit layout</Button>
       </SidebarSection>
       <SidebarSection title='Styling options'>
-        <Form.Check label='Draw paths' checked={graphSettings.drawPaths} />
+        <Form.Check
+          type='switch'
+          label='Draw paths'
+          checked={graphSettings.drawPaths}
+          onChange={(e) => dispatch(updateDrawPaths(e.target.checked))}
+        />
         <>
           <Form.Label>Link thickness</Form.Label>
           <Form.Range />

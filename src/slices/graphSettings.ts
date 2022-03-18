@@ -36,6 +36,6 @@ export const graphSettingsSlice = createSlice({
   },
 });
 
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions;
+export const { updateDrawPaths } = graphSettingsSlice.actions;
 
 export default graphSettingsSlice.reducer;
