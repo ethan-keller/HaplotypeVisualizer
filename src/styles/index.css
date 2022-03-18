@@ -35,3 +35,8 @@ code {
 .navbar-brand {
   margin-left: 1rem;
 }
+
+.vertical-spacer {
+  width: 100%;
+}
+

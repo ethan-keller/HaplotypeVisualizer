@@ -31,13 +31,13 @@ const BarPlot: React.FC<BarPlotProps> = (props) => {
 
   return (
     <ResponsiveContainer width={'100%'} height={200}>
-      <BarChart margin={{ top: 10, bottom: 30, right: 70 }} data={data}>
+      <BarChart margin={{ top: 10, left: 10, bottom: 30, right: 70 }} data={data}>
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis type={'number'} dataKey={'edge'} tickCount={values.length}>
           <Label value='Segment length' offset={25} position='bottom' />
         </XAxis>
         <YAxis>
-          <Label value='Freq.' angle={-90} position={'center'} />
+          <Label value='Freq.' angle={-90} position={'insideLeft'}/>
         </YAxis>
         <Tooltip />
         <Brush

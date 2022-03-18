@@ -1,6 +1,6 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import Layout, { Position } from '../types/layout';
+import Layout from '../types/layout';
 import Graph, { GraphSettings } from '../types/graph';
 import { GfaLink, GfaSegment } from '../types/gfa';
 
@@ -31,6 +31,15 @@ const edgeStyle = (settings: GraphSettings) => {
   };
 };
 
+const overlayStyle = (color: string) => {
+  return {
+    "target-arrow-color": color,
+    "overlay-padding": "5px",
+    "overlay-color": color,
+    "overlay-opacity": 0.25
+  }
+}
+
 // const coreStyle = {};
 
 export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
@@ -49,6 +58,7 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
         ]),
+        feature: segment,
       },
     };
   }) as NodeDefinition[];
@@ -66,28 +76,29 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
         ]),
+        feature: link,
       },
     };
   }) as EdgeDefinition[];
 };
 
-function createLayoutWithPositions(
-  positions: Record<string, Position>,
-): cytoscape.PresetLayoutOptions {
-  return {
-    name: 'preset',
-    positions: positions,
-  };
-}
+const layoutSettings: dagre.DagreLayoutOptions = {
+  name: 'dagre',
+  rankDir: 'LR',
+  //@ts-ignore 'align' is not in type declaration but it is in source code
+  align: 'UL',
+  fit: true,
+  nodeSep: 35,
+};
 
 export function createCytoscape(
   graph: Graph,
   settings: GraphSettings,
   layout: Layout,
 ): cytoscape.Core {
-  return cytoscape({
+  const cy = cytoscape({
     container: document.getElementById('graph'),
-    layout: createLayoutWithPositions(layout.positions),
+    layout: layoutSettings,
     elements: {
       nodes: graph.nodes,
       edges: graph.edges,
@@ -101,24 +112,57 @@ export function createCytoscape(
         selector: 'edge',
         style: edgeStyle(settings),
       },
+      {
+        selector: ':selected',
+        style: overlayStyle('green')
+      },
+      {
+        selector: ':active',
+        style: overlayStyle('grey')
+      }
     ],
-    minZoom: 0.1,
-    maxZoom: 4,
-    autoungrabify: true,
-    selectionType: 'single',
-    hideEdgesOnViewport: true,
-    hideLabelsOnViewport: true,
-    wheelSensitivity: 0.5,
   });
+
+  return cy;
 }
 
+// function createLayoutWithPositions(
+//   positions: Record<string, Position>,
+// ): cytoscape.PresetLayoutOptions {
+//   return {
+//     name: 'preset',
+//     positions: positions,
+//   };
+// }
 
-// function setEventListeners(
-//   cy: cytoscape.Core,
-//   props: GraphProps,
-//   onFeatureClick: (feature: GFAFeature | undefined) => void,
-// ) {
-//   cy.on('zoom', (e) => props.setZoom(e.cy.zoom()));
-//   cy.on('unselect', (_) => onFeatureClick(undefined));
-//   cy.on('select', (e) => onFeatureClick(e.target.data('feature')));
+// export function createCytoscape(
+//   graph: Graph,
+//   settings: GraphSettings,
+//   layout: Layout,
+// ): cytoscape.Core {
+//   return cytoscape({
+//     container: document.getElementById('graph'),
+//     layout: createLayoutWithPositions(layout.positions),
+//     elements: {
+//       nodes: graph.nodes,
+//       edges: graph.edges,
+//     },
+//     style: [
+//       {
+//         selector: 'node',
+//         style: nodeStyle(settings),
+//       },
+//       {
+//         selector: 'edge',
+//         style: edgeStyle(settings),
+//       },
+//     ],
+//     minZoom: 0.1,
+//     maxZoom: 4,
+//     autoungrabify: true,
+//     selectionType: 'single',
+//     hideEdgesOnViewport: true,
+//     hideLabelsOnViewport: true,
+//     wheelSensitivity: 0.5,
+//   });
 // }
