@@ -28,7 +28,12 @@ const cytoscapeNodes = (segments: GfaSegment[]) => {
       data: {
         id: segment.name,
         width:
-          2 * Math.cbrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
+          2 *
+          Math.cbrt(
+            segment.optionals && 'LN' in segment.optionals
+              ? segment.optionals.LN
+              : segment.sequence.length,
+          ),
         height: segmentThickness * (drawPaths ? Math.max(segment.paths.length, 1) : 1),
       },
     };

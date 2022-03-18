@@ -33,12 +33,12 @@ const edgeStyle = (settings: GraphSettings) => {
 
 const overlayStyle = (color: string) => {
   return {
-    "target-arrow-color": color,
-    "overlay-padding": "5px",
-    "overlay-color": color,
-    "overlay-opacity": 0.25
-  }
-}
+    'target-arrow-color': color,
+    'overlay-padding': '5px',
+    'overlay-color': color,
+    'overlay-opacity': 0.25,
+  };
+};
 
 // const coreStyle = {};
 
@@ -47,7 +47,13 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
     return {
       data: {
         id: segment.name,
-        width: 2 * Math.cbrt(segment.optionals ? segment.optionals['LN'] : segment.sequence.length),
+        width:
+          2 *
+          Math.cbrt(
+            segment.optionals && 'LN' in segment.optionals
+              ? segment.optionals.LN
+              : segment.sequence.length,
+          ),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
         stopColors: segment.paths.flatMap((_, i) => [
@@ -114,12 +120,12 @@ export function createCytoscape(
       },
       {
         selector: ':selected',
-        style: overlayStyle('green')
+        style: overlayStyle('green'),
       },
       {
         selector: ':active',
-        style: overlayStyle('grey')
-      }
+        style: overlayStyle('grey'),
+      },
     ],
   });
 
