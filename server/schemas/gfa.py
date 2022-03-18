@@ -15,21 +15,25 @@ class GFA_ELEMENT(IntEnum):
 
 class GfaElement(BaseModel):
     # TODO: change any to union of more specific types
+    type: str
     name: str
     optionals: Optional[Dict[str, Any]] = None
 
 
 class GfaPath(GfaElement):
+    type = "path"
     segment_names: List[str]
     # TODO: overlaps
 
 
 class GfaSegment(GfaElement):
+    type = "segment"
     sequence: str
     paths: List[GfaPath]
 
 
 class GfaLink(GfaElement):
+    type = "link"
     from_segment: str
     from_orient: str
     to_segment: str
@@ -43,11 +47,13 @@ class Gfa(BaseModel):
     links: List[GfaLink]
     paths: List[GfaPath]
 
+
 class GfaInfo(BaseModel):
     # TODO:  add more
     n_segments: int
     n_links: int
     n_paths: int
+
 
 class GfaHist(BaseModel):
     hist: List[float]
