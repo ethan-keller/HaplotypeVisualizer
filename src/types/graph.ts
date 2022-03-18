@@ -5,11 +5,13 @@ interface Graph {
     edges: EdgeDefinition[];
 }
 
+
 export interface GraphSettings {
-    drawPaths: boolean;
-    linkThickness: number;
-    segmentThickness: number;
-    pathColors: string[];
-  }
+  drawPaths: boolean;
+  drawLabels: boolean;
+  linkThickness: number;
+  segmentThickness: number;
+  pathColors: string[];
+}
 
 export default Graph;

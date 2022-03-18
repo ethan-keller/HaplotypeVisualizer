@@ -5,7 +5,7 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import GraphInfoModal from '../modals/GraphInfoModal';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
-import { updateDrawPaths } from '../../slices/graphSettings';
+import { updateDrawLabels, updateDrawPaths } from '../../slices/graphSettings';
 import RangeSegmentThickness from '../range/RangeSegmentThickness';
 import RangeLinkThickness from '../range/RangeLinkThickness';
 import EditLayoutModal from '../modals/EditLayoutModal';
@@ -51,6 +51,12 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           label='Draw paths'
           checked={graphSettings.drawPaths}
           onChange={(e) => dispatch(updateDrawPaths(e.target.checked))}
+        />
+        <Form.Check
+          type='switch'
+          label='Draw labels'
+          checked={graphSettings.drawLabels}
+          onChange={(e) => dispatch(updateDrawLabels(e.target.checked))}
         />
         <RangeSegmentThickness />
         <RangeLinkThickness />

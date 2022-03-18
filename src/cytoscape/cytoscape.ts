@@ -14,7 +14,7 @@ const nodeStyle = (settings: GraphSettings) => {
     'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
     'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
     'background-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
-    // label: settings.drawPaths ? 'data(height)' : undefined,
+    label: settings.drawLabels ? 'data(id)' : undefined,
   };
 };
 

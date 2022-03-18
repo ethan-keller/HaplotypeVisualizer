@@ -1,14 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { GraphSettings } from '../types/graph';
 
-interface GraphSettingsState {
-  drawPaths: boolean;
-  linkThickness: number;
-  segmentThickness: number;
-  pathColors: string[];
-}
-
-const initialState: GraphSettingsState = {
+const initialState: GraphSettings = {
   drawPaths: true,
+  drawLabels: false,
   linkThickness: 1.5,
   segmentThickness: 10,
   pathColors: ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#073B4C'],
@@ -20,6 +15,9 @@ export const graphSettingsSlice = createSlice({
   reducers: {
     updateDrawPaths: (state, action: PayloadAction<boolean>) => {
       state.drawPaths = action.payload;
+    },
+    updateDrawLabels: (state, action: PayloadAction<boolean>) => {
+      state.drawLabels = action.payload;
     },
     updateLinkThickness: (state, action: PayloadAction<number>) => {
       state.linkThickness = action.payload;
@@ -36,6 +34,7 @@ export const graphSettingsSlice = createSlice({
   },
 });
 
-export const { updateDrawPaths, updateLinkThickness, updateSegmentThickness } = graphSettingsSlice.actions;
+export const { updateDrawPaths, updateDrawLabels, updateLinkThickness, updateSegmentThickness } =
+  graphSettingsSlice.actions;
 
 export default graphSettingsSlice.reducer;
