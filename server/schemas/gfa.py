@@ -48,3 +48,7 @@ class GfaInfo(BaseModel):
     n_segments: int
     n_links: int
     n_paths: int
+
+class GfaHist(BaseModel):
+    hist: List[float]
+    bin_edges: List[float]

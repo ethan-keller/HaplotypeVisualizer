@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Table, Form, Button } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { useAppSelector } from '../../store';
@@ -8,7 +9,7 @@ import SidebarSection from './SidebarSection';
 interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
-  // TODO: make lightweight graph info endpoint
+  const [showInfo, setShowInfo] = useState<boolean>(false);
   const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);
 
@@ -31,8 +32,9 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
             </tr>
           </tbody>
         </Table>
-        <GraphInfoModal onHide={() => console.log()} />
-        <Button size='sm'>More graph information</Button>
+
+        {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
+        <Button onClick={() => setShowInfo(true)} size='sm'>More graph information</Button>
       </SidebarSection>
       <SidebarSection title='Layout options'>
         <Button size='sm'>Edit layout</Button>

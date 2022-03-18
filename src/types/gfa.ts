@@ -40,7 +40,12 @@ interface GfaInfo {
   readonly n_paths: number;
 }
 
+interface GfaHist {
+  readonly hist: number[];
+  readonly bin_edges: number[];
+}
+
 type GfaOptional = 'VN' | 'LN' | 'RC' | 'FC' | 'KC' | 'SH' | 'UR' | 'MQ' | 'NM' | 'ID';
 
-export type { GfaElement, GfaHeader, GfaSegment, GfaLink, GfaOptional, GfaPath, GfaInfo };
+export type { GfaElement, GfaHeader, GfaSegment, GfaLink, GfaOptional, GfaPath, GfaInfo, GfaHist };
 export default Gfa;

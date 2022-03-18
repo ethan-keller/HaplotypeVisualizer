@@ -1,9 +1,10 @@
 from typing import List
 import numpy as np
+from schemas.gfa import GfaHist
 
 
-def compute_histogram(nums: List[int]) -> List[float]:
+def compute_histogram(nums: List[int]) -> GfaHist:
     nums_np_array = np.array(nums, dtype=int)
-    values, _ = np.histogram(nums_np_array, bins=10, density=True)
-    return values.tolist()
-    
+    hist, bin_edges = np.histogram(nums_np_array, bins=10, density=False)
+    return GfaHist(hist=hist.tolist(), bin_edges=bin_edges.tolist())
+

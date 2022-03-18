@@ -8,7 +8,7 @@ import {
   gfaBaseUrl,
   getGfaHistValues,
 } from '../endpoints_config/GfaEndpoints';
-import Gfa, { GfaLink, GfaPath, GfaSegment, GfaInfo } from '../types/gfa';
+import Gfa, { GfaLink, GfaPath, GfaSegment, GfaInfo, GfaHist } from '../types/gfa';
 
 const gfaApi = createApi({
   reducerPath: 'gfaApi',
@@ -29,7 +29,7 @@ const gfaApi = createApi({
     getGraphInfo: builder.query<GfaInfo, void>({
       query: () => ({ url: getGfaInfo }),
     }),
-    getGfaHistValues: builder.query<number[], void>({
+    getGfaHistValues: builder.query<GfaHist, void>({
       query: () => ({ url: getGfaHistValues }),
     }),
   }),
