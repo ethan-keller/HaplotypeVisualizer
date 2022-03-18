@@ -48,8 +48,8 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
               </tr>
             </thead>
             <tbody>
-              {Object.entries(f.optionals).map((k, v) => (
-                <tr key={'tag_entry_' + k}>
+              {Object.entries(f.optionals).map(([k, v], i) => (
+                <tr key={'tag_entry_' + i}>
                   <td>{k}</td>
                   <td>{v}</td>
                 </tr>
