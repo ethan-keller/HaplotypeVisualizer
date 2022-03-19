@@ -31,7 +31,7 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
   }
 
   return densities ? (
-    <ResponsiveContainer width='100%' height='100%'>
+    <ResponsiveContainer width='100%' height='90%'>
       <AreaChart
         data={d}
         margin={{

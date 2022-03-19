@@ -37,7 +37,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
         </Card.Text>
         <ListGroup>
           {f.paths.map((path, i) => (
-            <ListGroupItem key={'path_' + i} style={{backgroundColor: pathColors[i] + '60'}}>{path.name}</ListGroupItem>
+            <ListGroupItem key={'path_' + i} style={{backgroundColor: pathColors[path.index] + '60'}}>{path.name}</ListGroupItem>
           ))}
         </ListGroup>
 

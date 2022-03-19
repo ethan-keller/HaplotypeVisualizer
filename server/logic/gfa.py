@@ -92,14 +92,14 @@ def convert_paths_to_pydantic(paths: List[Line]) -> List[GfaPath]:
     if len(paths) == 0:
         return []
 
-    return list(map(lambda path: _convert_path_to_pydantic(path), paths))
+    return list(map(lambda t: _convert_path_to_pydantic(t[1], t[0]), enumerate(paths)))
 
 
-def _convert_path_to_pydantic(path: Line) -> GfaPath:
+def _convert_path_to_pydantic(path: Line, i: int) -> GfaPath:
     if not path:
         raise PydanticConversionError(str(Line), str(GfaPath), "'path' is None")
 
-    return GfaPath(name=path.path_name, segment_names=list(map(lambda segment: segment.name, path.segment_names)))
+    return GfaPath(name=path.path_name, segment_names=list(map(lambda segment: segment.name, path.segment_names)), index=i)
 
 
 def _convert_optional_fields_to_pydantic(line: Line, element_type: GFA_ELEMENT) -> Optional[Dict[str, Any]]:

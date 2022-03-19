@@ -35,6 +35,7 @@ interface GfaLink extends GfaElement {
 interface GfaPath extends GfaElement {
   readonly type: 'path';
   readonly segment_names: string[];
+  readonly index: number;
   // TODO: overlaps
 }
 

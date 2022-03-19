@@ -56,9 +56,9 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
           ),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
-        stopColors: segment.paths.flatMap((_, i) => [
-          settings.pathColors[i],
-          settings.pathColors[i],
+        stopColors: segment.paths.flatMap((path) => [
+          settings.pathColors[path.index],
+          settings.pathColors[path.index],
         ]),
         stopPositions: segment.paths.flatMap((_, i, array) => [
           (i / array.length) * 100,
@@ -77,7 +77,7 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
         source: link.from_segment,
         target: link.to_segment,
         width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
-        stopColors: link.paths.flatMap((_, i) => [settings.pathColors[i], settings.pathColors[i]]),
+        stopColors: link.paths.flatMap((path) => [settings.pathColors[path.index], settings.pathColors[path.index]]),
         stopPositions: link.paths.flatMap((_, i, array) => [
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,

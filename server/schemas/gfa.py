@@ -23,6 +23,7 @@ class GfaElement(BaseModel):
 class GfaPath(GfaElement):
     type = "path"
     segment_names: List[str]
+    index: int
     # TODO: overlaps
 
 
