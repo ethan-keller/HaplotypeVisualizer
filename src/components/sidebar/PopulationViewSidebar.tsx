@@ -9,12 +9,14 @@ import { updateDrawLabels, updateDrawPaths } from '../../slices/graphSettings';
 import RangeSegmentThickness from '../range/RangeSegmentThickness';
 import RangeLinkThickness from '../range/RangeLinkThickness';
 import EditLayoutModal from '../modals/EditLayoutModal';
+import EditColorsModal from '../modals/EditColorsModal';
 
 interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   const [showInfo, setShowInfo] = useState<boolean>(false);
   const [showEditLayout, setShowEditLayout] = useState<boolean>(false);
+  const [showEditColors, setShowEditColors] = useState<boolean>(false);
 
   const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);
@@ -60,6 +62,10 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
         />
         <RangeSegmentThickness />
         <RangeLinkThickness />
+        <Button onClick={() => setShowEditColors(true)} size='sm'>
+          Edit paths
+        </Button>
+        {showEditColors ? <EditColorsModal onHide={() => setShowEditColors(false)} /> : false}
       </SidebarSection>
 
       <SidebarSection title='Layout options'>

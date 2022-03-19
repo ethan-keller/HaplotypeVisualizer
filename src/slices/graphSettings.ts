@@ -6,7 +6,7 @@ const initialState: GraphSettings = {
   drawLabels: false,
   linkThickness: 1.5,
   segmentThickness: 10,
-  pathColors: ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#073B4C'],
+  pathColors: ['#DB3E00', '#FCCB00', '#008B02', '#1273DE', '#EB9694'],
 };
 
 export const graphSettingsSlice = createSlice({

@@ -1,4 +1,4 @@
-import { Button, Form, Modal, Table } from 'react-bootstrap';
+import { Button, Modal, Form, Table } from 'react-bootstrap';
 
 interface EditLayoutModalProps {
   onHide: () => void;
@@ -6,7 +6,7 @@ interface EditLayoutModalProps {
 
 const EditLayoutModal: React.FC<EditLayoutModalProps> = (props) => {
   return (
-    <Modal onHide={props.onHide} show>
+    <Modal onHide={props.onHide} show backdrop='static'>
       <Modal.Header closeButton>
         <Modal.Title>Edit layout</Modal.Title>
       </Modal.Header>
