@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { createCytoscape } from '../../cytoscape/cytoscape';
 import '../../styles/graph.css';
 import ErrorCard from '../ErrorCard';
-import Layout from '../../types/layout';
+import { Layout } from '../../types/layout';
 import GraphType, { GraphSettings } from '../../types/graph';
 import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';

@@ -12,7 +12,7 @@ import Navigator from '../components/Navigator';
 interface PopulationViewProps {}
 
 const PopulationView: React.FC<PopulationViewProps> = (props) => {
-  const { data: layout, isLoading } = layoutApi.useGetLayoutQuery();
+  const { data: layout, isLoading } = layoutApi.useGetNodePositionsQuery();
   const { data: segments } = gfaApi.useGetSegmentsQuery();
   const { data: links } = gfaApi.useGetLinksQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);

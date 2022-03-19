@@ -1,6 +1,6 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import Layout from '../types/layout';
+import { Layout } from '../types/layout';
 import Graph, { GraphSettings } from '../types/graph';
 import { GfaLink, GfaSegment } from '../types/gfa';
 

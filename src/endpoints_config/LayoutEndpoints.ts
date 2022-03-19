@@ -1,6 +1,8 @@
-import baseUrl from "./base"
+import baseUrl from './base';
 
-const layoutPathPrefix = '/layout'
+const layoutPathPrefix = '/layout';
 export const layoutBaseUrl = baseUrl + layoutPathPrefix;
 
-export const getLayout = layoutBaseUrl + '/';
+export const prepareLayout = layoutBaseUrl + '/';
+export const getNodePositions = layoutBaseUrl + '/positions';
+export const getNodeBounds = layoutBaseUrl + '/bounds';
