@@ -1,10 +1,16 @@
+import { useState } from 'react';
 import { Table, Form, Button, FloatingLabel } from 'react-bootstrap';
+import gfaApi from '../../api/gfa';
+import GraphInfoModal from '../modals/GraphInfoModal';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
 
 interface PhenoGraphSidebarProps {}
 
 const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
+  const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+
   return (
     <Sidebar title='Phenotype Graph'>
       <SidebarSection title='Graph information'>
@@ -12,20 +18,24 @@ const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
           <tbody>
             <tr>
               <td>Nodes</td>
-              <td>-</td>
+              <td>{gfaInfo ? gfaInfo.n_segments : '-'}</td>
             </tr>
             <tr>
               <td>Edges</td>
-              <td>-</td>
+              <td>{gfaInfo ? gfaInfo.n_links : '-'}</td>
             </tr>
             <tr>
               <td>Paths</td>
-              <td>-</td>
+              <td>{gfaInfo ? gfaInfo.n_paths : '-'}</td>
             </tr>
           </tbody>
         </Table>
-        <Button size='sm'>More graph information</Button>
+        <Button onClick={() => setShowInfo(true)} size='sm'>
+          More graph information
+        </Button>
+        {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
       </SidebarSection>
+
       <SidebarSection title='Phenotype options'>
         <FloatingLabel label='Select phenotypes'>
           {/* Add multiple select options */}
