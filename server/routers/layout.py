@@ -85,3 +85,13 @@ def getDensities():
     xs, densities = get_density_values(LayoutManager.bounds)
 
     return Density(xs=xs, densities=densities)
+
+
+@router.get(
+    "/bounds_ready", response_model=bool, summary="Checks if node layout bounds are computed",
+)
+def are_bounds_ready():
+    """
+    Returns True if the node layout bounds are computed. False otherwise
+    """
+    return LayoutManager.bounds is not None

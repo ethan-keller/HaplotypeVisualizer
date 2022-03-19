@@ -43,5 +43,6 @@ def clear_file_data(id: int) -> None:
     if id == FileIndex.GFA:
         DataManager.gfa = None
         LayoutManager.layout = None
+        LayoutManager.bounds = None
     elif id == FileIndex.PHENO:
         DataManager.phenoTable = None
