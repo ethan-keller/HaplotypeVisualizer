@@ -1,10 +1,8 @@
 from typing import List
-from fastapi import APIRouter, HTTPException
-from schemas.layout import Layout
-from schemas.layout import LayoutAndBounds
-from fastapi import status
+from fastapi import APIRouter, HTTPException, status
 from logic.layout import getLayoutAndBounds
-from schemas.layout import Bounds
+from schemas.layout import Bounds, Density, Layout, LayoutAndBounds
+from logic.density import get_density_values
 
 from server_data.data import LayoutManager
 
@@ -13,7 +11,12 @@ router = APIRouter(prefix="/layout", tags=["layout"])
 
 @router.put(
     "/",
-    responses={status.HTTP_500_INTERNAL_SERVER_ERROR: {"description": "Could not compute layout and bound positions", "model": str}},
+    responses={
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Could not compute layout and bound positions",
+            "model": str,
+        }
+    },
     summary="Prepare layout and bound coordinates",
 )
 def prepareLayout():
@@ -57,3 +60,28 @@ def getNodeBounds():
     prepareLayout()
     return LayoutManager.bounds
 
+
+@router.get(
+    "/density",
+    responses={
+        status.HTTP_500_INTERNAL_SERVER_ERROR: {
+            "description": "Could not compute densities because there is no bound information",
+            "model": str,
+        }
+    },
+    response_model=Density,
+    summary="Get variation densities along with their x coordinates",
+)
+def getDensities():
+    """
+    Gets density values along with their respective x coordinates.
+    """
+    if not LayoutManager.bounds:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not compute densities because there is no bound information",
+        )
+
+    xs, densities = get_density_values(LayoutManager.bounds)
+
+    return Density(xs=xs, densities=densities)

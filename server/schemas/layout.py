@@ -21,7 +21,6 @@ class LayoutAndBounds(BaseModel):
     bounds: List[Bounds]
 
 
-class LayoutAndDensity(BaseModel):
-    layout: Layout
+class Density(BaseModel):
     xs: List[int]
     densities: List[int]
