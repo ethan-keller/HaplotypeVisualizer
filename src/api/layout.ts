@@ -4,7 +4,9 @@ import {
   getNodePositions,
   layoutBaseUrl,
   prepareLayout,
+  getDensities,
 } from '../endpoints_config/LayoutEndpoints';
+import Density from '../types/density';
 import { Bounds, Layout } from '../types/layout';
 
 const layoutApi = createApi({
@@ -19,6 +21,9 @@ const layoutApi = createApi({
     }),
     getNodeBounds: builder.query<Bounds[], void>({
       query: () => ({ url: getNodeBounds, method: 'GET' }),
+    }),
+    getDensities: builder.query<Density, void>({
+      query: () => ({ url: getDensities, method: 'GET' }),
     }),
   }),
 });
