@@ -6,6 +6,8 @@ from schemas.gfa import Gfa
 from schemas.layout import Layout
 import pandas as pd
 
+from schemas.layout import Bounds
+
 files_base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\server\\server_data\\"
 
 files: List[File] = [
@@ -22,3 +24,5 @@ class DataManager:
 
 class LayoutManager:
     layout: Optional[Layout] = None
+    bounds: Optional[Bounds] = None
+

@@ -87,12 +87,15 @@ axios
   // TODO: handle error and communicate it to client
   .then((gfa: Gfa) => {
     let positions: Record<string, cytoscape.Position> = {};
+    let bounds: {xl: number, xr: number}[] = [];
     createCytoscape(gfa)
       .nodes()
       .forEach((node) => {
         positions[node.id()] = node.position();
+        const bb = node.boundingBox({});
+        bounds.push({xl: bb.x1, xr: bb.x2});
       });
-    process.stdout.write(JSON.stringify({ positions: positions }));
+    process.stdout.write(JSON.stringify({ layout: {positions: positions}, bounds: bounds }));
   })
   .catch((err) => {
     throw new Error(err);
