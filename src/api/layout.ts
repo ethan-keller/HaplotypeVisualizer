@@ -5,6 +5,7 @@ import {
   layoutBaseUrl,
   prepareLayout,
   getDensities,
+  areBoundsReady,
 } from '../endpoints_config/LayoutEndpoints';
 import Density from '../types/density';
 import { Bounds, Layout } from '../types/layout';
@@ -24,6 +25,9 @@ const layoutApi = createApi({
     }),
     getDensities: builder.query<Density, void>({
       query: () => ({ url: getDensities, method: 'GET' }),
+    }),
+    areBoundsReady: builder.query<boolean, void>({
+      query: () => ({ url: areBoundsReady, method: 'GET' }),
     }),
   }),
 });
