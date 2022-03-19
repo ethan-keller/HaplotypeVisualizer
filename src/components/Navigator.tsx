@@ -6,6 +6,7 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
+  Brush,
 } from 'recharts';
 import layoutApi from '../api/layout';
 import SpinnerAnnotated from './SpinnerAnnotated';
@@ -29,8 +30,6 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
     }
   }
 
-  console.log(d);
-
   return densities ? (
     <ResponsiveContainer width='100%' height='100%'>
       <AreaChart
@@ -41,10 +40,11 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
         }}
       >
         <CartesianGrid strokeDasharray='3 3' />
-        <XAxis hide dataKey={'x'} />
+        <XAxis dataKey={'x'} />
         <YAxis hide />
         <Tooltip />
         <Area connectNulls type='linear' dataKey='density' fill='#0d6efd' />
+        <Brush travellerWidth={20} height={20} dataKey={'x'} />
       </AreaChart>
     </ResponsiveContainer>
   ) : (
