@@ -11,6 +11,7 @@ interface InfoCardProps {
 const InfoCard: React.FC<InfoCardProps> = (props) => {
   const f = props.data;
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
+  const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
   return (
     <Card style={{ border: 0 }}>
       <Card.Body>
@@ -36,9 +37,19 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
           <b>{f.paths.length}</b> paths through this {f.type}
         </Card.Text>
         <ListGroup>
-          {f.paths.map((path, i) => (
-            <ListGroupItem key={'path_' + i} style={{backgroundColor: pathColors[path.index] + '60'}}>{path.name}</ListGroupItem>
-          ))}
+          {f.paths.map((path, i) => {
+            const c =
+              activePaths.length === 0
+                ? pathColors[path.index]
+                : activePaths[path.index]
+                ? pathColors[path.index]
+                : '#999999';
+            return (
+              <ListGroupItem key={'path_' + i} style={{ backgroundColor: c + '60' }}>
+                {path.name}
+              </ListGroupItem>
+            );
+          })}
         </ListGroup>
 
         {f.optionals ? (

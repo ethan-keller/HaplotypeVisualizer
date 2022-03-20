@@ -9,7 +9,7 @@ import { updateDrawLabels, updateDrawPaths } from '../../slices/graphSettings';
 import RangeSegmentThickness from '../range/RangeSegmentThickness';
 import RangeLinkThickness from '../range/RangeLinkThickness';
 import EditLayoutModal from '../modals/EditLayoutModal';
-import EditColorsModal from '../modals/EditColorsModal';
+import EditPathsModal from '../modals/EditPathsModal';
 
 interface PopulationViewSidebarProps {}
 
@@ -65,7 +65,7 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
         <Button onClick={() => setShowEditColors(true)} size='sm'>
           Edit paths
         </Button>
-        {showEditColors ? <EditColorsModal onHide={() => setShowEditColors(false)} /> : false}
+        {showEditColors ? <EditPathsModal onHide={() => setShowEditColors(false)} /> : false}
       </SidebarSection>
 
       <SidebarSection title='Layout options'>

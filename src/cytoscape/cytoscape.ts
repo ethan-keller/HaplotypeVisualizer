@@ -56,10 +56,18 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
           ),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
-        stopColors: segment.paths.flatMap((path) => [
-          settings.pathColors[path.index],
-          settings.pathColors[path.index],
-        ]),
+        stopColors: segment.paths.flatMap((path) => {
+          if (settings.activePaths.length === 0) {
+            console.log('Empty');
+            return [settings.pathColors[path.index], settings.pathColors[path.index]];
+          } else {
+            console.log('Not Empty');
+            const c = settings.activePaths[path.index]
+              ? settings.pathColors[path.index]
+              : '#999999';
+            return [c, c];
+          }
+        }),
         stopPositions: segment.paths.flatMap((_, i, array) => [
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
@@ -77,7 +85,16 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
         source: link.from_segment,
         target: link.to_segment,
         width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
-        stopColors: link.paths.flatMap((path) => [settings.pathColors[path.index], settings.pathColors[path.index]]),
+        stopColors: link.paths.flatMap((path) => {
+          if (settings.activePaths.length === 0) {
+            return [settings.pathColors[path.index], settings.pathColors[path.index]];
+          } else {
+            const c = settings.activePaths[path.index]
+              ? settings.pathColors[path.index]
+              : '#999999';
+            return [c, c];
+          }
+        }),
         stopPositions: link.paths.flatMap((_, i, array) => [
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
