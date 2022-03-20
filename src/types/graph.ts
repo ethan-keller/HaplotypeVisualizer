@@ -1,10 +1,9 @@
-import { EdgeDefinition, NodeDefinition } from "cytoscape";
+import { EdgeDefinition, NodeDefinition } from 'cytoscape';
 
 interface Graph {
-    nodes: NodeDefinition[];
-    edges: EdgeDefinition[];
+  nodes: NodeDefinition[];
+  edges: EdgeDefinition[];
 }
-
 
 export interface GraphSettings {
   drawPaths: boolean;
@@ -12,6 +11,7 @@ export interface GraphSettings {
   linkThickness: number;
   segmentThickness: number;
   pathColors: string[];
+  activePaths: boolean[];
 }
 
 export default Graph;

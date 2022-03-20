@@ -43,11 +43,7 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
         </div>
 
         <div className='pp-v-navigator'>
-          {layout ? (
-            <Navigator />
-          ) : (
-            <SpinnerAnnotated message='Computing density values' />
-          )}
+          {layout ? <Navigator /> : <SpinnerAnnotated message='Computing density values' />}
         </div>
       </div>
     </>
