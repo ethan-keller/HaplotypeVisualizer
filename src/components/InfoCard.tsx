@@ -1,4 +1,4 @@
-import { Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
+import { Button, Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
 import { useAppSelector } from '../store';
 import { getSegmentLength, GfaFeature } from '../types/gfa';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
@@ -70,6 +70,10 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
             </tbody>
           </Table>
         ) : null}
+
+        <VerticalSpacer space={10} />
+        
+        <Button>Bookmark</Button>
       </Card.Body>
     </Card>
   );
