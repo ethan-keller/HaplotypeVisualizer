@@ -4,12 +4,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './styles/index.css';
 import AppRouter from './AppRouter';
 import { Provider } from 'react-redux';
-import { store } from './store';
+import { store, persistor } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
+import SpinnerAnnotated from './components/SpinnerAnnotated';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <AppRouter />
+      <PersistGate
+        loading={<SpinnerAnnotated message={'Loading persistence'} />}
+        persistor={persistor}
+      >
+        <AppRouter />
+      </PersistGate>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root'),
