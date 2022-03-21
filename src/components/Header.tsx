@@ -6,11 +6,13 @@ import { url as urlWelcomeView } from '../views/WelcomeView';
 import { url as urlPhenoTableView } from '../views/PhenoTableView';
 import { url as urlPopulationView } from '../views/PopulationView';
 import AboutModal from './modals/AboutModal';
+import BookmarksOffcanvas from './bookmarks/BookmarksOffcanvas';
 
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = (props) => {
   const [showAbout, setShowAbout] = useState(false);
+  const [showBookmarks, setShowBookmarks] = useState(false);
   const { pathname } = useLocation();
 
   return (
@@ -28,9 +30,10 @@ const Header: React.FC<HeaderProps> = (props) => {
           <Nav.Link active={pathname === urlPhenoTableView} href={urlPhenoTableView}>
             PhenoTable
           </Nav.Link>
-          <Nav.Link>Bookmarks</Nav.Link>
+          <Nav.Link onClick={() => setShowBookmarks(true)}>Bookmarks</Nav.Link>
+          <BookmarksOffcanvas show={showBookmarks} onHide={() => setShowBookmarks(false)} />
           <Nav.Link onClick={() => setShowAbout(true)}>About</Nav.Link>
-          {showAbout ? <AboutModal onHide={() => setShowAbout(false)} /> : null}
+          <AboutModal show={showAbout} onHide={() => setShowAbout(false)} />
         </Nav>
       </Navbar>
     </>

@@ -5,6 +5,7 @@ import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface GraphInfoModalProps {
   onHide: () => void;
+  show: boolean;
 }
 
 const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
@@ -12,7 +13,7 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
   const { data: gfaHist } = gfaApi.useGetGfaHistValuesQuery();
 
   return (
-    <Modal onHide={props.onHide} show>
+    <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
         <Modal.Title>Graph Information</Modal.Title>
       </Modal.Header>
