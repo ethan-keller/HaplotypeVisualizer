@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Nav, Navbar } from 'react-bootstrap';
+import { useLocation } from 'react-router-dom';
 import { url as urlPhenoGraphView } from '../views/PhenoGraphView';
 import { url as urlWelcomeView } from '../views/WelcomeView';
 import { url as urlPhenoTableView } from '../views/PhenoTableView';
@@ -9,26 +10,29 @@ import AboutModal from './modals/AboutModal';
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = (props) => {
-  // state: about modal
   const [showAbout, setShowAbout] = useState(false);
-  // state: settings modal
-  // const [showSettings, setShowSettings] = useState(false);
+  const { pathname } = useLocation();
 
   return (
     <>
       <Navbar bg='light'>
-        <Navbar.Brand href={urlWelcomeView}>Haplotype Visualizer</Navbar.Brand>
+        <Navbar.Brand href={urlPopulationView}>Haplotype Visualizer</Navbar.Brand>
         <Nav>
-          {/* <Nav.Link href='#pheno'>Pheno</Nav.Link>
-        <Nav.Link href='#trio'>Trio</Nav.Link> */}
-          <Nav.Link href={urlPopulationView}>PopuView</Nav.Link>
-          <Nav.Link href={urlPhenoGraphView}>PhenoGraph</Nav.Link>
-          <Nav.Link href={urlPhenoTableView}>PhenoTable</Nav.Link>
-          <Nav.Link href='#settings'>Settings</Nav.Link>
-          <Nav.Link href='#about'>About</Nav.Link>
+          <Nav.Link href={urlWelcomeView}>Imports</Nav.Link>
+          <Nav.Link active={pathname === urlPopulationView} href={urlPopulationView}>
+            PopuView
+          </Nav.Link>
+          <Nav.Link active={pathname === urlPhenoGraphView} href={urlPhenoGraphView}>
+            PhenoGraph
+          </Nav.Link>
+          <Nav.Link active={pathname === urlPhenoTableView} href={urlPhenoTableView}>
+            PhenoTable
+          </Nav.Link>
+          <Nav.Link>Bookmarks</Nav.Link>
+          <Nav.Link onClick={() => setShowAbout(true)}>About</Nav.Link>
+          {showAbout ? <AboutModal onHide={() => setShowAbout(false)} /> : null}
         </Nav>
       </Navbar>
-      {showAbout && <AboutModal onHide={() => setShowAbout(false)} />}
     </>
   );
 };
