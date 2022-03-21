@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from gfapy.gfa import Gfa as GfaPy
 from schemas.file import File, FileStatus
@@ -7,6 +7,7 @@ from schemas.layout import Layout
 import pandas as pd
 
 from schemas.layout import Bounds
+from schemas.bookmark import Bookmark
 
 files_base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\server\\server_data\\"
 
@@ -22,7 +23,12 @@ class DataManager:
     gfa: Optional[Gfa] = None
     phenoTable: Optional[pd.DataFrame] = None
 
+
 class LayoutManager:
     layout: Optional[Layout] = None
     bounds: Optional[Bounds] = None
+
+
+class BookmarkManager:
+    bookmarks: Dict[str, Bookmark] = {}
 

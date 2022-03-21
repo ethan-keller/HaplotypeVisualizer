@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import List
 from fastapi import APIRouter, Query, HTTPException, status
 
 from schemas.bookmark import Bookmark
@@ -8,15 +8,15 @@ from server_data.data import BookmarkManager
 router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
 
 
-@router.get("/", response_model=Dict[str, Bookmark], summary="Get all bookmarks")
+@router.get("/", response_model=List[Bookmark], summary="Get all bookmarks")
 def getFiles():
     """
     Get all bookmarks.
     """
-    return BookmarkManager.bookmarks
+    return list(BookmarkManager.bookmarks.values())
 
 
-@router.delete("/", summary="remove a bookmark")
+@router.delete("/remove", summary="remove a bookmark")
 def removeBookmark(elem_id: str):
     """
     Remove a bookmark given the element's id.
@@ -32,7 +32,7 @@ def removeBookmark(elem_id: str):
         )
 
 
-@router.post("/", summary="Add a bookmark")
+@router.post("/add", summary="Add a bookmark")
 def addBookmark(elem_id: str, description: str = Query(..., max_length=100)):
     """
     Add a bookmark.

@@ -19,7 +19,7 @@ const filesApi = createApi({
       query: () => ({ url: getAllFiles, method: 'GET' }),
       providesTags: (files) =>
         files
-          ? ['File', ...files?.map((file) => ({ type: 'File' as const, id: file.id }))]
+          ? ['File', ...files.map((file) => ({ type: 'File' as const, id: file.id }))]
           : ['File'],
     }),
     getFile: builder.query<File, GetFileParams>({

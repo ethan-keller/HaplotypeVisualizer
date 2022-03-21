@@ -17,6 +17,7 @@ import {
   REGISTER,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import bookmarksApi from './api/bookmarks';
 
 const persistConfig = {
   key: 'root',
@@ -26,6 +27,7 @@ const persistConfig = {
     gfaApi.reducerPath,
     layoutApi.reducerPath,
     phenoApi.reducerPath,
+    bookmarksApi.reducerPath,
   ],
 };
 
@@ -36,6 +38,7 @@ const reducers = combineReducers({
   [gfaApi.reducerPath]: gfaApi.reducer,
   [layoutApi.reducerPath]: layoutApi.reducer,
   [phenoApi.reducerPath]: phenoApi.reducer,
+  [bookmarksApi.reducerPath]: bookmarksApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, reducers);
@@ -47,7 +50,13 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat([filesApi.middleware, gfaApi.middleware, layoutApi.middleware, phenoApi.middleware]),
+    }).concat([
+      filesApi.middleware,
+      gfaApi.middleware,
+      layoutApi.middleware,
+      phenoApi.middleware,
+      bookmarksApi.middleware,
+    ]),
 });
 
 let persistor = persistStore(store);
