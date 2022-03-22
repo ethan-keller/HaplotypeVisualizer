@@ -2,8 +2,7 @@ from os.path import isfile, splitext
 from typing import List
 from schemas.file import FileStatus
 from schemas.file import FileIndex
-from server_data.data import DataManager, LayoutManager
-from server_data.data import files
+from server_data.data import GfaManager, PhenoManager, FileManager, LayoutManager
 
 from logic.gfa import prepare_gfa
 from logic.pheno import prepare_pheno
@@ -18,7 +17,7 @@ def validate_file_extension(path: str, accepted_extensions: List[str]) -> bool:
 
 
 def are_required_files_uploaded() -> bool:
-    for file in files:
+    for file in FileManager.files:
         if file.required and file.status is not FileStatus.SUCCESFUL:
             return False
     return True
@@ -41,8 +40,8 @@ def prepare_files() -> None:
 
 def clear_file_data(id: int) -> None:
     if id == FileIndex.GFA:
-        DataManager.gfa = None
+        GfaManager.gfa = None
         LayoutManager.layout = None
         LayoutManager.bounds = None
     elif id == FileIndex.PHENO:
-        DataManager.phenoTable = None
+        PhenoManager.phenoTable = None
