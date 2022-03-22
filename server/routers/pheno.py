@@ -7,10 +7,19 @@ from server_data.data import PhenoManager
 router = APIRouter(prefix="/pheno", tags=["pheno"])
 
 
-@router.get("/", response_model=PhenoTable, summary="Get phenotype table")
-def getPhenoTable():
+@router.get(
+    "/", response_model=Dict[str, Dict[str, Any]], summary="Get a list of phenotypes for every sample",
+)
+def getPhenotypesBySample():
     if PhenoManager.phenoTable is not None:
-        return PhenoTable(phenotypes=PhenoManager.phenoTable.reset_index().to_dict("records"))
+        samples = PhenoManager.phenoTable.index.values
+        phenotypes = PhenoManager.phenoTable.to_dict("records")
+
+        result = {}
+        for sample, phenotype in zip(samples, phenotypes):
+            result[sample] = phenotype
+
+        return result
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a pheno table")
 
@@ -28,3 +37,4 @@ def getPhenotypes():
         return PhenoManager.phenotypes
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find phenotypes")
+
