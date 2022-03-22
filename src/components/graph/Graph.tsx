@@ -23,7 +23,8 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings }) => {
   useEffect(() => {
     // setIsLoaded(false);
     try {
-      setCy(createCytoscape(graph, settings, layout));
+      const v = createCytoscape(graph, settings, layout);
+      setCy(v);
     } catch (err) {
       alert(err);
       setError(err);
