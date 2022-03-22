@@ -1,6 +1,10 @@
-interface PhenoTable {
-  // TODO: change any to all possible value types
-  phenotypes: Record<string, any>[];
-}
+// TODO: change any to all possible value types
+export type PhenoValue = any;
+export type PhenoRecord = Record<string, PhenoValue>;
+export type PhenotypeValues = Record<string, PhenoValue[]>;
+export type PhenosPerSample = Record<string, PhenoRecord>;
 
-export default PhenoTable;
+export interface PhenoState {
+  phenoFilters: Record<string, PhenoValue[]>;
+  sampleFilters: string[];
+}
