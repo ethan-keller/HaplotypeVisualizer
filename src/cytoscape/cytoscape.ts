@@ -42,9 +42,13 @@ const overlayStyle = (color: string) => {
 
 // const coreStyle = {};
 
-export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
+export const cytoscapeNodes = (
+  segments: GfaSegment[],
+  settings: GraphSettings,
+) => {
   return segments.map((segment: GfaSegment) => {
     return {
+      // TODO: create types for custom node data (and edge data) to be used on other files
       data: {
         id: segment.name,
         width:
@@ -58,13 +62,9 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
         stopColors: segment.paths.flatMap((path) => {
           if (settings.activePaths.length === 0) {
-            console.log('Empty');
             return [settings.pathColors[path.index], settings.pathColors[path.index]];
           } else {
-            console.log('Not Empty');
-            const c = settings.activePaths[path.index]
-              ? settings.pathColors[path.index]
-              : '#999999';
+            let c = settings.activePaths[path.index] ? settings.pathColors[path.index] : '#999999';
             return [c, c];
           }
         }),
@@ -78,7 +78,10 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
   }) as NodeDefinition[];
 };
 
-export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
+export const cytoscapeEdges = (
+  links: GfaLink[],
+  settings: GraphSettings,
+) => {
   return links.map((link: GfaLink) => {
     return {
       data: {
@@ -89,9 +92,7 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
           if (settings.activePaths.length === 0) {
             return [settings.pathColors[path.index], settings.pathColors[path.index]];
           } else {
-            const c = settings.activePaths[path.index]
-              ? settings.pathColors[path.index]
-              : '#999999';
+            let c = settings.activePaths[path.index] ? settings.pathColors[path.index] : '#999999';
             return [c, c];
           }
         }),
