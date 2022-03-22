@@ -1,4 +1,4 @@
-from typing import Any, Dict
+from typing import Any, Dict, List
 from fastapi import APIRouter, HTTPException, status
 from schemas.pheno import PhenoTable
 from server_data.data import PhenoManager
@@ -16,19 +16,15 @@ def getPhenoTable():
 
 
 @router.get(
-    "/phenotypes_by_sample",
-    response_model=Dict[str, Dict[str, Any]],
-    summary="Get a list of phenotypes for every sample",
+    "/phenotypes",
+    response_model=Dict[str, List[Any]],
+    summary="Get all the possible phenotypes and their respective possible phenotypes",
 )
-def getPhenotypesBySample():
-    if PhenoManager.phenoTable is not None:
-        samples = PhenoManager.phenoTable.index.values
-        phenotypes = PhenoManager.phenoTable.to_dict("records")
-
-        result = {}
-        for sample, phenotype in zip(samples, phenotypes):
-            result[sample] = phenotype
-
-        return result
+def getPhenotypes():
+    """
+    Get all phenotypes and a list of possible values per phenotype.
+    """
+    if PhenoManager.phenotypes is not None:
+        return PhenoManager.phenotypes
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a pheno table")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find phenotypes")
