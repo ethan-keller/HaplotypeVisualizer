@@ -1,7 +1,8 @@
-import { Modal, Table } from 'react-bootstrap';
+import { Modal } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import BarPlot from '../BarPlot';
 import SpinnerAnnotated from '../SpinnerAnnotated';
+import StatTable from '../StatTable';
 
 interface GraphInfoModalProps {
   onHide: () => void;
@@ -18,22 +19,13 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
         <Modal.Title>Graph Information</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Table style={{ fontWeight: 100 }} size='sm'>
-          <tbody>
-            <tr>
-              <td>Nodes</td>
-              <td>{gfaInfo ? gfaInfo.n_segments : '-'}</td>
-            </tr>
-            <tr>
-              <td>Edges</td>
-              <td>{gfaInfo ? gfaInfo.n_links : '-'}</td>
-            </tr>
-            <tr>
-              <td>Paths</td>
-              <td>{gfaInfo ? gfaInfo.n_paths : '-'}</td>
-            </tr>
-          </tbody>
-        </Table>
+        <StatTable
+          tableEntries={{
+            nodes: gfaInfo ? gfaInfo.n_segments.toString() : '-',
+            edges: gfaInfo ? gfaInfo.n_links.toString() : '-',
+            paths: gfaInfo ? gfaInfo.n_paths.toString() : '-',
+          }}
+        />
         <h6 style={{ textAlign: 'center' }}>Segment length histogram</h6>
         {gfaHist ? <BarPlot hist={gfaHist} /> : <SpinnerAnnotated message='Calculating plot' />}
       </Modal.Body>

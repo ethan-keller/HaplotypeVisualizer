@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Table, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { useAppDispatch, useAppSelector } from '../../store';
 import GraphInfoModal from '../modals/GraphInfoModal';
@@ -10,7 +10,7 @@ import RangeSegmentThickness from '../range/RangeSegmentThickness';
 import RangeLinkThickness from '../range/RangeLinkThickness';
 import EditLayoutModal from '../modals/EditLayoutModal';
 import EditPathsModal from '../modals/EditPathsModal';
-import StatTable from '../stat_table/StatTable';
+import StatTable from '../StatTable';
 
 interface PopulationViewSidebarProps {}
 
