@@ -10,6 +10,7 @@ import RangeSegmentThickness from '../range/RangeSegmentThickness';
 import RangeLinkThickness from '../range/RangeLinkThickness';
 import EditLayoutModal from '../modals/EditLayoutModal';
 import EditPathsModal from '../modals/EditPathsModal';
+import StatTable from '../stat_table/StatTable';
 
 interface PopulationViewSidebarProps {}
 
@@ -25,26 +26,17 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
   return (
     <Sidebar title='Population view'>
       <SidebarSection title='Graph information'>
-        <Table style={{ fontWeight: 100 }} borderless size='sm'>
-          <tbody>
-            <tr>
-              <td>Nodes</td>
-              <td>{gfaInfo ? gfaInfo.n_segments : '-'}</td>
-            </tr>
-            <tr>
-              <td>Edges</td>
-              <td>{gfaInfo ? gfaInfo.n_links : '-'}</td>
-            </tr>
-            <tr>
-              <td>Paths</td>
-              <td>{gfaInfo ? gfaInfo.n_paths : '-'}</td>
-            </tr>
-          </tbody>
-        </Table>
+        <StatTable
+          tableEntries={{
+            nodes: gfaInfo ? gfaInfo.n_segments.toString() : '-',
+            edges: gfaInfo ? gfaInfo.n_links.toString() : '-',
+            paths: gfaInfo ? gfaInfo.n_paths.toString() : '-',
+          }}
+        />
         <Button onClick={() => setShowInfo(true)} size='sm'>
           More graph information
         </Button>
-        {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
+        <GraphInfoModal show={showInfo} onHide={() => setShowInfo(false)} />
       </SidebarSection>
 
       <SidebarSection title='Styling options'>
@@ -65,14 +57,14 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
         <Button onClick={() => setShowEditColors(true)} size='sm'>
           Edit paths
         </Button>
-        {showEditColors ? <EditPathsModal onHide={() => setShowEditColors(false)} /> : false}
+        <EditPathsModal show={showEditColors} onHide={() => setShowEditColors(false)} />
       </SidebarSection>
 
       <SidebarSection title='Layout options'>
         <Button onClick={() => setShowEditLayout(true)} size='sm'>
           Edit layout
         </Button>
-        {showEditLayout ? <EditLayoutModal onHide={() => setShowEditLayout(false)} /> : false}
+        <EditLayoutModal show={showEditLayout} onHide={() => setShowEditLayout(false)} />
       </SidebarSection>
     </Sidebar>
   );

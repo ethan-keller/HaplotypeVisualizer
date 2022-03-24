@@ -8,6 +8,7 @@ import SpinnerAnnotated from '../SpinnerAnnotated';
 import VerticalSpacer from '../VerticalSpacer';
 import { Form, Table } from 'react-bootstrap';
 import { PhenoRecord } from '../../types/pheno';
+import StatTable from '../stat_table/StatTable';
 
 interface PhenoTableSidebarProps {}
 
@@ -19,18 +20,10 @@ const PhenoTableSidebar: React.FC<PhenoTableSidebarProps> = (props) => {
   return (
     <Sidebar title='Phenotype table'>
       <SidebarSection title='Table stats'>
-        <Table style={{ fontWeight: 100 }} borderless size='sm'>
-          <tbody>
-            <tr>
-              <td>Samples</td>
-              <td>{samples ? samples.length : '-'}</td>
-            </tr>
-            <tr>
-              <td>Phenotypes</td>
-              <td>{phenotypes ? Object.keys(phenotypes).length : '-'}</td>
-            </tr>
-          </tbody>
-        </Table>
+      <StatTable tableEntries={{
+        samples: samples ? samples.length.toString() : '-',
+        phenotypes: phenotypes ? Object.keys(phenotypes).length.toString() : '-',
+      }}/>
       </SidebarSection>
       <SidebarSection title='Filters'>
         <Form.Label style={{ fontSize: 14 }}>Phenotypes</Form.Label>
