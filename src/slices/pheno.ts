@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PhenoRecord, PhenoState } from '../types/pheno';
+import { PhenoRecord, PhenoState, PhenoValue } from '../types/pheno';
 
 const initialState: PhenoState = {
   sampleFilters: [],
@@ -10,40 +10,28 @@ export const phenoSlice = createSlice({
   name: 'pheno',
   initialState: initialState,
   reducers: {
-    addSampleFilter: (state, action: PayloadAction<string>) => {
-      state.sampleFilters.push(action.payload);
+    addSampleFilter: (state, action: PayloadAction<string[]>) => {
+      state.sampleFilters = action.payload;
     },
-    removeSampleFilter: (state, action: PayloadAction<string>) => {
-      const i = state.sampleFilters.indexOf(action.payload);
-      if (i > -1) {
-        state.sampleFilters.splice(i, 1);
-      }
-    },
-    addPhenoFilter: (state, action: PayloadAction<PhenoRecord>) => {
-      Object.entries(action.payload).forEach(([phenotype, phenoValue]) => {
-        if (phenotype! in state.phenoFilters) {
-          state.phenoFilters[phenotype] = [];
+    addPhenoFilter: (state, action: PayloadAction<PhenoRecord[]>) => {
+      let result: Record<string, PhenoValue[]> = {};
+      action.payload.forEach((phenoR) => {
+        if (Object.keys(phenoR).length !== 1) return;
+        const record = Object.entries(phenoR)[0];
+        if (!(record[0] in result)) {
+          result[record[0]] = [];
         }
-        state.phenoFilters[phenotype].push(phenoValue);
+        result[record[0]].push(record[1]);
       });
-    },
-    removePhenoFilter: (state, action: PayloadAction<string>) => {
-      Object.entries(action.payload).forEach(([phenotype, phenoValue]) => {
-        if (phenotype in state.phenoFilters) {
-          const i = state.phenoFilters[phenotype].indexOf(action.payload);
-          if (i > -1) {
-            state.phenoFilters[phenotype].splice(i, 1);
-          }
-        }
-      });
+      state.phenoFilters = result;
     },
     reset: (state) => {
-      state = initialState;
+      state.sampleFilters = [];
+      state.phenoFilters = {};
     },
   },
 });
 
-export const { addPhenoFilter, addSampleFilter, removePhenoFilter, removeSampleFilter, reset } =
-  phenoSlice.actions;
+export const { addPhenoFilter, addSampleFilter, reset } = phenoSlice.actions;
 
 export default phenoSlice.reducer;

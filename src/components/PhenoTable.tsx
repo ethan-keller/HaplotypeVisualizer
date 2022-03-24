@@ -17,9 +17,7 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
   const phenoFilters = useAppSelector((state) => state.pheno.phenoFilters);
 
   useEffect(() => {
-    return () => {
-      dispatch(reset());
-    };
+    dispatch(reset());
   }, []);
 
   return !isLoading && !phenosPerSample ? (
@@ -32,7 +30,7 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
         <tr>
           {phenotypes ? (
             <>
-              <th>sample</th>
+              <th style={{ backgroundColor: 'lightgrey' }}>sample</th>
               {Object.keys(phenotypes).map((key) => (
                 <th key={'column' + key}>{key}</th>
               ))}
@@ -42,21 +40,21 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
       </thead>
       <tbody>
         {Object.entries(phenosPerSample).map(([key, value], i) => {
-          if (sampleFilters.includes(key)) return null;
+          if (sampleFilters.length !== 0 && !sampleFilters.includes(key)) return null;
 
-          let filteredOut = false;
+          let filteredOut = true;
           const row = (
             <tr key={'row' + i}>
               <td key={'row' + i}>{key}</td>
-              {/* Not clean at all */}
               {Object.entries(value).map(([k, v], i) => {
                 if (k in phenoFilters && phenoFilters[k].includes(v)) {
-                  filteredOut = true;
+                  filteredOut = false;
                 }
                 return <td key={'pheno_value' + i}>{v}</td>;
               })}
             </tr>
           );
+          if (Object.keys(phenoFilters).length === 0) filteredOut = false;
           return filteredOut ? null : row;
         })}
       </tbody>

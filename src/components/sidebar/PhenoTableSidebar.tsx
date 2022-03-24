@@ -1,46 +1,97 @@
-import { Form, FloatingLabel } from 'react-bootstrap';
 import phenoApi from '../../api/pheno';
-import { addSampleFilter } from '../../slices/pheno';
+import { addSampleFilter, addPhenoFilter } from '../../slices/pheno';
 import { useAppDispatch } from '../../store';
 import Sidebar from './Sidebar';
 import SidebarSection from './SidebarSection';
+import Select from 'react-select';
+import SpinnerAnnotated from '../SpinnerAnnotated';
+import VerticalSpacer from '../VerticalSpacer';
+import { Form, Table } from 'react-bootstrap';
+import { PhenoRecord } from '../../types/pheno';
 
 interface PhenoTableSidebarProps {}
 
 const PhenoTableSidebar: React.FC<PhenoTableSidebarProps> = (props) => {
   const { data: phenotypes } = phenoApi.useGetPhenotypesQuery();
-  const { data: phenosPerSample } = phenoApi.useGetPhenosPerSampleQuery();
+  const { data: samples } = phenoApi.useGetSampleNamesQuery();
   const dispatch = useAppDispatch();
 
   return (
     <Sidebar title='Phenotype table'>
-      <SidebarSection title='Phenotypes'>
-        <FloatingLabel label='Select phenotypes'>
-          {/* Add multiple select options */}
-          <Form.Select size='sm'>
-            {phenotypes
-              ? Object.keys(phenotypes).map((key, i) => {
-                  return <option key={'pheno' + i}>{key}</option>;
-                })
-              : null}
-          </Form.Select>
-        </FloatingLabel>
+      <SidebarSection title='Table stats'>
+        <Table style={{ fontWeight: 100 }} borderless size='sm'>
+          <tbody>
+            <tr>
+              <td>Samples</td>
+              <td>{samples ? samples.length : '-'}</td>
+            </tr>
+            <tr>
+              <td>Phenotypes</td>
+              <td>{phenotypes ? Object.keys(phenotypes).length : '-'}</td>
+            </tr>
+          </tbody>
+        </Table>
       </SidebarSection>
+      <SidebarSection title='Filters'>
+        <Form.Label style={{ fontSize: 14 }}>Phenotypes</Form.Label>
+        {phenotypes ? (
+          <Select<PhenoOption, true, { label: string; options: PhenoOption[] }>
+            isSearchable
+            isClearable
+            isMulti
+            closeMenuOnSelect={false}
+            onChange={(values) => {
+              const phenoFilters = values.map((v) => {
+                let r = {} as PhenoRecord;
+                r[v.phenotype] = v.value;
+                return r;
+              });
+              dispatch(addPhenoFilter(phenoFilters));
+            }}
+            options={Object.entries(phenotypes).map((p) => ({
+              label: p[0],
+              options: p[1].map((o) => ({ value: o, label: o, phenotype: p[0] })),
+            }))}
+          />
+        ) : (
+          <SpinnerAnnotated message={'Loading phenotype filter'} />
+        )}
 
-      <SidebarSection title='Samples'>
-        <FloatingLabel label='Exclude samples'>
-          {/* Add multiple select options */}
-          <Form.Select size='sm' onChange={(e) => dispatch(addSampleFilter(e.target.value))}>
-            {phenosPerSample
-              ? Object.keys(phenosPerSample).map((sample, i) => {
-                  return <option key={'sample' + i}>{sample}</option>;
-                })
-              : null}
-          </Form.Select>
-        </FloatingLabel>
+        <VerticalSpacer space={10} />
+
+        <Form.Label style={{ fontSize: 14 }}>Samples</Form.Label>
+        {samples ? (
+          <Select<SampleOption, true>
+            isSearchable
+            isClearable
+            isMulti
+            closeMenuOnSelect={false}
+            closeMenuOnScroll
+            onChange={(values) => dispatch(addSampleFilter(values.map((o) => o.value)))}
+            options={samples.map((sample) => ({ value: sample, label: sample }))}
+          />
+        ) : (
+          <SpinnerAnnotated message={'Loading sample filter'} />
+        )}
       </SidebarSection>
     </Sidebar>
   );
 };
+
+interface PhenoOption {
+  readonly value: string;
+  readonly label: string;
+  readonly phenotype: string;
+}
+
+interface PhenoGroupOption {
+  readonly label: string;
+  readonly options: readonly PhenoOption[];
+}
+
+interface SampleOption {
+  readonly value: string;
+  readonly label: string;
+}
 
 export default PhenoTableSidebar;
