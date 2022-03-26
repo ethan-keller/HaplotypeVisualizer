@@ -33,11 +33,11 @@ def removeBookmark(elem_id: str):
 
 
 @router.post("/add", summary="Add a bookmark")
-def addBookmark(elem_id: str, description: str = Query(..., max_length=100)):
+def addBookmark(elem_id: str, comment: str = Query(..., max_length=100)):
     """
     Add a bookmark.
 
     **elem_id**: Id of bookmarked element
-    **description**: Custom description written by the user
+    **comment**: Comment written by the user
     """
-    BookmarkManager.bookmarks[elem_id] = Bookmark(elem_id=elem_id, description=description)
+    BookmarkManager.bookmarks[elem_id] = Bookmark(elem_id=elem_id, comment=comment)
