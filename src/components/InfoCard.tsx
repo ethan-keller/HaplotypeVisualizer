@@ -80,7 +80,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
           Bookmark
         </Button>
         <BookmarkModal
-          elemId={f.name}
+          elem={f}
           show={showBookmarkModal}
           onHide={() => setShowBookmarkModal(false)}
         />
