@@ -3,7 +3,7 @@ import bookmarksApi from '../../api/bookmarks';
 
 interface BookmarkCardProps {
   elemId: string;
-  description: string;
+  comment: string;
 }
 
 const BookmarkCard: React.FC<BookmarkCardProps> = (props) => {
@@ -13,7 +13,8 @@ const BookmarkCard: React.FC<BookmarkCardProps> = (props) => {
     <Card>
       <Card.Body>
         <Card.Title>{props.elemId}</Card.Title>
-        <Card.Text>{props.description}</Card.Text>
+        <Card.Text style={{opacity: 0.6}}>{props.comment}</Card.Text>
+        {/* Add description? */}
         <Button size='sm'>Go to element</Button>{' '}
         <Button
           onClick={() => removeBookMark({ elem_id: props.elemId })}
