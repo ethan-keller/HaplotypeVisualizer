@@ -6,7 +6,18 @@ const initialState: GraphSettings = {
   drawLabels: false,
   linkThickness: 1.5,
   segmentThickness: 10,
-  pathColors: ['#DB3E00', '#FCCB00', '#008B02', '#1273DE', '#EB9694'],
+  pathColors: [
+    '#EF4394',
+    '#BB2224',
+    '#EB9FD4',
+    '#A6A9A4',
+    '#DD96A4',
+    '#DB3E00',
+    '#FCCB00',
+    '#008B02',
+    '#1273DE',
+    '#EB9694',
+  ],
   activePaths: [],
 };
 
@@ -26,6 +37,11 @@ export const graphSettingsSlice = createSlice({
     updateSegmentThickness: (state, action: PayloadAction<number>) => {
       state.segmentThickness = action.payload;
     },
+    updatePathColor: (state, action: PayloadAction<{ path: number; color: string }>) => {
+      if (action.payload.path >= 0 && action.payload.path < state.pathColors.length) {
+        state.pathColors[action.payload.path] = action.payload.color;
+      }
+    },
     updatePathColors: (state, action: PayloadAction<string[]>) => {
       state.pathColors = action.payload;
     },
@@ -41,7 +57,15 @@ export const graphSettingsSlice = createSlice({
   },
 });
 
-export const { updateDrawPaths, updateDrawLabels, updateLinkThickness, updateSegmentThickness, setActivePaths, toggleActivePath } =
-  graphSettingsSlice.actions;
+export const {
+  updateDrawPaths,
+  updatePathColors,
+  updatePathColor,
+  updateDrawLabels,
+  updateLinkThickness,
+  updateSegmentThickness,
+  setActivePaths,
+  toggleActivePath,
+} = graphSettingsSlice.actions;
 
 export default graphSettingsSlice.reducer;
