@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Button, Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
+import bookmarksApi from '../api/bookmarks';
 import { useAppSelector } from '../store';
 import { getSegmentLength, GfaFeature } from '../types/gfa';
+import { isBookmarked } from '../utils/bookmarks';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
 import BookmarkModal from './modals/BookmarkModal';
 import VerticalSpacer from './VerticalSpacer';
@@ -14,6 +16,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
   const f = props.data;
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
+  const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const [showBookmarkModal, setShowBookmarkModal] = useState<boolean>(false);
   return (
     <Card style={{ border: 0 }}>
@@ -84,6 +87,8 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
           show={showBookmarkModal}
           onHide={() => setShowBookmarkModal(false)}
         />
+
+        {isBookmarked(bookmarks, f.name) ? <div className='bookmarked'>Bookmarked ✓</div> : null}
       </Card.Body>
     </Card>
   );
