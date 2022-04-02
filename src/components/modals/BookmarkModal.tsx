@@ -13,6 +13,7 @@ interface BookmarkModalProps {
 const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
   const [addBookmark] = bookmarksApi.useAddBookmarkMutation();
   const [comment, setComment] = useState<string>('');
+
   return (
     <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
@@ -36,6 +37,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
             maxLength={120}
             as='textarea'
             onChange={(e) => setComment(e.target.value)}
+            value={comment}
           />
         </InputGroup>
         <VerticalSpacer space={15} />
