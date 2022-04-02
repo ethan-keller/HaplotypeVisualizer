@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
-import { Button, Modal, Table, Form } from 'react-bootstrap';
+import { Modal, Table, Form } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
-import { setActivePaths, toggleActivePath } from '../../slices/graphSettings';
+import { setActivePaths, toggleActivePath, updatePathColor } from '../../slices/graphSettings';
 import { useAppDispatch, useAppSelector } from '../../store';
+import ColorPicker from '../ColorPicker';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface EditPathsModalProps {
@@ -38,7 +39,10 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
                 <tr key={'path_' + i} style={{ fontWeight: 100 }}>
                   <td className='text-start'>{path.name}</td>
                   <td className='text-center'>
-                    <Button style={{ border: 0, backgroundColor: pathColors[path.index] }} />
+                    <ColorPicker
+                      defaultColor={pathColors[path.index]}
+                      onPick={(color) => dispatch(updatePathColor({ path: path.index, color: color }))}
+                    />
                   </td>
                   <td className='text-end'>
                     <Form.Check
@@ -54,8 +58,6 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
         ) : (
           <SpinnerAnnotated message='Loading path colors' />
         )}
-
-        <Button>Edit paths</Button>
       </Modal.Body>
     </Modal>
   );
