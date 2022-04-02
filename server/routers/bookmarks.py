@@ -32,6 +32,14 @@ def removeBookmark(elem_id: str):
         )
 
 
+@router.delete("/remove_all", summary="remove all bookmarks")
+def removeBookmarks():
+    """
+    Remove all bookmarks.
+    """
+    BookmarkManager.bookmarks = {}
+
+
 @router.post("/add", summary="Add a bookmark")
 def addBookmark(elem_id: str, comment: str = Query(..., max_length=100)):
     """

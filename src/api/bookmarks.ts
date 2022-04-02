@@ -4,6 +4,7 @@ import {
   getBookmarks,
   removeBookmark,
   bookmarkBaseUrl,
+  removeAllBookmarks,
 } from '../endpoints_config/BookmarkEndpoints';
 import { Bookmark } from '../types/bookmark';
 
@@ -28,6 +29,10 @@ const bookmarksApi = createApi({
     }),
     removeBookmark: builder.mutation<void, { elem_id: string }>({
       query: (params) => ({ url: removeBookmark, params: params, method: 'DELETE' }),
+      invalidatesTags: (result, error, args) => ['Bookmark'],
+    }),
+    removeAllBookmarks: builder.mutation<void, void>({
+      query: () => ({ url: removeAllBookmarks, method: 'DELETE' }),
       invalidatesTags: (result, error, args) => ['Bookmark'],
     }),
   }),

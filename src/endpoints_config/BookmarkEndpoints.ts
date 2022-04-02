@@ -5,4 +5,5 @@ export const bookmarkBaseUrl = baseUrl + bookmarkPathPrefix;
 
 export const getBookmarks = '/';
 export const removeBookmark = '/remove';
+export const removeAllBookmarks = '/remove_all';
 export const addBookmark = '/add';
