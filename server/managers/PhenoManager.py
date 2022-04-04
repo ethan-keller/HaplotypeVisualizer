@@ -1,6 +1,6 @@
 from typing import Optional, Dict, List, Any
 import pandas as pd
-from FileManager import FileManager
+from managers import FileManager
 from schemas.file import FileIndex
 
 

@@ -2,9 +2,7 @@ from typing import List
 from os.path import isfile, splitext
 
 from schemas.file import File, FileStatus, FileIndex
-from managers.GfaManager import GfaManager
-from managers.PhenoManager import PhenoManager
-from managers.LayoutManager import LayoutManager
+from managers import GfaManager, PhenoManager, LayoutManager
 
 
 class FileManager:
@@ -20,7 +18,6 @@ class FileManager:
         # TODO: Maybe some other validation? File size etc? + separate exceptions?
         return cls.valid_id(file_id) and cls.file_exists(file_path) and cls.valid_file_extension(file_path, file_id)
 
-
     @classmethod
     def valid_id(cls, file_id: int) -> bool:
         return file_id > 0 and file_id < len(cls.files)
@@ -29,7 +26,7 @@ class FileManager:
     def valid_file_extension(cls, path: str, file_id: int) -> bool:
         valid_extensions = cls.files[file_id].file_extensions
         file_extension = cls.get_file_extension(path)
-        
+
         return file_extension in valid_extensions
 
     @classmethod

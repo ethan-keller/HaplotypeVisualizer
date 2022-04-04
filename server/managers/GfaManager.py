@@ -3,10 +3,9 @@ from gfapy import Gfa as GfaPy
 from gfapy.line.line import Line
 
 from schemas.gfa import Gfa, GFA_ELEMENT, GfaLink, GfaPath, GfaSegment, link_optional_fields, segment_optional_fields
-from managers.FileManager import FileManager
+from managers import FileManager
 from schemas.file import FileIndex
 from errors.PydanticConversionError import PydanticConversionError
-
 
 class GfaManager:
     __gfa: GfaPy = None
