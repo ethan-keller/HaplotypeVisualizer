@@ -1,13 +1,14 @@
 from enum import IntEnum
 from typing import List, Optional
 from pydantic import BaseModel
-from pydantic.types import FilePath
 
 
 class FileStatus(IntEnum):
     NO_FILE = 0
-    SUCCESFUL = 1
-    WARNING = 2
+    INVALID = 1
+    NEEDS_PRE_PROCESSING = 2
+    PRE_PROCESSING = 3
+    READY = 4
 
 
 class FileIndex(IntEnum):

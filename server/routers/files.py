@@ -1,16 +1,16 @@
 from typing import List
 
-import logic.files as FileLogic
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
-from schemas.file import File, FileStatus
-from server_data.data import FileManager
+from schemas.file import File, FileStatus, FileIndex
+from managers.GfaManager import GfaManager
+from managers.FileManager import FileManager
 
 router = APIRouter(prefix="/files", tags=["files"])
 
 
 @router.get("/", response_model=File, summary="Get a specific needed file")
-def getFiles(id: int = Query(..., ge=0, lt=len(FileManager.files))):
+def get_files(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Get a specific needed files by id.
 
@@ -20,16 +20,16 @@ def getFiles(id: int = Query(..., ge=0, lt=len(FileManager.files))):
 
 
 @router.get("/ready", response_model=bool, summary="Check if all files are ready")
-def are_all_uploaded():
+def are_all_files_ready():
     """
     Check if the server has all the necessary information to start visualizing
     """
     # TODO: Could potentially add other checks
-    return FileLogic.are_required_files_uploaded()
+    return FileManager.are_required_files_ready_for_visualization()
 
 
 @router.get("/all", response_model=List[File], summary="Get all needed files")
-def getAllFiles():
+def get_all_files():
     """
     Get the list of all needed files.
     """
@@ -42,7 +42,7 @@ def getAllFiles():
     responses={status.HTTP_400_BAD_REQUEST: {"description": "Invalid file extension", "model": str}},
     summary="Update the file name for a specific needed file",
 )
-def updateFile(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))):
+def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Update the file information for one of the needed files.
     
@@ -50,27 +50,25 @@ def updateFile(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files)))
     - **id**: Id of the file
     """
     FileManager.files[id].name = name
-    FileManager.files[id].status = FileStatus.WARNING
-
     file_path = FileManager.files_base_path + name
-    # TODO: Maybe some other validation? File size etc?
-    # TODO: Different exceptions?
-    if not FileLogic.file_exists(file_path):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"{file_path} is either not a file or non-existent"
-        )
 
-    if not FileLogic.validate_file_extension(file_path, FileManager.files[id].file_extensions):
+    if not FileManager.validate(file_path, id):
+        FileManager.files[id].status = FileStatus.INVALID
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"{FileLogic.get_extension(file_path)} files are not accepted for this entry",
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"{name} an invalid file. It did not pass validation."
         )
+    elif id == FileIndex.GFA:
+        if GfaManager.recognize(file_path):
+            FileManager.files[id].status = FileStatus.READY
+            raise NotImplementedError()
+        else:
+            FileManager.files[id].status = FileStatus.NEEDS_PRE_PROCESSING
     else:
-        FileManager.files[id].status = FileStatus.SUCCESFUL
+        FileManager.files[id].status = FileStatus.READY
 
 
 @router.put("/clear", summary="Clear file information for a specific needed file")
-def removeFile(id: int = Query(..., ge=0, lt=len(FileManager.files))):
+def remove_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Clear the file information for one of the needed files.
 
@@ -78,7 +76,7 @@ def removeFile(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     FileManager.files[id].name = None
     FileManager.files[id].status = FileStatus.NO_FILE
-    FileLogic.clear_file_data(id)
+    FileManager.clear_file_data(id)
 
 
 @router.put(
@@ -91,7 +89,7 @@ def prepare():
     Prepare the files for visualization (pre-processing, transformation, validation, data-structures etc).
     """
     try:
-        FileLogic.prepare_files()
+        FileManager.prepare_files()
     except ValueError:
         raise HTTPException(
             status_code=status.HTTP_424_FAILED_DEPENDENCY,

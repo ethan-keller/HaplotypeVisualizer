@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 from fastapi import APIRouter, HTTPException, status
 from schemas.pheno import PhenoTable
-from server_data.data import PhenoManager
+from managers.PhenoManager import PhenoManager
 
 
 router = APIRouter(prefix="/pheno", tags=["pheno"])

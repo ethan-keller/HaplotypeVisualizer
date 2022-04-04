@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Union
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 from schemas.gfa import Gfa, GfaLink, GfaPath, GfaSegment, GfaInfo, GfaHist
-from server_data.data import GfaManager
+from managers.GfaManager import GfaManager
 from utils.plots import compute_histogram
 
 

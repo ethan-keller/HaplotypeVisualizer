@@ -1,10 +1,9 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, status
-from logic.layout import getLayoutAndBounds
 from schemas.layout import Bounds, Density, Layout, LayoutAndBounds
 from logic.density import get_density_values
 
-from server_data.data import LayoutManager
+from managers.LayoutManager import LayoutManager
 
 router = APIRouter(prefix="/layout", tags=["layout"])
 
@@ -27,7 +26,7 @@ def prepareLayout():
         return
 
     try:
-        layout_and_bounds: LayoutAndBounds = getLayoutAndBounds()
+        layout_and_bounds: LayoutAndBounds = LayoutManager.getLayoutAndBounds()
     except:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not compute layout and bound positions",

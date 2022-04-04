@@ -2,7 +2,7 @@ from typing import List
 from fastapi import APIRouter, Query, HTTPException, status
 
 from schemas.bookmark import Bookmark
-from server_data.data import BookmarkManager
+from managers.BookmarkManager import BookmarkManager
 
 
 router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
