@@ -9,7 +9,7 @@ router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
 
 
 @router.get("/", response_model=List[Bookmark], summary="Get all bookmarks")
-def getFiles():
+def get_bookmarks():
     """
     Get all bookmarks.
     """
@@ -17,14 +17,14 @@ def getFiles():
 
 
 @router.delete("/remove", summary="remove a bookmark")
-def removeBookmark(elem_id: str):
+def remove_bookmark(elem_id: str):
     """
     Remove a bookmark given the element's id.
 
     **elem_id**: Id of bookmarked element
     """
     if elem_id in BookmarkManager.bookmarks:
-        BookmarkManager.bookmarks.pop(elem_id)
+        BookmarkManager.remove_bookmark(elem_id)
     else:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -33,19 +33,19 @@ def removeBookmark(elem_id: str):
 
 
 @router.delete("/remove_all", summary="remove all bookmarks")
-def removeBookmarks():
+def remove_bookmarks():
     """
     Remove all bookmarks.
     """
-    BookmarkManager.bookmarks = {}
+    BookmarkManager.clear_bookmarks()
 
 
 @router.post("/add", summary="Add a bookmark")
-def addBookmark(elem_id: str, comment: str = Query(..., max_length=100)):
+def add_bookmark(elem_id: str, comment: str = Query(..., max_length=100)):
     """
     Add a bookmark.
 
     **elem_id**: Id of bookmarked element
     **comment**: Comment written by the user
     """
-    BookmarkManager.bookmarks[elem_id] = Bookmark(elem_id=elem_id, comment=comment)
+    BookmarkManager.add_bookmark(elem_id, comment)
