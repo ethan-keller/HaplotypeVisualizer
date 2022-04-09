@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 from schemas.layout import Bounds, Density, Layout, LayoutAndBounds
 from logic.density import get_density_values
 
-from managers.LayoutManager import LayoutManager
+from managers import LayoutManager
 
 router = APIRouter(prefix="/layout", tags=["layout"])
 

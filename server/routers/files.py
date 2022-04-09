@@ -3,8 +3,7 @@ from typing import List
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
 from schemas.file import File, FileStatus, FileIndex
-from managers.GfaManager import GfaManager
-from managers.FileManager import FileManager
+from managers import FileManager, GfaManager
 
 router = APIRouter(prefix="/files", tags=["files"])
 
@@ -16,7 +15,12 @@ def get_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
 
     - **id**: Id of the file
     """
-    return FileManager.files[id]
+    try:
+        return FileManager.get_file(id)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=e.args[0],
+        )
 
 
 @router.get("/ready", response_model=bool, summary="Check if all files are ready")
@@ -49,37 +53,37 @@ def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))
     - **name**: File name
     - **id**: Id of the file
     """
-    FileManager.files[id].name = name
+    file = FileManager.get_file(id)
+    file.name = name
     file_path = FileManager.files_base_path + name
 
     try:
         FileManager.validate(file_path, id)
     except Exception as e:
-        FileManager.files[id].status = FileStatus.INVALID
+        file.status = FileStatus.INVALID
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"{name} is an invalid file. It did not pass validation: [{e.args[0]}]"
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"{name} is an invalid file. It did not pass validation: [{e.args[0]}]",
         )
 
     if id == FileIndex.GFA:
         if GfaManager.recognize(file_path):
-            FileManager.files[id].status = FileStatus.READY
+            file.status = FileStatus.READY
             raise NotImplementedError()
         else:
-            FileManager.files[id].status = FileStatus.NEEDS_PRE_PROCESSING
+            file.status = FileStatus.NEEDS_PRE_PROCESSING
     else:
-        FileManager.files[id].status = FileStatus.READY
+        file.status = FileStatus.READY
 
 
 @router.put("/clear", summary="Clear file information for a specific needed file")
-def remove_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
+def clear_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Clear the file information for one of the needed files.
 
     **id**: Id of the file
     """
-    FileManager.files[id].name = None
-    FileManager.files[id].status = FileStatus.NO_FILE
-    FileManager.clear_file_data(id)
+    FileManager.clear_file(id)
 
 
 @router.put(
@@ -99,3 +103,29 @@ def prepare():
             detail="The needed file paths were not uploaded. Files are not ready for preparation",
         )
 
+
+@router.put("/preprocess", summary="Preprocess the GFA file")
+def preprocess_gfa():
+    """
+    Preprocess the GFA file.
+    """
+    gfa_file = FileManager.get_file(FileIndex.GFA)
+    if gfa_file.status == FileStatus.NO_FILE:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot preprocess since GFA is not imported"
+        )
+
+    if gfa_file.status is not FileStatus.NEEDS_PRE_PROCESSING:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"{gfa_file.name} is either not ready for preprocessing or already preprocessed",
+        )
+
+    try:
+        gfa_file.status = FileStatus.PRE_PROCESSING
+        GfaManager.preprocess()
+        gfa_file.status = FileStatus.READY
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not preprocess {gfa_file.name}: [{e.args[0]}]",
+        )

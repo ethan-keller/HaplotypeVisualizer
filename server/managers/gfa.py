@@ -1,25 +1,28 @@
+import time
 from typing import Any, Dict, List, Optional
 from gfapy import Gfa as GfaPy
 from gfapy.line.line import Line
 
 from schemas.gfa import Gfa, GFA_ELEMENT, GfaLink, GfaPath, GfaSegment, link_optional_fields, segment_optional_fields
-from managers import FileManager
+import managers
 from schemas.file import FileIndex
 from errors.PydanticConversionError import PydanticConversionError
 
+
 class GfaManager:
-    __gfa: GfaPy = None
     gfa: Optional[Gfa] = None
 
     @classmethod
-    def prepare_gfa(cls) -> None:
-        file_name = FileManager.files[FileIndex.GFA].name
+    def is_empty(cls) -> bool:
+        return cls.gfa is None
 
-        if not file_name:
+    @classmethod
+    def prepare_gfa(cls) -> None:
+        if managers.FileManager.is_file_empty(FileIndex.GFA):
             raise ValueError("No GFA found. Cannot prepare for visualization.")
 
-        read_gfa = GfaPy.from_file(FileManager.files_base_path + file_name)
-        cls.__gfa = read_gfa
+        file_name = managers.FileManager.get_file(FileIndex.GFA).name
+        read_gfa = GfaPy.from_file(managers.FileManager.files_base_path + file_name)
 
         # Create needed data structures
         cls.gfa = cls.create_gfa(read_gfa)
@@ -30,22 +33,17 @@ class GfaManager:
         links = cls.convert_links_to_pydantic(gfa.dovetails)
         paths = cls.convert_paths_to_pydantic(gfa.paths)
 
-        segmentMap: Dict[str, GfaSegment] = {}
-        for segment in segments:
-            segmentMap[segment.name] = segment
-
-        linkMap: Dict[str, GfaLink] = {}
-        for link in links:
-            linkMap[link.name] = link
+        segmentMap: Dict[str, GfaSegment] = {segment.name: segment for segment in segments}
+        linkMap: Dict[str, GfaLink] = {link.name: link for link in links}
 
         for path in paths:
             s_names = path.segment_names
             for i in range(len(s_names) - 1):
                 segmentMap[s_names[i]].paths.append(path)
                 linkMap[cls.get_link_name(s_names[i], s_names[i + 1])].paths.append(path)
-            segmentMap[s_names[len(s_names) - 1]].paths.append(path)
+            segmentMap[s_names[-1]].paths.append(path)
 
-        cls.gfa = Gfa(segments=list(segmentMap.values()), links=list(linkMap.values()), paths=paths)
+        cls.gfa = Gfa(segments=segments, links=links, paths=paths)
 
         return cls.gfa
 
@@ -54,6 +52,12 @@ class GfaManager:
         # check hash
         # TODO: implement
         return False
+
+    @classmethod
+    def preprocess(cls) -> None:
+        # TODO: implement
+        time.sleep(4)
+        return
 
     @classmethod
     def convert_segments_to_pydantic(cls, segments: List[Line]) -> List[GfaSegment]:
@@ -150,3 +154,9 @@ class GfaManager:
     @classmethod
     def get_link_name(cls, from_segment: str, to_segment: str) -> str:
         return f"{from_segment}->{to_segment}"
+
+    @classmethod
+    def clear(cls) -> None:
+        cls.gfa = None
+        managers.LayoutManager.layout = None
+        managers.LayoutManager.bounds = None

@@ -19,7 +19,7 @@ class FileIndex(IntEnum):
 
 class File(BaseModel):
     id: int
-    name: Optional[str] = None
+    name: str = ""
     description: str
     status: FileStatus
     required: bool

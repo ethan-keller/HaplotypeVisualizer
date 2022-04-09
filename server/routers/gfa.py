@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Union
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
 from schemas.gfa import Gfa, GfaLink, GfaPath, GfaSegment, GfaInfo, GfaHist
-from managers.GfaManager import GfaManager
+from managers import GfaManager
 from utils.plots import compute_histogram
 
 
@@ -19,7 +19,7 @@ def get_gfa():
     """
     Gets the full GFA object.
     """
-    if GfaManager.gfa:
+    if not GfaManager.is_empty():
         return GfaManager.gfa
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a gfa object")
@@ -32,7 +32,7 @@ def get_segments():
     """
     Gets the segments from the GFA object.
     """
-    if GfaManager.gfa:
+    if not GfaManager.is_empty():
         return GfaManager.gfa.segments
     else:
         raise HTTPException(
@@ -47,7 +47,7 @@ def get_links():
     """
     Gets the links from the GFA object.
     """
-    if GfaManager.gfa:
+    if not GfaManager.is_empty():
         return GfaManager.gfa.links
     else:
         raise HTTPException(
@@ -62,7 +62,7 @@ def get_paths():
     """
     Gets the paths from the GFA object.
     """
-    if GfaManager.gfa:
+    if not GfaManager.is_empty():
         return GfaManager.gfa.paths
     else:
         raise HTTPException(
@@ -75,7 +75,7 @@ def get_graph_info():
     """
     Gets graph information.
     """
-    if GfaManager.gfa:
+    if not GfaManager.is_empty():
         g = GfaManager.gfa
         return GfaInfo(n_segments=len(g.segments), n_links=len(g.links), n_paths=len(g.paths))
     else:
@@ -89,7 +89,7 @@ def get_hist_values():
     """
     For the visualization of segment lengths, this endpoint returns the computed histogram values.
     """
-    if GfaManager.gfa:
+    if not GfaManager.is_empty():
         segment_lengths = list(
             map(
                 lambda segment: segment.optionals["LN"] if segment.optionals else len(segment.sequence),
@@ -102,3 +102,4 @@ def get_hist_values():
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Could compute histogram values from a non-existent gfa object",
         )
+
