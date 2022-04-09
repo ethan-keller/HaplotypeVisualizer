@@ -21,17 +21,17 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
       <Offcanvas.Body>
         <Button
           variant='danger'
-          disabled={bookmarks === undefined || bookmarks.length === 0}
+          disabled={bookmarks === undefined || Object.keys(bookmarks).length === 0}
           onClick={() => removeAllBookmarks()}
         >
           Clear all
         </Button>
         <VerticalSpacer space={20} />
         {bookmarks ? (
-          bookmarks.length === 0 ? (
+          Object.keys(bookmarks).length === 0 ? (
             'No bookmarks.'
           ) : (
-            bookmarks.map((bookmark) => (
+            Object.values(bookmarks).map((bookmark) => (
               <>
                 <BookmarkCard elemId={bookmark.elem_id} comment={bookmark.comment} />
                 <VerticalSpacer space={10} />

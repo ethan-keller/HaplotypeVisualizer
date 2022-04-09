@@ -13,13 +13,13 @@ const bookmarksApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: bookmarkBaseUrl }),
   tagTypes: ['Bookmark'],
   endpoints: (builder) => ({
-    getBookmarks: builder.query<Bookmark[], void>({
+    getBookmarks: builder.query<Record<string, Bookmark>, void>({
       query: () => ({ url: getBookmarks, method: 'GET' }),
       providesTags: (bookmarks) =>
         bookmarks
           ? [
               'Bookmark',
-              ...bookmarks.map((bookmark) => ({ type: 'Bookmark' as const, id: bookmark.elem_id })),
+              ...Object.values(bookmarks).map((bookmark) => ({ type: 'Bookmark' as const, id: bookmark.elem_id })),
             ]
           : ['Bookmark'],
     }),

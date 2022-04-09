@@ -9,8 +9,10 @@ interface File {
 
 export enum FileStatus {
   NO_FILE = 0,
-  SUCCESSFUL = 1,
-  WARNING = 2,
+  INVALID = 1,
+  NEEDS_PRE_PROCESSING = 2,
+  PRE_PROCESSING = 3,
+  READY = 4,
 }
 
 interface CoreApiParams {
