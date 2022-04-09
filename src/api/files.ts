@@ -5,6 +5,7 @@ import {
   getAllFiles,
   getFile,
   prepareFiles,
+  preprocess,
   ready,
   updateFile,
 } from '../endpoints_config/FileEndpoints';
@@ -40,6 +41,10 @@ const filesApi = createApi({
     }),
     prepareFiles: builder.mutation<void, void>({
       query: () => ({ url: prepareFiles, method: 'PUT' }),
+    }),
+    preprocess: builder.mutation<void, void>({
+      query: () => ({ url: preprocess, method: 'PUT' }),
+      invalidatesTags: (result, error, args) => ['File'],
     }),
   }),
 });

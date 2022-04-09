@@ -9,3 +9,4 @@ export const ready = '/ready';
 export const updateFile = '/update';
 export const clearFile = '/clear';
 export const prepareFiles = '/prepare';
+export const preprocess = '/preprocess';
