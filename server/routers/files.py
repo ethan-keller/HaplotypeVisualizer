@@ -10,7 +10,7 @@ router = APIRouter(prefix="/files", tags=["files"])
 
 
 @router.get("/", response_model=File, summary="Get a specific needed file")
-def get_files(id: int = Query(..., ge=0, lt=len(FileManager.files))):
+def get_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Get a specific needed files by id.
 
@@ -29,7 +29,7 @@ def are_all_files_ready():
 
 
 @router.get("/all", response_model=List[File], summary="Get all needed files")
-def get_all_files():
+def get_files():
     """
     Get the list of all needed files.
     """
@@ -52,12 +52,15 @@ def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))
     FileManager.files[id].name = name
     file_path = FileManager.files_base_path + name
 
-    if not FileManager.validate(file_path, id):
+    try:
+        FileManager.validate(file_path, id)
+    except Exception as e:
         FileManager.files[id].status = FileStatus.INVALID
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"{name} an invalid file. It did not pass validation."
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"{name} is an invalid file. It did not pass validation: [{e.args[0]}]"
         )
-    elif id == FileIndex.GFA:
+
+    if id == FileIndex.GFA:
         if GfaManager.recognize(file_path):
             FileManager.files[id].status = FileStatus.READY
             raise NotImplementedError()

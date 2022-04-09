@@ -15,12 +15,19 @@ class FileManager:
 
     @classmethod
     def validate(cls, file_path: str, file_id: int) -> bool:
-        # TODO: Maybe some other validation? File size etc? + separate exceptions?
-        return cls.valid_id(file_id) and cls.file_exists(file_path) and cls.valid_file_extension(file_path, file_id)
+        # TODO: Maybe some other validation? File size etc?
+        if not cls.valid_id(file_id):
+            raise Exception(f"Invalid file id: {file_id}")
+        if not cls.valid_file_extension(file_path, file_id):
+            raise Exception(f"[{file_path}] has an invalid file extension")
+        if not cls.file_exists(file_path):
+            raise Exception(f"File at path: [{file_path}] does not exist")
+
+        return True
 
     @classmethod
     def valid_id(cls, file_id: int) -> bool:
-        return file_id > 0 and file_id < len(cls.files)
+        return file_id >= 0 and file_id < len(cls.files)
 
     @classmethod
     def valid_file_extension(cls, path: str, file_id: int) -> bool:
