@@ -88,7 +88,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
           onHide={() => setShowBookmarkModal(false)}
         />
 
-        {isBookmarked(bookmarks, f.name) ? <div className='bookmarked'>Bookmarked ✓</div> : null}
+        {bookmarks && isBookmarked(Object.values(bookmarks), f.name) ? <div className='bookmarked'>Bookmarked ✓</div> : null}
       </Card.Body>
     </Card>
   );

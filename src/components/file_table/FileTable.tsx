@@ -159,7 +159,7 @@ const statusToDescription = new Map<FileStatus, string>([
   [FileStatus.NO_FILE, 'No file imported'],
   [FileStatus.INVALID, 'Invalid file'],
   [FileStatus.NEEDS_PRE_PROCESSING, 'Needs pre-processing'],
-  [FileStatus.PRE_PROCESSING, 'Pre processing...'],
+  [FileStatus.PRE_PROCESSING, 'Preprocessing...'],
   [FileStatus.READY, 'Ready for visualization'],
 ]);
 
