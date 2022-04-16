@@ -2,7 +2,6 @@ from json import JSONEncoder
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from gfapy import Line, Gfa as GfaPy
-from pydantic import Json
 
 from schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
 from errors.PydanticConversionError import PydanticConversionError

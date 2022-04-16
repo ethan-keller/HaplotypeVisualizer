@@ -56,12 +56,3 @@ class LayoutDecoder(JSONDecoder):
         else:
             return dct
 
-
-# if __name__ == "__main__":
-#     layout = Layout.get_layout_from_file(
-#         Path(
-#             "C:/Users/ethan/Documents/TUDelft/Honours Program/HAPLOTYPE_VISUALISATION/HaplotypeVisualizer/server/server_data/15gfa.gfa"
-#         )
-#     )
-
-#     print(layout.nodes)

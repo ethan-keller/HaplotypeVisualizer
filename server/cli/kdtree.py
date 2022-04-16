@@ -132,6 +132,7 @@ class KDTree:
         return True
 
     def print(self) -> None:
+        # TODO: better visualization
         self._print_tree(self.root)
 
     def _print_tree(self, node: KDTreeNode) -> None:

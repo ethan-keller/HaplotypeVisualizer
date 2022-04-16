@@ -1,5 +1,4 @@
 import os
-from types import SimpleNamespace
 from typing import Any, Type, Union
 from pickle import loads as p_loads, dumps as p_dumps, load as p_load, dump as p_dump
 from json import JSONDecoder, JSONEncoder, loads as j_loads, dumps as j_dumps, load as j_load, dump as j_dump

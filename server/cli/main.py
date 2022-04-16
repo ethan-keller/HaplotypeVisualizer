@@ -2,12 +2,17 @@ from pathlib import Path
 from typing import List, Optional
 import typer
 
+from layout import Layout
+from kdtree import KDTree
+from serialization import PickleSerializer
+from uuid import uuid4
+
 APP = typer.Typer(add_completion=False)
 
 # Static variables
 VERSION = "0.1.0"
 VALID_GRAPH_EXTENSIONS = [".gfa"]
-VALID_LAYOUT_EXTENSIONS = [".json"]
+VALID_LAYOUT_EXTENSIONS = [".pickle"]
 
 
 def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
@@ -46,17 +51,15 @@ def layout(
     outputs: Optional[List[Path]] = typer.Option(None, "--outputs", "-o"),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ):
-    # for every file:
-    # positions = layout(file)
-    # index_tree = indexing(positions)
-    # serialized_index_tree = serialize(index_tree)
-    # output_file = to_output_file(serialized_index_tree)
-
     # TODO: add verbose texts
     # TODO: add progress bars
 
-    pass
-
+    for gfa in gfas:
+        # TODO: add try except with red text for when layout fails
+        layout = Layout.get_layout_from_file(gfa)
+        kdtree = KDTree.create_tree_from_layout(layout)
+        out_path = PickleSerializer.serialize(kdtree, str(uuid4()) + ".pickle")
+        typer.secho(f"Successfully computed layout for {gfa}. Stored at {str(out_path)}", fg="green")
 
 @APP.command()
 def see_layout(
@@ -72,7 +75,10 @@ def see_layout(
 ):
     # for debugging puproses
     # visualization of index tree
-    pass
+    for layout in layouts:
+        kdtree: KDTree = PickleSerializer.deserialize(from_file=layout.name)
+        kdtree.print()
+
 
 
 @APP.callback()
