@@ -2,7 +2,7 @@ import os
 from types import SimpleNamespace
 from typing import Any, Type, Union
 from pickle import loads as p_loads, dumps as p_dumps, load as p_load, dump as p_dump
-from json import JSONEncoder, loads as j_loads, dumps as j_dumps, load as j_load, dump as j_dump
+from json import JSONDecoder, JSONEncoder, loads as j_loads, dumps as j_dumps, load as j_load, dump as j_dump
 
 out_put_dir = "./out/"
 
@@ -43,10 +43,10 @@ class JsonSerializer:
             return j_dumps(o, cls=encoder)
 
     @classmethod
-    def deserialize(cls, sb: Union[str, bytes] = None, from_file: str = None) -> Any:
+    def deserialize(cls, sb: Union[str, bytes] = None, from_file: str = None, decoder: Type[JSONDecoder] = None) -> Any:
         if from_file:
             with open(out_put_dir + from_file, "r") as f:
-                return j_load(f)
+                return j_load(f, cls=decoder)
         elif sb:
-            return j_loads(sb)
+            return j_loads(sb, cls=decoder)
 

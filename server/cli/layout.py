@@ -1,6 +1,6 @@
-from json import JSONEncoder
+from json import JSONDecoder, JSONEncoder
 from pathlib import Path
-from typing import Dict, Tuple, Type, Union
+from typing import Dict, Tuple, Union
 from gfa import Gfa
 from schemas.layout import Position, Bounds
 from subprocess import check_output
@@ -31,14 +31,37 @@ class Layout:
         return layout
 
     @classmethod
-    def serialize(cls, layout: "Layout", out_file: str = None, encoder: Type[JSONEncoder] = None) -> str:
+    def serialize(cls, layout: "Layout", out_file: str = None) -> str:
         return JsonSerializer.serialize(layout, out_file, LayoutEncoder)
 
     @classmethod
     def deserialize(cls, sb: Union[str, bytes] = None, from_file: str = None) -> "Layout":
-        return cls(**JsonSerializer.deserialize(sb, from_file))
+        return cls(**JsonSerializer.deserialize(sb, from_file, LayoutDecoder))
 
 
 class LayoutEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
+
+
+class LayoutDecoder(JSONDecoder):
+    def __init__(self, *args, **kwargs):
+        JSONDecoder.__init__(self, object_hook=self.object_hook, *args, **kwargs)
+
+    def object_hook(self, dct: Dict):
+        if "x" in dct and "y" in dct:
+            return Position(dct["x"], dct["y"])
+        elif "xl" in dct and "xr" in dct:
+            return Bounds(dct["xl"], dct["xr"])
+        else:
+            return dct
+
+
+# if __name__ == "__main__":
+#     layout = Layout.get_layout_from_file(
+#         Path(
+#             "C:/Users/ethan/Documents/TUDelft/Honours Program/HAPLOTYPE_VISUALISATION/HaplotypeVisualizer/server/server_data/15gfa.gfa"
+#         )
+#     )
+
+#     print(layout.nodes)
