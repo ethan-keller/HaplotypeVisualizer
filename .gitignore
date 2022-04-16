@@ -6,6 +6,9 @@
 *.csv
 *.gff
 
+# cli output/temp files
+/server/cli/out
+
 # dependencies
 /node_modules
 /server/graph_layout/node_modules
