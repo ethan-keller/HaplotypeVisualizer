@@ -79,16 +79,22 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
   });
 }
 
-const gfa: Gfa = JSON.parse(process.argv[3]);
-let positions: Record<string, cytoscape.Position> = {};
-let bounds: Record<string, { xl: number; xr: number }> = {};
+const gfa_file_path: string = '../' + process.argv[2];
+const fs = require('fs');
+let gfa;
 
-createCytoscape(gfa)
-  .nodes()
-  .forEach((node) => {
-    positions[node.id()] = node.position();
-    const bb = node.boundingBox({});
-    bounds[node.id()] = { xl: bb.x1, xr: bb.x2 };
-  });
+fs.readFile(gfa_file_path, (err, data) => {
+  if (err) throw err;
+  gfa = JSON.parse(data);
 
-process.stdout.write(JSON.stringify({ positions: positions, bounds: bounds }));
+  let layout: Record<string, [cytoscape.Position, { xl: number; xr: number }]> = {};
+
+  createCytoscape(gfa)
+    .nodes()
+    .forEach((node) => {
+      const bb = node.boundingBox({});
+      layout[node.id()] = [node.position(), { xl: bb.x1, xr: bb.x2 }];
+    });
+
+  process.stdout.write(JSON.stringify({ nodes: layout }));
+});

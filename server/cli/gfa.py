@@ -1,6 +1,8 @@
+from json import JSONEncoder
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from gfapy import Line, Gfa as GfaPy
+from pydantic import Json
 
 from schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
 from errors.PydanticConversionError import PydanticConversionError
@@ -14,12 +16,12 @@ class Gfa:
         self.paths = paths
 
     @classmethod
-    def serialize(cls, gfa: "Gfa") -> str:
-        return JsonSerializer.serialize(gfa)
+    def serialize(cls, gfa: "Gfa", out_file: str = None) -> str:
+        return JsonSerializer.serialize(gfa, out_file, GfaEncoder)
 
     @classmethod
-    def deserialize(cls, sb: Union[bytes, str]) -> "Gfa":
-        return JsonSerializer.deserialize(sb)
+    def deserialize(cls, sb: Union[bytes, str] = None, from_file: str = None) -> "Gfa":
+        return cls(**JsonSerializer.deserialize(sb, from_file))
 
     @classmethod
     def read_gfa_from_file(cls, path: Path) -> "Gfa":
@@ -139,3 +141,8 @@ class Gfa:
     @classmethod
     def get_link_name(cls, from_segment: str, to_segment: str) -> str:
         return f"{from_segment}->{to_segment}"
+
+class GfaEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
