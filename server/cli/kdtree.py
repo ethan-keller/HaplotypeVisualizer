@@ -169,19 +169,19 @@ class KDTree:
         result = []
 
         if self.is_fully_contained(node, lu, rd):
-            result += self.traverse(node)
+            result += self.get_all_nodes_in_subtree(node)
         elif self.is_intersect(node, lu, rd):
             result += self._range_query(node, lu, rd)
 
         return result
 
-    def traverse(self, node: KDTreeNode) -> List[KDTreeNode]:
+    def get_all_nodes_in_subtree(self, node: KDTreeNode) -> List[KDTreeNode]:
         members = []
 
         if node:
-            members += self.traverse(node.left)
+            members += self.get_all_nodes_in_subtree(node.left)
             members.append(node)
-            members += self.traverse(node.right)
+            members += self.get_all_nodes_in_subtree(node.right)
 
         return members
 
