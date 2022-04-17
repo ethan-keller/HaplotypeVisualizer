@@ -6,8 +6,9 @@
 *.csv
 *.gff
 
-# cli output/temp files
+# output/temp files
 /server/cli/out
+/server/out
 
 # dependencies
 /node_modules
