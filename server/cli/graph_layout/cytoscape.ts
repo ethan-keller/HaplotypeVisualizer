@@ -79,7 +79,7 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
   });
 }
 
-const gfa_file_path: string = '../' + process.argv[2];
+const gfa_file_path: string = '../../' + process.argv[2];
 const fs = require('fs');
 let gfa;
 
