@@ -11,7 +11,8 @@ class PhenoManager:
     @classmethod
     def prepare_pheno(cls) -> None:
         if managers.FileManager.is_file_empty(FileIndex.PHENO):
-            raise ValueError("No phenotype information found. Cannot prepare for visualization.")
+            return None
+            # raise ValueError("No phenotype information found. Cannot prepare for visualization.")
 
         file_name = managers.FileManager.get_file(FileIndex.PHENO).name
 

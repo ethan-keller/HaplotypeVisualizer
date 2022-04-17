@@ -81,6 +81,7 @@ class FileManager:
 
     @classmethod
     def prepare_files(cls) -> None:
+        # TODO: reading gfa already happened in CLI
         managers.GfaManager.prepare_gfa()
         managers.PhenoManager.prepare_pheno()
 
