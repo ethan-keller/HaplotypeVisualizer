@@ -18,14 +18,11 @@ const filesApi = createApi({
   endpoints: (builder) => ({
     getAllFiles: builder.query<File[], void>({
       query: () => ({ url: getAllFiles, method: 'GET' }),
-      providesTags: (files) =>
-        files
-          ? ['File', ...files.map((file) => ({ type: 'File' as const, id: file.id }))]
-          : ['File'],
+      providesTags: ['File'],
     }),
     getFile: builder.query<File, GetFileParams>({
       query: (params) => ({ url: getFile, params: params, method: 'GET' }),
-      providesTags: (file, error, args) => [{ type: 'File', id: args.id }],
+      providesTags: (file, error, args) => ['File'],
     }),
     areFilesReady: builder.query<boolean, void>({
       query: () => ({ url: ready, method: 'GET' }),

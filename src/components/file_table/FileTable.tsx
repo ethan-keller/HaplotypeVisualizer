@@ -25,12 +25,15 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   };
 
   // handle import click
-  const handleImport = (fileIndex: number, inputRef: React.RefObject<HTMLInputElement>) => {
-    if (!inputRef.current?.files) return;
-    const file = inputRef.current?.files[0];
+  const handleImport = (fileIndex: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
     if (!file) return;
 
     updateFile({ id: fileIndex, name: file.name });
+    
+    // to allow for same file input
+    e.target.value = ''
   };
 
   const MainTable = (files: File[]) => {
@@ -60,7 +63,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
         <td>
           <input
             ref={inputRef}
-            onChange={() => handleImport(i, inputRef)}
+            onChange={(e) => handleImport(i, e)}
             className='d-none'
             type='file'
             accept={file.file_extensions.join(',')}
