@@ -1,6 +1,7 @@
 from typing import List
 import numpy as np
-from schemas.gfa import GfaHist
+
+from cli.schemas.gfa import GfaHist
 
 
 def compute_histogram(nums: List[int]) -> GfaHist:

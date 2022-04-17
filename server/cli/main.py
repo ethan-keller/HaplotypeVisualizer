@@ -56,10 +56,11 @@ def layout(
 
     for gfa in gfas:
         # TODO: add try except with red text for when layout fails
-        layout = Layout.get_layout_from_file(gfa)
+        layout = Layout.get_layout_from_gfa_file(gfa)
         kdtree = KDTree.create_tree_from_layout(layout)
         out_path = PickleSerializer.serialize(kdtree, str(uuid4()) + ".pickle")
         typer.secho(f"Successfully computed layout for {gfa}. Stored at {str(out_path)}", fg="green")
+
 
 @APP.command()
 def see_layout(
@@ -78,7 +79,6 @@ def see_layout(
     for layout in layouts:
         kdtree: KDTree = PickleSerializer.deserialize(from_file=layout.name)
         kdtree.print()
-
 
 
 @APP.callback()

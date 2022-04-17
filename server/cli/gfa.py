@@ -2,10 +2,11 @@ from json import JSONEncoder
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from gfapy import Line, Gfa as GfaPy
+import hashlib
 
-from schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
+from .schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
 from errors.PydanticConversionError import PydanticConversionError
-from serialization import JsonSerializer
+from .serialization import JsonSerializer
 
 
 class Gfa:
@@ -21,6 +22,17 @@ class Gfa:
     @classmethod
     def deserialize(cls, sb: Union[bytes, str] = None, from_file: str = None) -> "Gfa":
         return cls(**JsonSerializer.deserialize(sb, from_file))
+
+    @classmethod
+    def get_gfa_hash(cls, file_path: str) -> Optional[str]:
+        h = None
+        try:
+            with open(file_path, "rb") as f:
+                data = f.read()
+                h = hashlib.md5(data).hexdigest()
+        except:
+            h = None
+        return h
 
     @classmethod
     def read_gfa_from_file(cls, path: Path) -> "Gfa":
