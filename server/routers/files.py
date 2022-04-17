@@ -69,7 +69,6 @@ def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))
     if id == FileIndex.GFA:
         if GfaManager.recognize(file_path):
             file.status = FileStatus.READY
-            raise NotImplementedError()
         else:
             file.status = FileStatus.NEEDS_PRE_PROCESSING
     else:

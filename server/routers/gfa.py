@@ -2,8 +2,8 @@ from typing import Any, Dict, List, Union
 
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
-from schemas.gfa import Gfa, GfaLink, GfaPath, GfaSegment, GfaInfo, GfaHist
 from managers import GfaManager
+from cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaHist, GfaInfo
 from utils.plots import compute_histogram
 
 
