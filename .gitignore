@@ -8,7 +8,6 @@
 
 # output/temp files
 /server/cli/out
-/server/out
 
 # dependencies
 /node_modules

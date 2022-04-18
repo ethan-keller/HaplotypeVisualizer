@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@babel/cli": "^7.17.6",
     "@reduxjs/toolkit": "^1.7.2",
     "@types/cytoscape": "^3.14.17",
     "@types/cytoscape-dagre": "^2.3.0",
@@ -37,7 +38,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-api": "cd server && uvicorn main:server --reload",
+    "start-api": "uvicorn server.main:server --reload",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
