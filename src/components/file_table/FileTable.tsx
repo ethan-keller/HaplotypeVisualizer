@@ -12,11 +12,16 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   const [clearFile] = filesApi.useClearFileMutation();
   const [updateFile] = filesApi.useUpdateFileMutation();
   const [preprocess, { isLoading: isPreprocessing }] = filesApi.usePreprocessMutation();
+  const [uploadLayout] = filesApi.useUploadLayoutMutation();
 
   // create refs for inputs
-  const inputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
+  const importInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
     () => (files ? files.map(() => createRef<HTMLInputElement>()) : []),
     [files],
+  );
+  const layoutInputRef: React.RefObject<HTMLInputElement> = useMemo(
+    () => createRef<HTMLInputElement>(),
+    [],
   );
 
   // dispatch the click of a button to a input element via its ref
@@ -31,9 +36,23 @@ const FileTable: React.FC<FileTableProps> = (props) => {
     if (!file) return;
 
     updateFile({ id: fileIndex, name: file.name });
-    
+
     // to allow for same file input
-    e.target.value = ''
+    e.target.value = '';
+  };
+
+  const handleLayoutImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const fm = new FormData();
+    fm.append('layout_file', file);
+
+    uploadLayout(fm);
+
+    // to allow for same file input
+    e.target.value = '';
   };
 
   const MainTable = (files: File[]) => {
@@ -73,6 +92,24 @@ const FileTable: React.FC<FileTableProps> = (props) => {
               <Button onClick={() => preprocess()} variant='outline-info' size='sm'>
                 preprocess
               </Button>{' '}
+              {i === 0 ? (
+                <>
+                  <input
+                    ref={layoutInputRef}
+                    onChange={(e) => handleLayoutImport(e)}
+                    className='d-none'
+                    type='file'
+                    accept={'.pickle'}
+                  />
+                  <Button
+                    onClick={() => dispatchImportClick(layoutInputRef)}
+                    variant='outline-primary'
+                    size='sm'
+                  >
+                    local layout
+                  </Button>{' '}
+                </>
+              ) : null}
             </>
           ) : null}
           {status !== FileStatus.NO_FILE ? (
@@ -87,20 +124,6 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                 size='sm'
               >
                 import
-              </Button>{' '}
-              <Button
-                onClick={() => dispatchImportClick(inputRef)}
-                variant='outline-primary'
-                size='sm'
-              >
-                local layout
-              </Button>{' '}
-              <Button
-                onClick={() => dispatchImportClick(inputRef)}
-                variant='outline-primary'
-                size='sm'
-              >
-                cluster layout
               </Button>
             </>
           )}
@@ -121,7 +144,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
         <tbody>
           {files.map((file, i) => {
             const status = file.status;
-            const inputRef = inputRefs[i];
+            const inputRef = importInputRefs[i];
             return (
               <tr key={'file-table-row-' + i}>
                 {getDescriptionRow(file)}

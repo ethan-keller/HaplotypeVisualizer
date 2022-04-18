@@ -8,6 +8,7 @@ import {
   preprocess,
   ready,
   updateFile,
+  uploadLayout,
 } from '../endpoints_config/FileEndpoints';
 import { File, GetFileParams, UpdateFileParams, ClearFileParams } from '../types/files';
 
@@ -41,6 +42,10 @@ const filesApi = createApi({
     }),
     preprocess: builder.mutation<void, void>({
       query: () => ({ url: preprocess, method: 'PUT' }),
+      invalidatesTags: (result, error, args) => ['File'],
+    }),
+    uploadLayout: builder.mutation<void, FormData>({
+      query: (formData) => ({ url: uploadLayout, method: 'POST', body: formData }),
       invalidatesTags: (result, error, args) => ['File'],
     }),
   }),

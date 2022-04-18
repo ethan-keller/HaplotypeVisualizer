@@ -10,3 +10,4 @@ export const updateFile = '/update';
 export const clearFile = '/clear';
 export const prepareFiles = '/prepare';
 export const preprocess = '/preprocess';
+export const uploadLayout = '/layout';
