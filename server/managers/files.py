@@ -34,6 +34,10 @@ class FileManager:
         return cls._does_file_have_status(id, FileStatus.PRE_PROCESSING)
 
     @classmethod
+    def set_file_status(cls, id: int, status: FileStatus) -> None:
+        cls.get_file(id).status = status
+
+    @classmethod
     def get_file(cls, id: int) -> File:
         if cls.is_valid_id(id):
             return cls.files[id]
@@ -65,8 +69,8 @@ class FileManager:
 
     @classmethod
     def are_required_files_ready_for_visualization(cls) -> bool:
-        for file in cls.files:
-            if file.required and file.status is not FileStatus.READY:
+        for i, file in enumerate(cls.files):
+            if file.required and not cls._does_file_have_status(i, FileStatus.READY):
                 return False
         return True
 

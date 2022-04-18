@@ -1,9 +1,10 @@
 from typing import List
 
-from fastapi import APIRouter, Query, status
+from fastapi import APIRouter, Query, status, UploadFile, File as FastApiFile
 from fastapi.exceptions import HTTPException
+from server import managers
 from server.schemas.file import File, FileStatus, FileIndex
-from server.managers import FileManager, GfaManager
+from server.managers import FileManager, GfaManager, LayoutManager
 
 router = APIRouter(prefix="/files", tags=["files"])
 
@@ -125,6 +126,31 @@ def preprocess_gfa():
         GfaManager.preprocess()
         gfa_file.status = FileStatus.READY
     except Exception as e:
+        gfa_file.status = FileStatus.NEEDS_PRE_PROCESSING
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not preprocess {gfa_file.name}: [{e}]",
+        )
+
+@router.post("/layout", summary="Upload layout file")
+def layout(layout_file: UploadFile = FastApiFile(...)):
+    """
+    Upload a layout file.
+    """
+    if FileManager.is_file_empty(FileIndex.GFA):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot upload layout file for an unimported gfa file",
+        )
+    
+    gfa_hash = GfaManager.get_hash()
+    if gfa_hash:
+        try:
+            LayoutManager.store_layout_in_default_out_dir(layout_file, gfa_hash)
+            FileManager.set_file_status(FileIndex.GFA, FileStatus.READY)
+        except:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot store layout file",
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot generate hash for gfa file",
         )
