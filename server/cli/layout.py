@@ -32,10 +32,13 @@ class Layout:
         try:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
-                file_path = Gfa.serialize(gfa, "./server/cli/out/" + f"{gfa_hash}.gfa.json")
                 cwd = "./graph_layout"
+                folder = "./out/"
                 if Path(os.getcwd()).name == 'HaplotypeVisualizer':
                     cwd = "./server/cli/graph_layout"
+                    folder = "./server/cli/out/"
+                file_path = Gfa.serialize(gfa, folder + f"{gfa_hash}.gfa.json")
+                
                 out = check_output(["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True)
                 layout = cls.deserialize(out)
             else:
