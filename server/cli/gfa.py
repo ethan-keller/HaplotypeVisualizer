@@ -3,11 +3,14 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from gfapy import Line, Gfa as GfaPy
 import hashlib
-
-from .schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
-from errors.PydanticConversionError import PydanticConversionError
-from .serialization import JsonSerializer
-
+try:
+    from schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
+    from errors.PydanticConversionError import PydanticConversionError
+    from serialization import JsonSerializer
+except:
+    from server.cli.schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
+    from server.cli.errors.PydanticConversionError import PydanticConversionError
+    from server.cli.serialization import JsonSerializer
 
 class Gfa:
     def __init__(self, segments: List[GfaSegment], links: List[GfaLink], paths: List[GfaPath]) -> None:
@@ -24,7 +27,7 @@ class Gfa:
         return cls(**JsonSerializer.deserialize(sb, from_file))
 
     @classmethod
-    def get_gfa_hash(cls, file_path: str) -> Optional[str]:
+    def get_gfa_hash(cls, file_path: Path) -> Optional[str]:
         h = None
         try:
             with open(file_path, "rb") as f:

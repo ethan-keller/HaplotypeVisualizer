@@ -1,9 +1,14 @@
 from typing import List, Tuple, Union
 import numpy as np
 
-from layout import Layout
-from serialization import PickleSerializer
-from schemas.layout import Position
+try: 
+    from layout import Layout
+    from serialization import PickleSerializer
+    from schemas.layout import Position
+except:
+    from server.cli.layout import Layout
+    from server.cli.serialization import PickleSerializer
+    from server.cli.schemas.layout import Position 
 
 # https://github.com/khuyentran1401/kdtree-implementation/blob/master/kdtree.py
 

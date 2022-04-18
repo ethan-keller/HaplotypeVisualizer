@@ -2,11 +2,15 @@ from json import JSONDecoder, JSONEncoder
 import os
 from pathlib import Path
 from typing import Dict, Tuple, Union
-from .gfa import Gfa
-from .schemas.layout import Position, Bounds
 from subprocess import check_output
-
-from .serialization import JsonSerializer
+try:
+    from gfa import Gfa
+    from schemas.layout import Position, Bounds
+    from serialization import JsonSerializer
+except:
+    from server.cli.gfa import Gfa
+    from server.cli.schemas.layout import Position, Bounds
+    from server.cli.serialization import JsonSerializer
 
 
 class Layout:
@@ -27,11 +31,17 @@ class Layout:
     def compute_layout(cls, gfa: Gfa, gfa_path: Path) -> "Layout":
         try:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
-            file_path = Gfa.serialize(gfa, gfa_hash + ".gfa.json")
-            out = check_output(["npx", "ts-node", "./cytoscape.ts", file_path], cwd="./cli/graph_layout", shell=True)
-            layout = cls.deserialize(out)
-        except:
-            raise Exception("Could not compute layout")
+            if gfa_hash:
+                file_path = Gfa.serialize(gfa, "./out/" + f"{gfa_hash}.gfa.json")
+                cwd = "./graph_layout"
+                if Path(os.getcwd()).name == 'HaplotypeVisualizer':
+                    cwd = "./server/cli/graph_layout"
+                out = check_output(["npx", "ts-node", "./cytoscape.ts", file_path], cwd=cwd, shell=True)
+                layout = cls.deserialize(out)
+            else:
+                raise Exception("Could not compute gfa hash")
+        except Exception as e:
+            raise Exception(f"Could not compute layout: [{e}]")
 
         return layout
 

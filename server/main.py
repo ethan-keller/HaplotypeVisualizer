@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from routers import files, gfa, layout, pheno, bookmarks
+from server.routers import files, gfa, layout, pheno, bookmarks
 
 origins = ["http://localhost:3000"]
 

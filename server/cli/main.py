@@ -1,11 +1,16 @@
 from pathlib import Path
 from typing import List, Optional
 import typer
-
-from layout import Layout
-from kdtree import KDTree
-from serialization import PickleSerializer
-from uuid import uuid4
+try:
+    from layout import Layout
+    from kdtree import KDTree
+    from serialization import PickleSerializer
+    from gfa import Gfa
+except:
+    from server.cli.layout import Layout
+    from server.cli.kdtree import KDTree
+    from server.cli.serialization import PickleSerializer
+    from server.cli.gfa import Gfa
 
 APP = typer.Typer(add_completion=False)
 
@@ -13,6 +18,7 @@ APP = typer.Typer(add_completion=False)
 VERSION = "0.1.0"
 VALID_GRAPH_EXTENSIONS = [".gfa"]
 VALID_LAYOUT_EXTENSIONS = [".pickle"]
+DEFAULT_OUTPUT_DIR = "/out"
 
 
 def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
@@ -48,7 +54,9 @@ def layout(
         case_sensitive=True,
         callback=path_validation_callback,
     ),
-    outputs: Optional[List[Path]] = typer.Option(None, "--outputs", "-o"),
+    output_folder: Path = typer.Option(
+        DEFAULT_OUTPUT_DIR, "--outputs", "-o", dir_okay=True, case_sensitive=True
+    ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ):
     # TODO: add verbose texts
@@ -58,8 +66,13 @@ def layout(
         # TODO: add try except with red text for when layout fails
         layout = Layout.get_layout_from_gfa_file(gfa)
         kdtree = KDTree.create_tree_from_layout(layout)
-        out_path = PickleSerializer.serialize(kdtree, str(uuid4()) + ".pickle")
-        typer.secho(f"Successfully computed layout for {gfa}. Stored at {str(out_path)}", fg="green")
+        gfa_hash = Gfa.get_gfa_hash(gfa)
+        if gfa_hash:
+            index_file_path = str(Path(f".{output_folder}/{gfa_hash}.pickle").resolve())
+            out_path = PickleSerializer.serialize(kdtree, index_file_path)
+            typer.secho(f"Successfully computed layout for {gfa} --> Stored at {str(out_path)}", fg="green")
+        else:
+            typer.secho(f"Could not compute layout for {gfa}", fg="red")
 
 
 @APP.command()
@@ -77,7 +90,7 @@ def see_layout(
     # for debugging puproses
     # visualization of index tree
     for layout in layouts:
-        kdtree: KDTree = PickleSerializer.deserialize(from_file=layout.name)
+        kdtree: KDTree = PickleSerializer.deserialize(from_file="./out/" + layout.name)
         kdtree.print()
 
 
