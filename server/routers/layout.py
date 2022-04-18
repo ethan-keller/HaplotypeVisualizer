@@ -1,9 +1,9 @@
 from typing import List
 from fastapi import APIRouter, HTTPException, status
-from schemas.layout import Bounds, Density, Layout, LayoutAndBounds
-from logic.density import get_density_values
+from server.schemas.layout import Bounds, Density, Layout, LayoutAndBounds
+from server.logic.density import get_density_values
 
-from managers import LayoutManager
+from server.managers import LayoutManager
 
 router = APIRouter(prefix="/layout", tags=["layout"])
 

@@ -1,6 +1,6 @@
 from typing import List, Tuple
 
-from schemas.layout import Bounds
+from server.schemas.layout import Bounds
 import numpy as np
 
 # TODO: downsampling?

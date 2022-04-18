@@ -1,6 +1,6 @@
 from typing import Dict
 
-from schemas.bookmark import Bookmark
+from server.schemas.bookmark import Bookmark
 
 
 class BookmarkManager:

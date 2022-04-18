@@ -2,9 +2,9 @@ from typing import Any, Dict, List, Union
 
 from fastapi import APIRouter, status
 from fastapi.exceptions import HTTPException
-from managers import GfaManager
-from cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaHist, GfaInfo
-from utils.plots import compute_histogram
+from server.managers import GfaManager
+from server.cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaHist, GfaInfo
+from server.utils.plots import compute_histogram
 
 
 router = APIRouter(prefix="/gfa", tags=["gfa"])

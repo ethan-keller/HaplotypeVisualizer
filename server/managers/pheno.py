@@ -1,7 +1,7 @@
 from typing import Optional, Dict, List, Any
 import pandas as pd
-import managers
-from schemas.file import FileIndex
+import server.managers as managers
+from server.schemas.file import FileIndex
 
 
 class PhenoManager:

@@ -1,8 +1,8 @@
 from typing import List
 from os.path import isfile, splitext
 
-from schemas.file import File, FileStatus, FileIndex
-import managers
+from server.schemas.file import File, FileStatus, FileIndex
+import server.managers as managers
 
 
 class FileManager:

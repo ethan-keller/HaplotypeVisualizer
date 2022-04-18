@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
-from cli.schemas.layout import Bounds, Position
-from cli.layout import Layout
-from cli.gfa import Gfa
+from server.cli.schemas.layout import Bounds, Position
+from server.cli.layout import Layout
+from server.cli.gfa import Gfa
 
 
 class LayoutManager:
@@ -22,7 +23,7 @@ class LayoutManager:
     @classmethod
     def layout_for_gfa_exists(cls, gfa_file_path: str) -> bool:
         hash_value = Gfa.get_gfa_hash(gfa_file_path)
-        path = Path(f"out/{hash_value}.json")
+        path = Path(f"./server/cli/out/{hash_value}.pickle")
         return path.exists()
 
     @classmethod

@@ -2,8 +2,8 @@ from typing import List
 
 from fastapi import APIRouter, Query, status
 from fastapi.exceptions import HTTPException
-from schemas.file import File, FileStatus, FileIndex
-from managers import FileManager, GfaManager
+from server.schemas.file import File, FileStatus, FileIndex
+from server.managers import FileManager, GfaManager
 
 router = APIRouter(prefix="/files", tags=["files"])
 
@@ -126,5 +126,5 @@ def preprocess_gfa():
         gfa_file.status = FileStatus.READY
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not preprocess {gfa_file.name}: [{e.args[0]}]",
+            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not preprocess {gfa_file.name}: [{e}]",
         )

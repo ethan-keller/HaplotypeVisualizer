@@ -1,8 +1,8 @@
 from typing import Dict
 from fastapi import APIRouter, Query, HTTPException, status
 
-from schemas.bookmark import Bookmark
-from managers import BookmarkManager
+from server.schemas.bookmark import Bookmark
+from server.managers import BookmarkManager
 
 
 router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
