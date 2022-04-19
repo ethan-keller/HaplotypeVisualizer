@@ -41,10 +41,10 @@ class GfaManager:
         file_name = "server/server_data/" + managers.FileManager.get_file(FileIndex.GFA).name
         file_path = Path(file_name)
         layout = Layout.compute_layout(cls.gfa, file_path)
-        LayoutManager.layout = KDTree.create_tree_from_layout(layout)
+        LayoutManager.get_index_from_layout(layout)
         gfa_hash = Gfa.get_gfa_hash(Path(file_name))
         if gfa_hash:
-            layout_path = KDTree.serialize(LayoutManager.layout, "./server/cli/out/" + gfa_hash + ".pickle")
+            layout_path = KDTree.serialize(LayoutManager.index, "./server/cli/out/" + gfa_hash + ".pickle")
             print(layout_path)
         else:
             raise Exception("Could not compute gfa hash")

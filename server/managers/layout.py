@@ -7,19 +7,19 @@ from server.cli.gfa import Gfa
 from server.cli.kdtree import KDTree
 import shutil
 
+from server.cli.layout import Layout
+
 
 class LayoutManager:
-    layout: Optional[KDTree] = None
+    index: Optional[KDTree] = None
 
-    # @classmethod
-    # def get_layout(cls) -> Dict[str, Tuple[Position, Bounds]]:
-    #     try:
-    #         if cls.layout:
-    #             layout = cls.layout
-    #     except:
-    #         raise Exception("Could not compute layout and bound positions")
-
-    #     return layout
+    @classmethod
+    def get_index_from_layout(cls, layout: Layout) -> None:
+        if layout:
+            kdtree = KDTree.create_tree_from_layout(layout)
+            cls.index = kdtree
+        else:
+            raise Exception("Cannot create index without layout")
 
     @classmethod
     def copy_layout_file_to_default_dir(cls, layout_file: Path, gfa_hash: str) -> None:
@@ -46,4 +46,4 @@ class LayoutManager:
 
     @classmethod
     def clear(cls) -> None:
-        cls.layout = None
+        cls.index = None

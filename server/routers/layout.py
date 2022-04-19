@@ -22,7 +22,7 @@ def prepareLayout():
     """
     Executes the graph layout algorithm and memoizes layout and bound information.
     """
-    if LayoutManager.layout and LayoutManager.bounds:
+    if LayoutManager.index and LayoutManager.bounds:
         return
 
     try:
@@ -32,7 +32,7 @@ def prepareLayout():
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not compute layout and bound positions",
         )
 
-    LayoutManager.layout = layout_and_bounds.layout
+    LayoutManager.index = layout_and_bounds.layout
     LayoutManager.bounds = layout_and_bounds.bounds
 
 
@@ -41,11 +41,11 @@ def getNodePositions():
     """
     Gets layout node positions.
     """
-    if LayoutManager.layout:
-        return LayoutManager.layout
+    if LayoutManager.index:
+        return LayoutManager.index
 
     prepareLayout()
-    return LayoutManager.layout
+    return LayoutManager.index
 
 
 @router.get("/bounds", response_model=List[Bounds], summary="Get layout node bounding box boundaries")
