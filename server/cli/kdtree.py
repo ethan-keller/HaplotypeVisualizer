@@ -8,7 +8,7 @@ try:
 except:
     from server.cli.layout import Layout
     from server.cli.serialization import PickleSerializer
-    from server.cli.schemas.layout import Position 
+    from server.cli.schemas.layout import Position
 
 # https://github.com/khuyentran1401/kdtree-implementation/blob/master/kdtree.py
 
@@ -138,14 +138,23 @@ class KDTree:
 
     def print(self) -> None:
         # TODO: better visualization
-        self._print_tree(self.root)
+        traversal = self.in_order_traversal()
+        for node in traversal:
+            print(node)
 
-    def _print_tree(self, node: KDTreeNode) -> None:
-        if node.left is not None:
-            self._print_tree(node.left)
-        print(node)
-        if node.right is not None:
-            self._print_tree(node.right)
+    def in_order_traversal(self) -> List[KDTreeNode]:
+        result: List[KDTreeNode] = []
+        self._in_order_traversal(self.root, result)
+        return result
+    
+    def _in_order_traversal(self, curr: KDTreeNode, traversal: List[KDTreeNode]) -> None:
+        if curr.left is not None:
+            traversal.append(curr.left)
+            self._in_order_traversal(curr.left, traversal)
+        traversal.append(curr)
+        if curr.right is not None:
+            traversal.append(curr.right)
+            self._in_order_traversal(curr.right, traversal)
 
     def range_query(self, lu: Position, rd: Position) -> List[KDTreeNode]:
         return self._range_query(self.root, lu, rd)
