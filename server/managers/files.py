@@ -87,6 +87,7 @@ class FileManager:
     def prepare_files(cls) -> None:
         # TODO: reading gfa already happened in CLI
         managers.GfaManager.prepare_gfa()
+        managers.LayoutManager.prepare_layout()
         managers.PhenoManager.prepare_pheno()
 
     @classmethod
@@ -97,6 +98,7 @@ class FileManager:
             file.status = FileStatus.NO_FILE
             if id == FileIndex.GFA:
                 managers.GfaManager.clear()
+                managers.LayoutManager.clear()
             elif id == FileIndex.PHENO:
                 managers.PhenoManager.clear()
         else:
