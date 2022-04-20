@@ -1,6 +1,7 @@
-from typing import List
-from fastapi import APIRouter, HTTPException, status
-from server.schemas.layout import Bounds, Density, Layout, LayoutAndBounds
+from typing import Any, List
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from pydantic import Json
+from server.schemas.layout import Density, LayoutNode, RectangleRange
 from server.logic.density import get_density_values
 
 from server.managers import LayoutManager
@@ -8,56 +9,46 @@ from server.managers import LayoutManager
 router = APIRouter(prefix="/layout", tags=["layout"])
 
 
-@router.put(
+@router.get(
     "/",
-    responses={
-        status.HTTP_500_INTERNAL_SERVER_ERROR: {
-            "description": "Could not compute layout and bound positions",
-            "model": str,
-        }
-    },
-    summary="Prepare layout and bound coordinates",
+    response_model=List[LayoutNode],
+    summary="Gets all nodes",
 )
-def prepareLayout():
+def get_all_layout_nodes():
     """
-    Executes the graph layout algorithm and memoizes layout and bound information.
+    Gets all layout nodes from the index. # TODO: Containing bounds
     """
-    if LayoutManager.index and LayoutManager.bounds:
-        return
-
-    try:
-        layout_and_bounds: LayoutAndBounds = LayoutManager.getLayoutAndBounds()
-    except:
+    if LayoutManager.is_index_empty():
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not compute layout and bound positions",
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not get nodes because there is no index available",
         )
+    else:
+        return LayoutManager.get_all_layout_nodes()
 
-    LayoutManager.index = layout_and_bounds.layout
-    LayoutManager.bounds = layout_and_bounds.bounds
+def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
+    try:
+        return RectangleRange.parse_obj(range)
+    except Exception as e:
+        print(e)
 
-
-@router.get("/positions", response_model=Layout, summary="Get layout node positions")
-def getNodePositions():
+@router.get(
+    "/range",
+    response_model=List[LayoutNode],
+    summary="Gets all nodes in given range",
+)
+def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_range)):
     """
-    Gets layout node positions.
+    Gets all layout nodes from the index inside the given range. # TODO: Containing bounds
     """
-    if LayoutManager.index:
-        return LayoutManager.index
-
-    prepareLayout()
-    return LayoutManager.index
-
-
-@router.get("/bounds", response_model=List[Bounds], summary="Get layout node bounding box boundaries")
-def getNodeBounds():
-    """
-    Gets layout node bounding box boundaries.
-    """
-    if LayoutManager.bounds:
-        return LayoutManager.bounds
-
-    prepareLayout()
-    return LayoutManager.bounds
+    # TODO: validate range
+    if LayoutManager.is_index_empty():
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Could not get nodes because there is no index available",
+        )
+    else:
+        return LayoutManager.get_all_layout_nodes_in_range(range)
 
 
 @router.get(

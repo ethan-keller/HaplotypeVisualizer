@@ -1,26 +1,23 @@
-from typing import Dict, List
+from typing import List
 from pydantic import BaseModel
 
-
 class Position(BaseModel):
-    x: int
-    y: int
+    x: float
+    y: float
 
-
-class Layout(BaseModel):
-    positions: Dict[str, Position]
-
-
-class Bounds(BaseModel):
-    xl: int
-    xr: int
-
-
-class LayoutAndBounds(BaseModel):
-    layout: Layout
-    bounds: List[Bounds]
-
+class RectangleRange(BaseModel):
+    lu: Position
+    rd: Position
 
 class Density(BaseModel):
     xs: List[int]
     densities: List[int]
+
+class LayoutNode(BaseModel):
+    segment: str
+    x: float
+    y: float
+    # TODO: bounds
+    # xl: float
+    # xr: float
+
