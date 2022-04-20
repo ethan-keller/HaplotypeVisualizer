@@ -15,7 +15,8 @@ except:
 
 class KDTreeNode:
     # TODO: add parent as field?
-    def __init__(self, x, y, split_x=True):
+    def __init__(self, segment: str, x, y, split_x=True):
+        self.segment = segment
         self.x = x
         self.y = y
         self.xmax = np.inf
@@ -25,6 +26,7 @@ class KDTreeNode:
         self.split_x = split_x
         self.left = None
         self.right = None
+        
 
     def set_min_max(self, parent: "KDTreeNode", split_x: bool) -> None:
         self.xmin = parent.xmin
@@ -47,7 +49,8 @@ class KDTreeNode:
         return self.left == None and self.right == None
 
     def __str__(self) -> str:
-        return "(" + str(self.x) + ", " + str(self.y) + ")"
+        # return "[(" + str(self.x) + ", " + str(self.y) + ")]"
+        return f"[{self.segment}: (x: {self.x}, y: {self.y})]"
 
     def __repr__(self) -> str:
         return "<KDTreeNode " + self.__str__() + ">"
@@ -55,13 +58,15 @@ class KDTreeNode:
 
 class KDTree:
     def __init__(self, data: np.ndarray) -> None:
-        assert data.shape[1] == 2
+        assert data.shape[1] == 3
 
-        xs = data[:, 0]
-        ys = data[:, 1]
+        segments = data[:, 0]
+        xs = data[:, 1]
+        ys = data[:, 2]
+        
         sorted_x_indices = np.argsort(xs)
         sorted_y_indices = np.argsort(ys)
-        self.root = self._construct_tree(xs, ys, sorted_x_indices, sorted_y_indices, True)
+        self.root = self._construct_tree(xs, ys, segments, sorted_x_indices, sorted_y_indices, True)
 
     def _select(self, truncated_sorted_first_indices, sorted_second_indices) -> np.ndarray:
         """
@@ -77,14 +82,14 @@ class KDTree:
         return matching_indices
 
     def _construct_tree(
-        self, xs: np.ndarray, ys: np.ndarray, ix: np.ndarray, iy: np.ndarray, split_x: bool, parent: KDTreeNode = None,
+        self, xs: np.ndarray, ys: np.ndarray, segments: np.ndarray, ix: np.ndarray, iy: np.ndarray, split_x: bool, parent: KDTreeNode = None,
     ) -> KDTreeNode:
         n = ix.shape[0]
         median = n // 2
 
         # split on x-coordinate
         if split_x:
-            node = KDTreeNode(xs[ix[median]], ys[ix[median]], True)
+            node = KDTreeNode(segments[ix[median]], xs[ix[median]], ys[ix[median]], True)
 
             if parent is not None:
                 # set min and max fields
@@ -94,16 +99,16 @@ class KDTree:
                 # select corresponding indices
                 sub_iy = self._select(ix[:median], iy)
                 # recursively construct on left
-                node.left = self._construct_tree(xs, ys, ix[:median], sub_iy, False, node)
+                node.left = self._construct_tree(xs, ys, segments, ix[:median], sub_iy, False, node)
             if median + 1 < n:
                 # select corresponding indices
                 sub_iy = self._select(ix[median + 1 :], iy)
                 # recursively construct on right
-                node.right = self._construct_tree(xs, ys, ix[median + 1 :], sub_iy, False, node)
+                node.right = self._construct_tree(xs, ys, segments, ix[median + 1 :], sub_iy, False, node)
 
         # split on y-coordinate
         else:
-            node = KDTreeNode(xs[iy[median]], ys[iy[median]], False)
+            node = KDTreeNode(segments[iy[median]], xs[iy[median]], ys[iy[median]], False)
 
             if parent is not None:
                 # set min and max fields
@@ -113,12 +118,12 @@ class KDTree:
                 # select corresponding indices
                 sub_ix = self._select(iy[:median], ix)
                 # recursively construct on left
-                node.left = self._construct_tree(xs, ys, sub_ix, iy[:median], True, node)
+                node.left = self._construct_tree(xs, ys, segments, sub_ix, iy[:median], True, node)
             if median + 1 < n:
                 # select corresponding indices
                 sub_ix = self._select(iy[median + 1 :], ix)
                 # recursively construct on right
-                node.right = self._construct_tree(xs, ys, sub_ix, iy[median + 1 :], True, node)
+                node.right = self._construct_tree(xs, ys, segments, sub_ix, iy[median + 1 :], True, node)
 
         return node
 
@@ -206,9 +211,9 @@ class KDTree:
     def create_tree_from_layout(cls, layout: Layout) -> "KDTree":
         # TODO: need bound information in tree?
         # TODO: is y needed?
-        X = np.zeros((len(layout.nodes), 2))
-        for i, (position, _) in enumerate(layout.nodes.values()):
-            X[i] = (position.x, position.y)
+        X = np.zeros((len(layout.nodes), 3), dtype=object)
+        for i, (segment, (position, _)) in enumerate(layout.nodes.items()):
+            X[i] = (segment, position.x, position.y)
         return cls(X)
 
     @classmethod
