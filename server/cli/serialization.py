@@ -1,10 +1,15 @@
 import os
+import sys
 from typing import Any, Type, Union
 from pickle import loads as p_loads, dumps as p_dumps, load as p_load, dump as p_dump
 from json import JSONDecoder, JSONEncoder, loads as j_loads, dumps as j_dumps, load as j_load, dump as j_dump
 
-# TODO: Add try except blocks?
+# Otherwise unpickling doesn't work since it cannot find the kdtree module
+# Not that clean
+sys.path.append('./server/cli')
 
+
+# TODO: Add try except blocks?
 
 class PickleSerializer:
     @classmethod
