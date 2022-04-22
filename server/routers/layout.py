@@ -66,22 +66,13 @@ def getDensities():
     """
     Gets density values along with their respective x coordinates.
     """
-    if not LayoutManager.bounds:
+    if LayoutManager.is_index_empty():
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Could not compute densities because there is no bound information",
         )
 
-    xs, densities = get_density_values(LayoutManager.bounds)
+    xs, densities = get_density_values(LayoutManager.get_all_bounds())
 
     return Density(xs=xs, densities=densities)
 
-
-@router.get(
-    "/bounds_ready", response_model=bool, summary="Checks if node layout bounds are computed",
-)
-def are_bounds_ready():
-    """
-    Returns True if the node layout bounds are computed. False otherwise
-    """
-    return LayoutManager.bounds is not None

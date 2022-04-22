@@ -12,6 +12,10 @@ class RectangleRange(BaseModel):
 class Density(BaseModel):
     xs: List[int]
     densities: List[int]
+
+class Bounds(BaseModel):
+    xl: int
+    xr: int
  
 Layout = Dict[str, Position]
 

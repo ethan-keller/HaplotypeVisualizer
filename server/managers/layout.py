@@ -1,13 +1,13 @@
 import os
 import shutil
 from pathlib import Path
-from typing import Optional
+from typing import List, Optional
 
 from fastapi import UploadFile
 from server.cli.gfa import Gfa
 from server.cli.kdtree import KDTree
 from server.cli.layout import Layout
-from server.schemas.layout import Layout, Position, RectangleRange
+from server.schemas.layout import Layout, Position, RectangleRange, Bounds
 
 
 class LayoutManager:
@@ -25,6 +25,14 @@ class LayoutManager:
             return { node.segment : Position(x=node.x, y=node.y) for node in kdtree_nodes }
         else:
             return {}
+
+    @classmethod
+    def get_all_bounds(cls) -> List[Bounds]:
+        if cls.index is not None:
+            kdtree_nodes = cls.index.in_order_traversal()
+            return [Bounds(xl=node.bounds.xl, xr=node.bounds.xr) for node in kdtree_nodes]
+        else:
+            return []
 
     @classmethod
     def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> Layout:

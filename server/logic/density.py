@@ -1,7 +1,9 @@
 from typing import List, Tuple
 
-from server.schemas.layout import Bounds
+
 import numpy as np
+
+from server.schemas.layout import Bounds
 
 # TODO: downsampling?
 def get_density_values(xs: List[Bounds]) -> Tuple[List[int], List[int]]:
