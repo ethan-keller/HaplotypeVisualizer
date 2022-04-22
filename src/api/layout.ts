@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   layoutBaseUrl,
   getDensities,
-  areBoundsReady,
   getAllLayoutNodes,
   getRangeLayoutNodes,
 } from '../endpoints_config/LayoutEndpoints';
@@ -21,9 +20,6 @@ const layoutApi = createApi({
     }),
     getDensities: builder.query<Density, void>({
       query: () => ({ url: getDensities, method: 'GET' }),
-    }),
-    areBoundsReady: builder.query<boolean, void>({
-      query: () => ({ url: areBoundsReady, method: 'GET' }),
     }),
   }),
 });
