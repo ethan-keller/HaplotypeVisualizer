@@ -8,11 +8,10 @@ import { RectangleRange } from '../../types/layout';
 import GraphType, { GraphSettings } from '../../types/graph';
 import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';
-// @ts-ignore
-import panzoom from 'cytoscape-panzoom';
 import layoutApi from '../../api/layout';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { updateViewport } from '../../slices/graphLayout';
 
-panzoom(cytoscape);
 
 interface GraphProps {
   graph: GraphType;
@@ -23,9 +22,14 @@ interface GraphProps {
 const Graph: React.FC<GraphProps> = ({
   graph,
   settings,
-  initialViewport = defaultInitialViewport,
+  initialViewport,
 }) => {
-  const [viewport, setViewport] = useState<RectangleRange>(initialViewport);
+  const dispatch = useAppDispatch();
+  if (initialViewport) {
+    dispatch(updateViewport(initialViewport))
+  }
+  const viewport = useAppSelector(state => state.graphLayout.viewport);
+
   const [cy, setCy] = useState<cytoscape.Core>();
   const [error, setError] = useState<any>(undefined);
   const [featureData, setFeatureData] = useState<GfaFeature | undefined>(undefined);
@@ -48,6 +52,15 @@ const Graph: React.FC<GraphProps> = ({
   useEffect(() => console.log(viewport), [viewport]);
 
   useEffect(() => {
+    return () => {
+      if (cy) {
+        // @ts-ignore
+        cy.panzoom('destroy');
+      }
+    };
+  }, [])
+
+  useEffect(() => {
     if (cy) {
       // @ts-ignore
       cy.panzoom({});
@@ -60,12 +73,6 @@ const Graph: React.FC<GraphProps> = ({
         // setViewport(extentToRectangleRange(cy.extent()));
       });
     }
-    return () => {
-      if (cy) {
-        // @ts-ignore
-        cy.panzoom('destroy');
-      }
-    };
   }, [cy]);
 
   return (
@@ -100,7 +107,5 @@ const extentToRectangleRange = (extent: {
 }) => {
   return { lu: { x: extent.x1, y: extent.y1 }, rd: { x: extent.x2, y: extent.y2 } };
 };
-
-const defaultInitialViewport = { lu: { x: 0, y: 0 }, rd: { x: 1000, y: 1000 } };
 
 export default Graph;

@@ -3,8 +3,11 @@ import dagre from 'cytoscape-dagre';
 import { Layout } from '../types/layout';
 import Graph, { GraphSettings } from '../types/graph';
 import { GfaLink, GfaSegment } from '../types/gfa';
+// @ts-ignore
+import panzoom from 'cytoscape-panzoom';
 
 cytoscape.use(dagre);
+panzoom(cytoscape);
 
 const nodeStyle = (settings: GraphSettings) => {
   return {

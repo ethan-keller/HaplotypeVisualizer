@@ -6,6 +6,7 @@ import phenoApi from './api/pheno';
 import layoutApi from './api/layout';
 import graphSettingsReducer from './slices/graphSettings';
 import phenoReducer from './slices/pheno';
+import graphLayoutReducer from './slices/graphLayout';
 import {
   persistStore,
   persistReducer,
@@ -34,6 +35,7 @@ const persistConfig = {
 const reducers = combineReducers({
   graphSettings: graphSettingsReducer,
   pheno: phenoReducer,
+  graphLayout: graphLayoutReducer,
   [filesApi.reducerPath]: filesApi.reducer,
   [gfaApi.reducerPath]: gfaApi.reducer,
   [layoutApi.reducerPath]: layoutApi.reducer,
