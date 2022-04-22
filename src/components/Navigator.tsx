@@ -43,7 +43,7 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
         <XAxis dataKey={'x'} />
         <YAxis hide />
         <Tooltip />
-        <Area connectNulls type='linear' dataKey='density' fill='#0d6efd' />
+        <Area connectNulls type='linear' dataKey='density' fill='#0d6efd' isAnimationActive={false} />
         <Brush travellerWidth={20} height={20} dataKey={'x'} />
       </AreaChart>
     </ResponsiveContainer>
