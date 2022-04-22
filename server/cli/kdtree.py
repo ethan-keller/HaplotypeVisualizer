@@ -4,19 +4,20 @@ import numpy as np
 try: 
     from layout import Layout
     from serialization import PickleSerializer
-    from schemas.layout import Position
+    from schemas.layout import Position, Bounds
 except:
     from server.cli.layout import Layout
     from server.cli.serialization import PickleSerializer
-    from server.cli.schemas.layout import Position
+    from server.cli.schemas.layout import Position, Bounds
 
 # https://github.com/khuyentran1401/kdtree-implementation/blob/master/kdtree.py
 
 
 class KDTreeNode:
     # TODO: add parent as field?
-    def __init__(self, segment: str, x, y, split_x=True):
+    def __init__(self, segment: str, bounds: Bounds, x, y, split_x=True):
         self.segment = segment
+        self.bounds = bounds
         self.x = x
         self.y = y
         self.xmax = np.inf
@@ -50,7 +51,7 @@ class KDTreeNode:
 
     def __str__(self) -> str:
         # return "[(" + str(self.x) + ", " + str(self.y) + ")]"
-        return f"[{self.segment}: (x: {self.x}, y: {self.y})]"
+        return f"[{self.segment} pos: (x: {self.x}, y: {self.y}) bounds: (xl: {self.bounds.xl}, xr: {self.bounds.xr})]"
 
     def __repr__(self) -> str:
         return "<KDTreeNode " + self.__str__() + ">"
@@ -58,15 +59,16 @@ class KDTreeNode:
 
 class KDTree:
     def __init__(self, data: np.ndarray) -> None:
-        assert data.shape[1] == 3
+        assert data.shape[1] == 4
 
         segments = data[:, 0]
-        xs = data[:, 1]
-        ys = data[:, 2]
+        bounds = data[:, 1]
+        xs = data[:, 2]
+        ys = data[:, 3]
         
         sorted_x_indices = np.argsort(xs)
         sorted_y_indices = np.argsort(ys)
-        self.root = self._construct_tree(xs, ys, segments, sorted_x_indices, sorted_y_indices, True)
+        self.root = self._construct_tree(xs, ys, segments, bounds, sorted_x_indices, sorted_y_indices, True)
 
     def _select(self, truncated_sorted_first_indices, sorted_second_indices) -> np.ndarray:
         """
@@ -82,14 +84,14 @@ class KDTree:
         return matching_indices
 
     def _construct_tree(
-        self, xs: np.ndarray, ys: np.ndarray, segments: np.ndarray, ix: np.ndarray, iy: np.ndarray, split_x: bool, parent: KDTreeNode = None,
+        self, xs: np.ndarray, ys: np.ndarray, segments: np.ndarray, bounds: np.ndarray, ix: np.ndarray, iy: np.ndarray, split_x: bool, parent: KDTreeNode = None,
     ) -> KDTreeNode:
         n = ix.shape[0]
         median = n // 2
 
         # split on x-coordinate
         if split_x:
-            node = KDTreeNode(segments[ix[median]], xs[ix[median]], ys[ix[median]], True)
+            node = KDTreeNode(segments[ix[median]], bounds[ix[median]], xs[ix[median]], ys[ix[median]], True)
 
             if parent is not None:
                 # set min and max fields
@@ -99,16 +101,16 @@ class KDTree:
                 # select corresponding indices
                 sub_iy = self._select(ix[:median], iy)
                 # recursively construct on left
-                node.left = self._construct_tree(xs, ys, segments, ix[:median], sub_iy, False, node)
+                node.left = self._construct_tree(xs, ys, segments, bounds, ix[:median], sub_iy, False, node)
             if median + 1 < n:
                 # select corresponding indices
                 sub_iy = self._select(ix[median + 1 :], iy)
                 # recursively construct on right
-                node.right = self._construct_tree(xs, ys, segments, ix[median + 1 :], sub_iy, False, node)
+                node.right = self._construct_tree(xs, ys, segments, bounds, ix[median + 1 :], sub_iy, False, node)
 
         # split on y-coordinate
         else:
-            node = KDTreeNode(segments[iy[median]], xs[iy[median]], ys[iy[median]], False)
+            node = KDTreeNode(segments[iy[median]], bounds[iy[median]], xs[iy[median]], ys[iy[median]], False)
 
             if parent is not None:
                 # set min and max fields
@@ -118,12 +120,12 @@ class KDTree:
                 # select corresponding indices
                 sub_ix = self._select(iy[:median], ix)
                 # recursively construct on left
-                node.left = self._construct_tree(xs, ys, segments, sub_ix, iy[:median], True, node)
+                node.left = self._construct_tree(xs, ys, segments, bounds, sub_ix, iy[:median], True, node)
             if median + 1 < n:
                 # select corresponding indices
                 sub_ix = self._select(iy[median + 1 :], ix)
                 # recursively construct on right
-                node.right = self._construct_tree(xs, ys, segments, sub_ix, iy[median + 1 :], True, node)
+                node.right = self._construct_tree(xs, ys, segments, bounds, sub_ix, iy[median + 1 :], True, node)
 
         return node
 
@@ -211,9 +213,9 @@ class KDTree:
     def create_tree_from_layout(cls, layout: Layout) -> "KDTree":
         # TODO: need bound information in tree?
         # TODO: is y needed?
-        X = np.zeros((len(layout.nodes), 3), dtype=object)
-        for i, (segment, (position, _)) in enumerate(layout.nodes.items()):
-            X[i] = (segment, position.x, position.y)
+        X = np.zeros((len(layout.nodes), 4), dtype=object)
+        for i, (segment, (position, bounds)) in enumerate(layout.nodes.items()):
+            X[i] = (segment, bounds, position.x, position.y)
         return cls(X)
 
     @classmethod
