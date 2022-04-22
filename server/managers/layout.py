@@ -37,7 +37,7 @@ class LayoutManager:
     @classmethod
     def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> Layout:
         if cls.index is not None:
-            kdtree_nodes = cls.index.range_query(Position(range.lu.x, range.lu.y), Position(range.rd.x, range.rd.y))
+            kdtree_nodes = cls.index.range_query(Position(x=range.lu.x, y=range.lu.y), Position(x=range.rd.x, y=range.rd.y))
             return { node.segment : Position(x=node.x, y=node.y) for node in kdtree_nodes }
         else:
             return {}
