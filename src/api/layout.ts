@@ -16,7 +16,11 @@ const layoutApi = createApi({
       query: () => ({ url: getAllLayoutNodes, method: 'GET' }),
     }),
     getRangeLayoutNodes: builder.query<Layout, RectangleRange>({
-      query: () => ({ url: getRangeLayoutNodes, method: 'GET' }),
+      query: (range) => ({
+        url: getRangeLayoutNodes,
+        method: 'GET',
+        params: { range: JSON.stringify(range) },
+      }),
     }),
     getDensities: builder.query<Density, void>({
       query: () => ({ url: getDensities, method: 'GET' }),

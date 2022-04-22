@@ -4,49 +4,60 @@ import { createCytoscape } from '../../cytoscape/cytoscape';
 import '../../styles/graph.css';
 import '../../styles/panzoom.css';
 import ErrorCard from '../ErrorCard';
-import { Layout } from '../../types/layout';
+import { RectangleRange } from '../../types/layout';
 import GraphType, { GraphSettings } from '../../types/graph';
 import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';
 // @ts-ignore
 import panzoom from 'cytoscape-panzoom';
+import layoutApi from '../../api/layout';
 
 panzoom(cytoscape);
 
 interface GraphProps {
   graph: GraphType;
-  layout: Layout;
   settings: GraphSettings;
+  initialViewport?: RectangleRange;
 }
 
-const Graph: React.FC<GraphProps> = ({ graph, layout, settings }) => {
+const Graph: React.FC<GraphProps> = ({
+  graph,
+  settings,
+  initialViewport = defaultInitialViewport,
+}) => {
+  const [viewport, setViewport] = useState<RectangleRange>(initialViewport);
   const [cy, setCy] = useState<cytoscape.Core>();
   const [error, setError] = useState<any>(undefined);
   const [featureData, setFeatureData] = useState<GfaFeature | undefined>(undefined);
 
+  const { data: layout } = layoutApi.useGetRangeLayoutNodesQuery(viewport);
+
   useEffect(() => {
     try {
-      const v = createCytoscape(graph, settings, layout);
-      setCy(v);
+      if (layout) {
+        const v = createCytoscape(graph, settings, layout);
+        setCy(v);
+        // setViewport(extentToRectangleRange(v.extent()));
+      }
     } catch (err) {
       alert(err);
       setError(err);
     }
   }, [graph, layout, settings]);
 
+  useEffect(() => console.log(viewport), [viewport]);
+
   useEffect(() => {
     if (cy) {
-      console.log('HS');
       // @ts-ignore
-      cy.panzoom();
+      cy.panzoom({});
       cy.on('unselect', (_) => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
       cy.on('taphold', () => {
-        console.log(cy.extent().x1, cy.extent().y1);
-        // console.log(cy.nodes().forEach(node => console.log(node.position())))
+        // setViewport(extentToRectangleRange(cy.extent()));
       });
       cy.on('dragpan zoom', () => {
-        console.log('f');
+        // setViewport(extentToRectangleRange(cy.extent()));
       });
     }
     return () => {
@@ -78,5 +89,18 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings }) => {
     </>
   );
 };
+
+const extentToRectangleRange = (extent: {
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  w: number;
+  h: number;
+}) => {
+  return { lu: { x: extent.x1, y: extent.y1 }, rd: { x: extent.x2, y: extent.y2 } };
+};
+
+const defaultInitialViewport = { lu: { x: 0, y: 0 }, rd: { x: 1000, y: 1000 } };
 
 export default Graph;

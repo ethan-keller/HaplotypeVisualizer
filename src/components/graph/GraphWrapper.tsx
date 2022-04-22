@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import gfaApi from '../../api/gfa';
-import layoutApi from '../../api/layout';
 import { cytoscapeNodes, cytoscapeEdges } from '../../cytoscape/cytoscape';
 import { useAppSelector } from '../../store';
 import Graph from '../../types/graph';
@@ -10,7 +9,6 @@ import GraphComponent from './Graph';
 interface GraphWrapperProps {}
 
 const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
-  const { data: layout } = layoutApi.useGetAllLayoutNodesQuery();
   const { data: segments } = gfaApi.useGetSegmentsQuery();
   const { data: links } = gfaApi.useGetLinksQuery();
   const graphSettings = useAppSelector((state) => state.graphSettings);
@@ -25,8 +23,8 @@ const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
     }
   }, [segments, links, graphSettings]);
 
-  return layout && graph ? (
-    <GraphComponent graph={graph} settings={graphSettings} layout={layout} />
+  return graph ? (
+    <GraphComponent graph={graph} settings={graphSettings} />
   ) : (
     <SpinnerAnnotated message='Loading graph' />
   );
