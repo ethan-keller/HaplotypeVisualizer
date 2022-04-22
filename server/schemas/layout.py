@@ -1,4 +1,4 @@
-from typing import List
+from typing import Dict, List
 from pydantic import BaseModel
 
 class Position(BaseModel):
@@ -12,12 +12,13 @@ class RectangleRange(BaseModel):
 class Density(BaseModel):
     xs: List[int]
     densities: List[int]
+ 
+Layout = Dict[str, Position]
 
-class LayoutNode(BaseModel):
-    segment: str
-    x: float
-    y: float
-    # TODO: bounds
-    # xl: float
-    # xr: float
+# class LayoutNode(BaseModel):
+#     segment: str
+#     position: Position
+#     # TODO: bounds
+#     # xl: float
+#     # xr: float
 

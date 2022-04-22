@@ -16,7 +16,6 @@ const layoutSettings: dagre.DagreLayoutOptions = {
   rankDir: 'LR',
   //@ts-ignore 'align' is not in type declaration but it is in source code
   align: 'UL',
-  fit: true,
   nodeSep: 35,
 };
 

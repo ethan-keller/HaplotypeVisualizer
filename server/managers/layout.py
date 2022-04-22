@@ -1,14 +1,13 @@
 import os
 import shutil
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 from fastapi import UploadFile
 from server.cli.gfa import Gfa
 from server.cli.kdtree import KDTree
 from server.cli.layout import Layout
-from server.cli.schemas.layout import Position
-from server.schemas.layout import LayoutNode, RectangleRange
+from server.schemas.layout import Layout, Position, RectangleRange
 
 
 class LayoutManager:
@@ -20,20 +19,20 @@ class LayoutManager:
         return cls.index is None
 
     @classmethod
-    def get_all_layout_nodes(cls) -> List[LayoutNode]:
+    def get_all_layout_nodes(cls) -> Layout:
         if cls.index is not None:
             kdtree_nodes = cls.index.in_order_traversal()
-            return list(map(lambda node: LayoutNode(segment=node.segment, x=node.x, y=node.y), kdtree_nodes))
+            return { node.segment : Position(x=node.x, y=node.y) for node in kdtree_nodes }
         else:
-            return []
+            return {}
 
     @classmethod
-    def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> List[LayoutNode]:
+    def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> Layout:
         if cls.index is not None:
             kdtree_nodes = cls.index.range_query(Position(range.lu.x, range.lu.y), Position(range.rd.x, range.rd.y))
-            return list(map(lambda node: LayoutNode(segment=node.segment, x=node.x, y=node.y), kdtree_nodes))
+            return { node.segment : Position(x=node.x, y=node.y) for node in kdtree_nodes }
         else:
-            return []
+            return {}
 
 
     @classmethod
