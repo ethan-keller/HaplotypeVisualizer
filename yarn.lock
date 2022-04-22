@@ -4496,7 +4496,14 @@
   "resolved" "https://registry.npmjs.org/cytoscape-navigator/-/cytoscape-navigator-2.0.1.tgz"
   "version" "2.0.1"
 
-"cytoscape@^2.6.0 || ^3.0.0", "cytoscape@^3.19.0", "cytoscape@^3.2.22", "cytoscape@^3.20.0":
+"cytoscape-panzoom@^2.5.3":
+  "integrity" "sha512-//qLOqbbFUCGddarNKHDZArItOJHgnkQ1TvxI9nV2/8aOOl/5wuEOHmra3fL/aWSjB4AYpYTG4LX7w96uWfRTQ=="
+  "resolved" "https://registry.npmjs.org/cytoscape-panzoom/-/cytoscape-panzoom-2.5.3.tgz"
+  "version" "2.5.3"
+  dependencies:
+    "jquery" "^1.4 || ^2.0 || ^3.0"
+
+"cytoscape@^2.0.0 || ^3.0.0", "cytoscape@^2.6.0 || ^3.0.0", "cytoscape@^3.19.0", "cytoscape@^3.2.22", "cytoscape@^3.20.0":
   "integrity" "sha512-V2OUoav8ltY9UPgdjuhQOqkkWT28IbJODioWCjcnLqmjym9lMpnD0ie0vdQCdAiZapjbTGAv8aoKmmSuVcC1gA=="
   "resolved" "https://registry.npmjs.org/cytoscape/-/cytoscape-3.20.0.tgz"
   "version" "3.20.0"
@@ -7797,6 +7804,11 @@
     "@jest/core" "^26.6.0"
     "import-local" "^3.0.2"
     "jest-cli" "^26.6.0"
+
+"jquery@^1.4 || ^2.0 || ^3.0", "jquery@^3.6.0":
+  "integrity" "sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw=="
+  "resolved" "https://registry.npmjs.org/jquery/-/jquery-3.6.0.tgz"
+  "version" "3.6.0"
 
 "js-tokens@^3.0.0 || ^4.0.0", "js-tokens@^4.0.0":
   "integrity" "sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ=="

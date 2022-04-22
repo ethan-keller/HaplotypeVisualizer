@@ -1,31 +1,12 @@
-import GraphComponent from '../components/graph/Graph';
 import Header from '../components/Header';
 import '../styles/popu-view.css';
 import PopulationViewSidebar from '../components/sidebar/PopulationViewSidebar';
-import SpinnerAnnotated from '../components/SpinnerAnnotated';
-import layoutApi from '../api/layout';
-import gfaApi from '../api/gfa';
-import { useAppSelector } from '../store';
-import { cytoscapeEdges, cytoscapeNodes } from '../cytoscape/cytoscape';
 import Navigator from '../components/Navigator';
+import GraphWrapper from '../components/graph/GraphWrapper';
 
 interface PopulationViewProps {}
 
 const PopulationView: React.FC<PopulationViewProps> = (props) => {
-  const { data: layout, isLoading } = layoutApi.useGetNodePositionsQuery();
-  const { data: segments } = gfaApi.useGetSegmentsQuery();
-  const { data: links } = gfaApi.useGetLinksQuery();
-  const graphSettings = useAppSelector((state) => state.graphSettings);
-
-  let graph;
-
-  if (segments && links) {
-    graph = {
-      nodes: cytoscapeNodes(segments, graphSettings),
-      edges: cytoscapeEdges(links, graphSettings),
-    };
-  }
-
   return (
     <>
       <Header />
@@ -35,15 +16,11 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
         </div>
 
         <div className='pp-v-graph'>
-          {isLoading ? (
-            <SpinnerAnnotated message='Loading graph' />
-          ) : layout && graph && graphSettings ? (
-            <GraphComponent graph={graph} settings={graphSettings} layout={layout} />
-          ) : null}
+          <GraphWrapper />
         </div>
 
         <div className='pp-v-navigator'>
-          {layout ? <Navigator /> : <SpinnerAnnotated message='Computing density values' />}
+          <Navigator />
         </div>
       </div>
     </>
