@@ -28,6 +28,7 @@
 
 .ph-g-graph {
   grid-area: graph;
+  position: relative;
 }
 
 .ph-g-navigator {

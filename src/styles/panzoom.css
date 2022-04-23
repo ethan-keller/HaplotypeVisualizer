@@ -7,8 +7,7 @@
 	font-size: 11px;
 	z-index: 99999;
 	box-sizing: content-box;
-	left: 5px;
-	top: 5px;
+	margin: 8px;
 	width: 50px;
 	height: 220px;
 	border-style: solid;
@@ -16,6 +15,7 @@
 	background-color: rgb(194, 194, 194);
 	border-width: 1px;
 	border-radius: 10px;
+	box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .cy-panzoom-zoom-button {

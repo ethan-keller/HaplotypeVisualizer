@@ -28,6 +28,7 @@
 
 .pp-v-graph {
   grid-area: graph;
+  position: relative;
 }
 
 .pp-v-navigator {
