@@ -24,4 +24,5 @@ export interface GraphLayoutState {
   viewport: RectangleRange;
   zoom: number;
   pan: Position;
+  bufferSize: number;
 }
