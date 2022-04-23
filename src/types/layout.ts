@@ -19,3 +19,9 @@ export interface RectangleRange {
 }
 
 export type Layout = Record<string, Position>;
+
+export interface GraphLayoutState {
+  viewport: RectangleRange;
+  zoom: number;
+  pan: Position;
+}

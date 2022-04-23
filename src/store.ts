@@ -6,7 +6,7 @@ import phenoApi from './api/pheno';
 import layoutApi from './api/layout';
 import graphSettingsReducer from './slices/graphSettings';
 import phenoReducer from './slices/pheno';
-import graphLayoutReducer from './slices/graphLayout';
+import graphLayoutReducer, { graphLayoutSlice } from './slices/graphLayout';
 import {
   persistStore,
   persistReducer,
@@ -29,6 +29,7 @@ const persistConfig = {
     layoutApi.reducerPath,
     phenoApi.reducerPath,
     bookmarksApi.reducerPath,
+    graphLayoutSlice.name,
   ],
 };
 
