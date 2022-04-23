@@ -1,7 +1,7 @@
 from typing import Any
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import Json
-from server.schemas.layout import Density, Layout, RectangleRange
+from server.schemas.layout import Density, Layout, Position, RectangleRange
 from server.logic.density import get_density_values
 
 from server.managers import LayoutManager
@@ -28,7 +28,11 @@ def get_all_layout_nodes():
 
 def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
     try:
-        return RectangleRange.parse_obj(range)
+        viewport = RectangleRange.parse_obj(range)
+        # swap y axis (js coordinate system)
+        rangeLu = Position(x=viewport.lu.x, y=viewport.rd.y)
+        rangeRd = Position(x=viewport.rd.x, y=viewport.lu.y)
+        return RectangleRange(lu=rangeLu, rd=rangeRd)
     except Exception as e:
         print(e)
 
