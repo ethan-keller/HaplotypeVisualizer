@@ -75,6 +75,7 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
         },
       },
     ],
+    styleEnabled: true,
   });
 }
 
@@ -88,12 +89,12 @@ fs.readFile(gfa_file_path, (err, data) => {
 
   let layout: Record<string, [cytoscape.Position, { xl: number; xr: number }]> = {};
 
-  createCytoscape(gfa)
-    .nodes()
-    .forEach((node) => {
-      const bb = node.boundingBox({});
-      layout[node.id()] = [node.position(), { xl: bb.x1, xr: bb.x2 }];
-    });
+  const cy = createCytoscape(gfa);
+  cy.nodes().forEach((node) => {
+    const bb = node.boundingBox({});
+    layout[node.id()] = [node.position(), { xl: bb.x1, xr: bb.x2 }];
+  });
+  cy.destroy();
 
   process.stdout.write(JSON.stringify({ nodes: layout }));
 });
