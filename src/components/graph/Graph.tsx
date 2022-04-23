@@ -10,6 +10,7 @@ import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { updatePan, updateViewport, updateZoom } from '../../slices/graphLayout';
+import PanBar from './PanBar';
 
 interface GraphProps {
   graph: GraphType;
@@ -24,7 +25,6 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
   if (initialViewport) {
     dispatch(updateViewport(initialViewport));
   }
-  const viewport = useAppSelector((state) => state.graphLayout.viewport);
   const zoom = useAppSelector((state) => state.graphLayout.zoom);
   const pan = useAppSelector((state) => state.graphLayout.pan);
 
@@ -35,10 +35,7 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
   useEffect(() => {
     try {
       const cyto = createCytoscape(graph, settings, layout, zoom, pan);
-      console.log(cyto.zoom());
-      console.log(cyto.pan());
       setCy(cyto);
-      // setViewport(extentToRectangleRange(v.extent()));
     } catch (err) {
       alert(err);
       setError(err);
@@ -68,25 +65,30 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
       cy.on('unselect', (_) => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
       cy.on('taphold', () => {
-        dispatch(updateViewport(extentToRectangleRange(cy.extent())));
+        // debugging purposes
+        console.log(extentToRectangleRange(cy.extent()));
       });
       cy.on('pan dragpan', () => {
+        dispatch(updateViewport(extentToRectangleRange(cy.extent())));
         dispatch(updatePan(cy.pan()));
       });
       cy.on('zoom', () => {
-        // setViewport(extentToRectangleRange(cy.extent()));
-
-        // TODO: too many calls?
+        dispatch(updateViewport(extentToRectangleRange(cy.extent())));
         dispatch(updateZoom(cy.zoom()));
       });
     }
-  }, [cy]);
+  }, [cy, dispatch]);
 
   return (
     <>
       {featureData ? (
         <div className='info-card'>
           <InfoCard data={featureData} />
+        </div>
+      ) : null}
+      {cy ? (
+        <div className='pan-bar'>
+          <PanBar cy={cy} />
         </div>
       ) : null}
       <div
@@ -112,7 +114,7 @@ const extentToRectangleRange = (extent: {
   w: number;
   h: number;
 }) => {
-  return { lu: { x: extent.x1, y: extent.y2 }, rd: { x: extent.x2, y: extent.y1 } };
+  return { lu: { x: extent.x1, y: extent.y1 }, rd: { x: extent.x2, y: extent.y2 } };
 };
 
 export default Graph;

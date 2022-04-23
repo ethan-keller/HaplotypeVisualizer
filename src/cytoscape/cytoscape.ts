@@ -5,7 +5,6 @@ import Graph, { GraphSettings } from '../types/graph';
 import { GfaLink, GfaSegment } from '../types/gfa';
 // @ts-ignore
 import panzoom from 'cytoscape-panzoom';
-import { useAppSelector } from '../store';
 
 cytoscape.use(dagre);
 panzoom(cytoscape);
