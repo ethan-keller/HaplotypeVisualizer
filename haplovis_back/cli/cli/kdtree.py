@@ -140,7 +140,7 @@ class KDTree:
     def print(self) -> None:
         # TODO: better visualization
         traversal = self.in_order_traversal()
-        for node in traversal:
+        for node in set(traversal):
             print(node)
 
     def in_order_traversal(self) -> List[KDTreeNode]:

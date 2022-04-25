@@ -29,7 +29,7 @@ class LayoutManager:
     def get_all_bounds(cls) -> List[Bounds]:
         if cls.index is not None:
             kdtree_nodes = cls.index.in_order_traversal()
-            return [Bounds(xl=node.bounds.xl, xr=node.bounds.xr) for node in kdtree_nodes]
+            return [Bounds(xl=node.bounds.xl, xr=node.bounds.xr) for node in set(kdtree_nodes)]
         else:
             return []
 
