@@ -6,7 +6,7 @@ from json import JSONDecoder, JSONEncoder, loads as j_loads, dumps as j_dumps, l
 
 # Otherwise unpickling doesn't work since it cannot find the kdtree module
 # Not that clean
-sys.path.append('./server/cli')
+# sys.path.append('./server/cli')
 
 
 # TODO: Add try except blocks?

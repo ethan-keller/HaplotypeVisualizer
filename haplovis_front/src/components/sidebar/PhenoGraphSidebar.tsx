@@ -3,7 +3,7 @@ import { Table, Form, Button, FloatingLabel } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import GraphInfoModal from '../modals/GraphInfoModal';
 import Sidebar from './Sidebar';
-import SidebarSection from './SidebarSection';
+import SidebarSection from './sidebar_section/SidebarSection';
 
 interface PhenoGraphSidebarProps {}
 
@@ -33,7 +33,7 @@ const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
         <Button onClick={() => setShowInfo(true)} size='sm'>
           More graph information
         </Button>
-        {showInfo ? <GraphInfoModal onHide={() => setShowInfo(false)} /> : false}
+        {showInfo ? <GraphInfoModal show={showInfo} onHide={() => setShowInfo(false)} /> : false}
       </SidebarSection>
 
       <SidebarSection title='Phenotype options'>

@@ -1,16 +1,10 @@
 from pathlib import Path
 from typing import List, Optional
 import typer
-try:
-    from layout import Layout
-    from kdtree import KDTree
-    from serialization import PickleSerializer
-    from gfa import Gfa
-except:
-    from server.cli.layout import Layout
-    from server.cli.kdtree import KDTree
-    from server.cli.serialization import PickleSerializer
-    from server.cli.gfa import Gfa
+from cli.layout import Layout
+from cli.kdtree import KDTree
+from cli.serialization import PickleSerializer
+from cli.gfa import Gfa
 
 APP = typer.Typer(add_completion=False)
 
@@ -55,7 +49,7 @@ def layout(
         callback=path_validation_callback,
     ),
     output_folder: Path = typer.Option(
-        DEFAULT_OUTPUT_DIR, "--outputs", "-o", dir_okay=True, case_sensitive=True
+        DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True
     ),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ):

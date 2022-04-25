@@ -1,6 +1,4 @@
 import { Card } from 'react-bootstrap';
-// @ts-ignore
-import pkg from '../../package.json';
 import VisualizeButton from './file_table/VisualizeButton';
 import FileTable from './file_table/FileTable';
 
@@ -22,7 +20,7 @@ const WelcomeCard: React.FC<WelcomeCardProps> = (props) => {
         <VisualizeButton />
       </Card.Body>
 
-      <Card.Footer className='text-muted'>v{pkg.version}</Card.Footer>
+      <Card.Footer className='text-muted'>v{process.env.REACT_APP_VERSION}</Card.Footer>
     </Card>
   );
 };

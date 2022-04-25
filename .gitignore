@@ -10,9 +10,7 @@
 /server/cli/out
 
 # dependencies
-/node_modules
-/server/graph_layout/node_modules
-/server/cli/graph_layout/node_modules
+node_modules
 /.pnp
 .pnp.js
 
@@ -25,6 +23,15 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+
+# Compiled python modules.
+*.pyc
+
+# Setuptools distribution folder.
+/dist/
+
+# Python egg metadata, regenerated from source files by setuptools.
+/*.egg-info
 
 # misc
 .DS_Store

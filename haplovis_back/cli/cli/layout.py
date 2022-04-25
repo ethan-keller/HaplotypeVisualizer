@@ -3,14 +3,9 @@ import os
 from pathlib import Path
 from typing import Dict, Tuple, Union
 from subprocess import check_output
-try:
-    from gfa import Gfa
-    from schemas.layout import Position, Bounds
-    from serialization import JsonSerializer
-except:
-    from server.cli.gfa import Gfa
-    from server.cli.schemas.layout import Position, Bounds
-    from server.cli.serialization import JsonSerializer
+from cli.gfa import Gfa
+from cli.schemas.layout import Position, Bounds
+from cli.serialization import JsonSerializer
 
 
 class Layout:
@@ -33,10 +28,11 @@ class Layout:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
                 cwd = "./graph_layout"
+                # folder should be what user specifies (e.g., temp)
                 folder = "./out/"
-                if Path(os.getcwd()).name == 'HaplotypeVisualizer':
-                    cwd = "./server/cli/graph_layout"
-                    folder = "./server/cli/out/"
+                if Path(os.getcwd()).name == 'server':
+                    cwd = "../cli/cli/graph_layout"
+                    folder = "../cli/cli/out/"
                 file_path = Gfa.serialize(gfa, folder + f"{gfa_hash}.gfa.json")
                 
                 out = check_output(["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True)

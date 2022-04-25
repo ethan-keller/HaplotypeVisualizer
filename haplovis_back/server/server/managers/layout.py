@@ -2,11 +2,10 @@ import os
 import shutil
 from pathlib import Path
 from typing import List, Optional
-
 from fastapi import UploadFile
-from server.cli.gfa import Gfa
-from server.cli.kdtree import KDTree
-from server.cli.layout import Layout
+from cli.gfa import Gfa
+from cli.kdtree import KDTree
+from cli.layout import Layout
 from server.schemas.layout import Layout, Position, RectangleRange, Bounds
 
 
@@ -62,13 +61,13 @@ class LayoutManager:
     def copy_layout_file_to_default_dir(cls, layout_file: Path, gfa_hash: str) -> None:
         if layout_file:
             try:
-                shutil.copy(layout_file, f"./server/cli/out/{gfa_hash}.pickle")
+                shutil.copy(layout_file, f"../cli/cli/out/{gfa_hash}.pickle")
             except shutil.SameFileError:
                 return None
 
     @classmethod
     def store_layout_in_default_out_dir(cls, layout_file: UploadFile, gfa_hash: str) -> Path:
-        layout_file_path = f"./server/cli/out/{gfa_hash}.pickle"
+        layout_file_path = f"../cli/cli/out/{gfa_hash}.pickle"
         os.makedirs(os.path.dirname(layout_file_path), exist_ok=True)
         with open(layout_file_path, 'wb') as f:
             layout_content = layout_file.file.read()
@@ -79,7 +78,7 @@ class LayoutManager:
     @classmethod
     def layout_for_gfa_exists(cls, gfa_file_path: str) -> Optional[Path]:
         hash_value = Gfa.get_gfa_hash(gfa_file_path)
-        path = Path(f"./server/cli/out/{hash_value}.pickle")
+        path = Path(f"../cli/cli/out/{hash_value}.pickle")
         if path.exists():
             return path
         else:
