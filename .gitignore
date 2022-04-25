@@ -7,7 +7,7 @@
 *.gff
 
 # output/temp files
-/server/cli/out
+/haplovis_back/cli/cli/out
 
 # dependencies
 node_modules
