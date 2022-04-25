@@ -6,7 +6,6 @@ import { useAppSelector } from '../../store';
 import Graph from '../../types/graph';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import GraphComponent from './Graph';
-import PanBar from './PanBar';
 
 interface GraphWrapperProps {}
 
