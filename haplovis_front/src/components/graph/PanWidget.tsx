@@ -2,11 +2,11 @@ import cytoscape from 'cytoscape';
 import { Button } from 'react-bootstrap';
 import { FaAngleDoubleRight, FaAngleDoubleLeft, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 
-interface PanBarProps {
+interface PanWidgetProps {
   cy: cytoscape.Core;
 }
 
-const PanBar: React.FC<PanBarProps> = ({ cy }) => {
+const PanWidget: React.FC<PanWidgetProps> = ({ cy }) => {
   const singlePan = 50;
   const doublePan = 200;
 
@@ -20,7 +20,7 @@ const PanBar: React.FC<PanBarProps> = ({ cy }) => {
   return (
     <div style={{ paddingLeft: 10, paddingRight: 10 }}>
       <Button
-        className={'pan-button'}
+        className={'widget-button'}
         size='sm'
         variant='secondary'
         onClick={() => pan(true, true)}
@@ -28,7 +28,7 @@ const PanBar: React.FC<PanBarProps> = ({ cy }) => {
         <FaAngleDoubleLeft />
       </Button>
       <Button
-        className={'pan-button'}
+        className={'widget-button'}
         size='sm'
         variant='secondary'
         onClick={() => pan(true, false)}
@@ -36,7 +36,7 @@ const PanBar: React.FC<PanBarProps> = ({ cy }) => {
         <FaAngleLeft />
       </Button>
       <Button
-        className={'pan-button'}
+        className={'widget-button'}
         size='sm'
         variant='secondary'
         onClick={() => pan(false, false)}
@@ -44,7 +44,7 @@ const PanBar: React.FC<PanBarProps> = ({ cy }) => {
         <FaAngleRight />
       </Button>
       <Button
-        className={'pan-button'}
+        className={'widget-button'}
         size='sm'
         variant='secondary'
         onClick={() => pan(false, true)}
@@ -55,4 +55,4 @@ const PanBar: React.FC<PanBarProps> = ({ cy }) => {
   );
 };
 
-export default PanBar;
+export default PanWidget;

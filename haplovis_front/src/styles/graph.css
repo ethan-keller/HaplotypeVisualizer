@@ -14,7 +14,18 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.pan-bar {
+.zoom-widget {
+  position: absolute;
+  z-index: 20;
+  margin: 8px;
+	width: 50px;
+  border: 4px solid rgba(232, 232, 232, 1);
+  border-radius: 0.35rem;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  background-color: white;
+}
+
+.pan-widget {
   position: absolute;
   z-index: 20;
   bottom: 0px;
@@ -28,27 +39,12 @@
   background-color: white;
 }
 
-.pan-button {
+.widget-button {
   box-shadow: none !important;
   margin: 5px;
 }
 
-.pan-button:focus {
+.widget-button:focus {
   background-color: #6c757d;
   border-color: #6c757d;
 }
-
-/* .node rect {
-    stroke: #333;
-    fill: #fff;
-} */
-
-/* .node text {
-    pointer-events: none;
-} */
-
-/* .edgePath path {
-    stroke: #333;
-    stroke-width: 2px;
-    fill: #333;
-} */

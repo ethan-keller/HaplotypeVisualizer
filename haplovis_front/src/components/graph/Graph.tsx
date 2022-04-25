@@ -2,7 +2,6 @@ import cytoscape from 'cytoscape';
 import { useEffect, useState } from 'react';
 import { createCytoscape } from '../../cytoscape/cytoscape';
 import '../../styles/graph.css';
-import '../../styles/panzoom.css';
 import ErrorCard from '../ErrorCard';
 import { Layout, RectangleRange } from '../../types/layout';
 import GraphType, { GraphSettings } from '../../types/graph';
@@ -10,7 +9,8 @@ import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { updatePan, updateViewport, updateZoom } from '../../slices/graphLayout';
-import PanBar from './PanBar';
+import PanWidget from './PanWidget';
+import ZoomWidget from './ZoomWidget';
 
 interface GraphProps {
   graph: GraphType;
@@ -44,12 +44,6 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
 
   useEffect(() => {
     setFitInitial(true);
-    return () => {
-      if (cy) {
-        // @ts-ignore
-        cy.panzoom('destroy');
-      }
-    };
   }, []);
 
   useEffect(() => {
@@ -60,8 +54,6 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
         dispatch(updateZoom(cy.zoom()));
         setFitInitial(false);
       }
-      // @ts-ignore
-      cy.panzoom({});
       cy.on('unselect', (_) => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
       cy.on('taphold', () => {
@@ -87,9 +79,14 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
         </div>
       ) : null}
       {cy ? (
-        <div className='pan-bar'>
-          <PanBar cy={cy} />
-        </div>
+        <>
+          <div className='zoom-widget'>
+            <ZoomWidget cy={cy} />
+          </div>
+          <div className='pan-widget'>
+            <PanWidget cy={cy} />
+          </div>
+        </>
       ) : null}
       <div
         id={'graph'}
