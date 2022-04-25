@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import bookmarksApi from '../../api/bookmarks';
 import { GfaFeature } from '../../types/gfa';
@@ -12,7 +12,14 @@ interface BookmarkModalProps {
 
 const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
   const [addBookmark] = bookmarksApi.useAddBookmarkMutation();
+  const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const [comment, setComment] = useState<string>('');
+
+  useEffect(() => {
+    if (bookmarks && props.elem.name in bookmarks) {
+      setComment(bookmarks[props.elem.name].comment);
+    }
+  }, [bookmarks, props.elem.name]);
 
   return (
     <Modal onHide={props.onHide} show={props.show}>
@@ -26,15 +33,11 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
           Type: <em>{props.elem.type}</em>
         </Form.Label>
         <br />
-        <Form.Label>
-          Comment <em>({comment.length}/100 characters)</em>
-        </Form.Label>
+        <Form.Label>Comment</Form.Label>
         <InputGroup>
           <Form.Control
             style={{ height: 100, resize: 'none' }}
-            isInvalid={comment.length > 100}
-            placeholder='max. 100 characters'
-            maxLength={120}
+            placeholder='your comment'
             as='textarea'
             onChange={(e) => setComment(e.target.value)}
             value={comment}
@@ -51,6 +54,14 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
         >
           Add bookmark
         </Button>
+        {bookmarks && props.elem.name in bookmarks ? (
+          <>
+            {' '}
+            <Form.Label style={{ color: 'red' }}>
+              This bookmark will overwrite the current one!
+            </Form.Label>
+          </>
+        ) : null}
       </Modal.Body>
     </Modal>
   );
