@@ -2,6 +2,7 @@ import React from 'react';
 import Header from '../components/Header';
 import PhenoGraphSidebar from '../components/sidebar/PhenoGraphSidebar';
 import '../styles/pheno-graph-view.css';
+import Navigator from '../components/Navigator';
 import GraphWrapper from '../components/graph/GraphWrapper';
 
 interface PhenoGraphViewProps {}
@@ -19,8 +20,8 @@ const PhenoGraphView: React.FC<PhenoGraphViewProps> = (props) => {
           <GraphWrapper />
         </div>
 
-        <div className='ph-g-navigator' style={{ backgroundColor: '#dbebb7' }}>
-          Navigator
+        <div className='ph-g-navigator'>
+          <Navigator />
         </div>
       </div>
     </>
