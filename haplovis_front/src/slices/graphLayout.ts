@@ -6,8 +6,8 @@ const initialState: GraphLayoutState = {
   viewport: { lu: { x: 0, y: 0 }, rd: { x: 1000, y: 1000 } },
   zoom: 1,
   pan: { x: 0, y: 0 },
-  bufferSize: 100,
-  extent: { xl: 0, xr: 0 },
+  bufferSize: 1000,
+  extent: { xl: 0, xr: 1000 },
 };
 
 export const graphLayoutSlice = createSlice({
