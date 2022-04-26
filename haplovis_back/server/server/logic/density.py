@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 
 import numpy as np
@@ -6,23 +6,17 @@ import numpy as np
 from server.schemas.layout import Bounds
 
 # TODO: downsampling?
-def get_density_values(xs: List[Bounds]) -> Tuple[List[int], List[int]]:
+def get_density_values(xs: List[Bounds], down_sample_factor: int = 1) -> List[int]:
     if xs is None:
         return None
 
     m = int(max(xs, key=lambda x: x.xr).xr)
-    x = np.arange(0, m)
-    density = np.zeros((m,), dtype=np.uint16)
+    density = np.zeros((m + 1,), dtype=np.uint16)
 
     for seg in xs:
         l = seg.xl
-        if (seg.xl == -1):
+        if (l < 0):
             l = 0
         density[l : seg.xr] += 1
 
-    to_keep = density != 0
-
-    x = x[to_keep]
-    density = density[to_keep]
-
-    return x.tolist(), density.tolist()
+    return density[::down_sample_factor].tolist()

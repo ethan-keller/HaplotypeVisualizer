@@ -5,7 +5,6 @@ import {
   getAllLayoutNodes,
   getRangeLayoutNodes,
 } from '../endpoints_config/LayoutEndpoints';
-import Density from '../types/density';
 import { Layout, RectangleRange } from '../types/layout';
 
 const layoutApi = createApi({
@@ -22,7 +21,7 @@ const layoutApi = createApi({
         params: { range: JSON.stringify(range) },
       }),
     }),
-    getDensities: builder.query<Density, void>({
+    getDensities: builder.query<number[], void>({
       query: () => ({ url: getDensities, method: 'GET' }),
     }),
   }),
