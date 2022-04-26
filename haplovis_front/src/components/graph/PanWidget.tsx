@@ -13,7 +13,7 @@ const PanWidget: React.FC<PanWidgetProps> = ({ cy }) => {
   const pan = (left: boolean, double: boolean) => {
     const currentPanPos = cy.pan();
     cy.pan({
-      x: currentPanPos.x + (left ? -1 : 1) * (double ? doublePan : singlePan),
+      x: currentPanPos.x + (left ? 1 : -1) * (double ? doublePan : singlePan),
       y: currentPanPos.y,
     });
   };

@@ -54,7 +54,7 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
         dispatch(updateZoom(cy.zoom()));
         setFitInitial(false);
       }
-      cy.on('unselect', (_) => setFeatureData(undefined));
+      cy.on('unselect', () => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
       cy.on('taphold', () => {
         // debugging purposes
