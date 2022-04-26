@@ -1,8 +1,8 @@
 import Header from '../components/Header';
 import '../styles/popu-view.css';
 import PopulationViewSidebar from '../components/sidebar/PopulationViewSidebar';
-import Navigator from '../components/Navigator';
 import GraphWrapper from '../components/graph/GraphWrapper';
+import NavigatorWrapper from '../components/navigator/NavigatorWrapper';
 
 interface PopulationViewProps {}
 
@@ -20,7 +20,7 @@ const PopulationView: React.FC<PopulationViewProps> = (props) => {
         </div>
 
         <div className='pp-v-navigator'>
-          <Navigator />
+          <NavigatorWrapper />
         </div>
       </div>
     </>

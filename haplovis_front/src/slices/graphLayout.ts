@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { GraphLayoutState, Position, RectangleRange } from '../types/layout';
+import { Bounds, GraphLayoutState, Position, RectangleRange } from '../types/layout';
 
 // TODO: add type for initial state of this slice
 const initialState: GraphLayoutState = {
@@ -7,6 +7,7 @@ const initialState: GraphLayoutState = {
   zoom: 1,
   pan: { x: 0, y: 0 },
   bufferSize: 100,
+  extent: { xl: 0, xr: 0 },
 };
 
 export const graphLayoutSlice = createSlice({
@@ -14,6 +15,8 @@ export const graphLayoutSlice = createSlice({
   initialState: initialState,
   reducers: {
     updateViewport: (state, action: PayloadAction<RectangleRange>) => {
+      state.extent.xl = action.payload.lu.x;
+      state.extent.xr = action.payload.rd.x;
       if (viewportNeedsUpdate(state.viewport, action.payload, state.bufferSize)) {
         state.viewport = addViewportBuffer(action.payload, state.bufferSize);
       }
@@ -27,6 +30,10 @@ export const graphLayoutSlice = createSlice({
     },
     updateBufferSize: (state, action: PayloadAction<number>) => {
       state.bufferSize = action.payload;
+    },
+    updateExtent: (state, action: PayloadAction<Bounds>) => {
+      state.extent.xl = action.payload.xl;
+      state.extent.xr = action.payload.xr;
     },
     reset: (state) => {
       state = initialState;
@@ -61,6 +68,7 @@ const addViewportBuffer = (viewport: RectangleRange, bufferSize: number) => {
   return { lu: newLu, rd: newRd } as RectangleRange;
 };
 
-export const { updateViewport, updateZoom, updatePan, reset } = graphLayoutSlice.actions;
+export const { updateViewport, updateZoom, updatePan, updateExtent, reset } =
+  graphLayoutSlice.actions;
 
 export default graphLayoutSlice.reducer;

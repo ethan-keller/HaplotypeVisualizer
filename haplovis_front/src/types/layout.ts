@@ -25,4 +25,5 @@ export interface GraphLayoutState {
   zoom: number;
   pan: Position;
   bufferSize: number;
+  extent: Bounds;
 }

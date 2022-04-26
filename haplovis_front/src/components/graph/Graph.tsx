@@ -8,7 +8,7 @@ import GraphType, { GraphSettings } from '../../types/graph';
 import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';
 import { useAppDispatch, useAppSelector } from '../../store';
-import { updatePan, updateViewport, updateZoom } from '../../slices/graphLayout';
+import { updateExtent, updatePan, updateViewport, updateZoom } from '../../slices/graphLayout';
 import PanWidget from './PanWidget';
 import ZoomWidget from './ZoomWidget';
 
