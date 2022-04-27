@@ -1,22 +1,22 @@
-import cytoscape from 'cytoscape';
 import { Button } from 'react-bootstrap';
 import { FaAngleDoubleRight, FaAngleDoubleLeft, FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import { Position } from '../../types/layout';
 
 interface PanWidgetProps {
-  cy: cytoscape.Core;
+  onPan: (p: Position) => void;
 }
 
-const PanWidget: React.FC<PanWidgetProps> = ({ cy }) => {
+const PanWidget: React.FC<PanWidgetProps> = (props) => {
   const singlePan = 50;
   const doublePan = 200;
 
   const pan = (left: boolean, double: boolean) => {
-    const currentPanPos = cy.pan();
-    cy.pan({
-      x: currentPanPos.x + (left ? 1 : -1) * (double ? doublePan : singlePan),
-      y: currentPanPos.y,
+    props.onPan({
+      x: (left ? 1 : -1) * (double ? doublePan : singlePan),
+      y: 0,
     });
   };
+
   return (
     <div style={{ paddingLeft: 10, paddingRight: 10 }}>
       <Button

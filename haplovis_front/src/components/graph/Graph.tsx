@@ -92,7 +92,7 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
             />
           </div>
           <div className='pan-widget'>
-            <PanWidget cy={cy} />
+            <PanWidget onPan={(p) => cy.panBy(p)} />
           </div>
         </>
       ) : null}
