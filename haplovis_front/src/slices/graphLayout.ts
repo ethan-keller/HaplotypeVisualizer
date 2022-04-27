@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Bounds, GraphLayoutState, Position, RectangleRange } from '../types/layout';
 
-// TODO: add type for initial state of this slice
 const initialState: GraphLayoutState = {
   viewport: { lu: { x: 0, y: 0 }, rd: { x: 1000, y: 1000 } },
   zoom: 1,

@@ -20,7 +20,6 @@ interface GraphProps {
 }
 
 const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport }) => {
-  const [fitInitial, setFitInitial] = useState<boolean>(true);
   const dispatch = useAppDispatch();
   if (initialViewport) {
     dispatch(updateViewport(initialViewport));
@@ -42,18 +41,9 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
     }
   }, [graph, layout, settings]);
 
-  useEffect(() => {
-    setFitInitial(true);
-  }, []);
 
   useEffect(() => {
     if (cy) {
-      // if (fitInitial) {
-      //   cy.fit();
-      //   dispatch(updatePan(cy.pan()));
-      //   dispatch(updateZoom(cy.zoom()));
-      //   setFitInitial(false);
-      // }
       cy.on('unselect', () => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
       cy.on('taphold', () => {
