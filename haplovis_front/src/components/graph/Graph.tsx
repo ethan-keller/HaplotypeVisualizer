@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { createCytoscape } from '../../cytoscape/cytoscape';
 import '../../styles/graph.css';
 import ErrorCard from '../ErrorCard';
-import { Layout, RectangleRange } from '../../types/layout';
-import GraphType, { GraphSettings } from '../../types/graph';
+import { Layout } from '../../types/layout';
+import GraphType from '../../types/graph';
 import { GfaFeature } from '../../types/gfa';
 import InfoCard from '../InfoCard';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -15,41 +15,30 @@ import ZoomWidget from './ZoomWidget';
 interface GraphProps {
   graph: GraphType;
   layout: Layout;
-  settings: GraphSettings;
-  initialViewport?: RectangleRange;
 }
 
-const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport }) => {
-  const dispatch = useAppDispatch();
-  if (initialViewport) {
-    dispatch(updateViewport(initialViewport));
-  }
+const Graph: React.FC<GraphProps> = ({ graph, layout }) => {
   const zoom = useAppSelector((state) => state.graphLayout.zoom);
   const pan = useAppSelector((state) => state.graphLayout.pan);
-
+  const settings = useAppSelector((state) => state.graphSettings);
   const [cy, setCy] = useState<cytoscape.Core>();
   const [error, setError] = useState<any>(undefined);
   const [featureData, setFeatureData] = useState<GfaFeature | undefined>(undefined);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     try {
-      const cyto = createCytoscape(graph, settings, layout, zoom, pan);
-      setCy(cyto);
+      setCy(createCytoscape(graph, settings, layout, zoom, pan));
     } catch (err) {
-      alert(err);
       setError(err);
     }
-  }, [graph, layout, settings]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [graph, layout]);
 
   useEffect(() => {
     if (cy) {
       cy.on('unselect', () => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
-      cy.on('taphold', () => {
-        // debugging purposes
-        console.log(extentToRectangleRange(cy.extent()));
-      });
       cy.on('pan dragpan', () => {
         dispatch(updateViewport(extentToRectangleRange(cy.extent())));
         dispatch(updatePan(cy.pan()));

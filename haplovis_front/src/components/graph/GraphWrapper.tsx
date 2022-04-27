@@ -34,7 +34,7 @@ const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
 
   return graph && layout ? (
     <>
-      <GraphComponent graph={graph} layout={layout} settings={graphSettings} />
+      <GraphComponent graph={graph} layout={layout} />
     </>
   ) : (
     <SpinnerAnnotated message='Loading graph' />

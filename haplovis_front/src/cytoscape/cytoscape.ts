@@ -1,6 +1,6 @@
-import cytoscape, { EdgeDefinition, NodeDefinition, Position } from 'cytoscape';
+import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import { Layout } from '../types/layout';
+import { Layout, Position } from '../types/layout';
 import Graph, { GraphSettings } from '../types/graph';
 import { GfaLink, GfaSegment } from '../types/gfa';
 
@@ -39,8 +39,6 @@ const overlayStyle = (color: string) => {
     'overlay-opacity': 0.25,
   };
 };
-
-// const coreStyle = {};
 
 export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
   return segments.map((segment: GfaSegment) => {
@@ -100,58 +98,6 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
   }) as EdgeDefinition[];
 };
 
-// const layoutSettings: dagre.DagreLayoutOptions = {
-//   name: 'dagre',
-//   rankDir: 'LR',
-//   //@ts-ignore 'align' is not in type declaration but it is in source code
-//   align: 'UL',
-//   fit: true,
-//   nodeSep: 35,
-// };
-
-// export function createCytoscape(
-//   graph: Graph,
-//   settings: GraphSettings,
-//   layout: Layout,
-// ): cytoscape.Core {
-//   const cy = cytoscape({
-//     container: document.getElementById('graph'),
-//     layout: layoutSettings,
-//     elements: {
-//       nodes: graph.nodes,
-//       edges: graph.edges,
-//     },
-//     style: [
-//       {
-//         selector: 'node',
-//         style: nodeStyle(settings),
-//       },
-//       {
-//         selector: 'edge',
-//         style: edgeStyle(settings),
-//       },
-//       {
-//         selector: ':selected',
-//         style: overlayStyle('green'),
-//       },
-//       {
-//         selector: ':active',
-//         style: overlayStyle('grey'),
-//       },
-//     ],
-//   });
-
-//   return cy;
-// }
-
-function createLayoutWithPositions(layout: Layout): cytoscape.PresetLayoutOptions {
-  return {
-    name: 'preset',
-    positions: layout,
-    fit: false,
-  };
-}
-
 export function createCytoscape(
   graph: Graph,
   settings: GraphSettings,
@@ -165,7 +111,7 @@ export function createCytoscape(
       nodes: graph.nodes,
       edges: graph.edges,
     },
-    layout: createLayoutWithPositions(layout),
+    layout: { name: 'preset', positions: layout, fit: false },
     style: [
       {
         selector: 'node',
