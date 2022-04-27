@@ -85,7 +85,11 @@ const Graph: React.FC<GraphProps> = ({ graph, layout, settings, initialViewport 
       {cy ? (
         <>
           <div className='zoom-widget'>
-            <ZoomWidget cy={cy} />
+            <ZoomWidget
+              zoom={cy.zoom()}
+              onZoom={(newZoom) => cy.zoom(newZoom)}
+              onFit={() => cy.fit()}
+            />
           </div>
           <div className='pan-widget'>
             <PanWidget cy={cy} />
