@@ -3,8 +3,7 @@ import filesApi from '../../api/files';
 import { url as urlPopulationView } from '../../views/PopulationView';
 import { useNavigate } from 'react-router';
 
-interface VisualizeButtonProps {
-}
+interface VisualizeButtonProps {}
 
 const VisualizeButton: React.FC<VisualizeButtonProps> = (props) => {
   const navigate = useNavigate();
@@ -21,11 +20,11 @@ const VisualizeButton: React.FC<VisualizeButtonProps> = (props) => {
         navigate(urlPopulationView);
       })
       .catch((err) => {
-        console.log(err);
         alert('Files did not prepare correctly on server.');
       });
   };
 
+  // TODO: reset settings like current viewport, pan, zoom etc?
   return (
     <Button variant='primary' disabled={!ready} onClick={handleStartVisualize}>
       Visualize {isPreparing ? <Spinner className='spinner' animation='border' /> : null}
