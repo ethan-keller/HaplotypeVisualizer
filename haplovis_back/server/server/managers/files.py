@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import List
 from os.path import isfile, splitext
 
@@ -12,6 +13,10 @@ class FileManager:
         File(id=1, description="Phenotype table", status=FileStatus.NO_FILE, required=False, file_extensions=[".csv"]),
         File(id=2, description="GFF file", status=FileStatus.NO_FILE, required=False, file_extensions=[".gff"]),
     ]
+
+    @classmethod
+    def get_absolute_file_path(cls, id: int) -> Path:
+        return Path(cls.files_base_path + cls.get_file(id).name)
 
     @classmethod
     def _does_file_have_status(cls, id: int, status: FileStatus) -> bool:
@@ -85,9 +90,11 @@ class FileManager:
 
     @classmethod
     def prepare_files(cls) -> None:
-        # TODO: reading gfa already happened in CLI
+        print("preparing gfa")
         managers.GfaManager.prepare_gfa()
+        print("preparing layout")
         managers.LayoutManager.prepare_layout()
+        print("preparing pheno")
         managers.PhenoManager.prepare_pheno()
 
     @classmethod

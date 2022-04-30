@@ -1,11 +1,17 @@
-# TODO: check if float is really needed instead of int
+from typing import Dict, Tuple
+from pydantic.dataclasses import dataclass
+
+
+@dataclass
 class Position:
-    def __init__(self, x: float, y: float) -> None:
-        self.x = x
-        self.y = y
+    x: float
+    y: float
 
-
+@dataclass
 class Bounds:
-    def __init__(self, xl: float, xr: float) -> None:
-        self.xl = xl
-        self.xr = xr
+    xl: float
+    xr: float
+
+@dataclass
+class Layout:
+    nodes: Dict[str, Tuple[Position, Bounds]]

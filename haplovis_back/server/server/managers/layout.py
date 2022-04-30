@@ -45,7 +45,9 @@ class LayoutManager:
     @classmethod
     def prepare_layout(cls) -> None:
         if cls.layout_file_path:
+            print("deserializing layout")
             cls.index = KDTree.deserialize(from_file=cls.layout_file_path)
+            print("Done deserializing layout")
         else:
             raise Exception("Could not retrieve layout file because layout file location is unknown")
 

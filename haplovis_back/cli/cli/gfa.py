@@ -1,9 +1,8 @@
-from json import JSONEncoder
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 from gfapy import Line, Gfa as GfaPy
 import hashlib
-from cli.schemas.gfa import GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
+from cli.schemas.gfa import Gfa as GfaDataClass, GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
 from cli.errors.PydanticConversionError import PydanticConversionError
 from cli.serialization import JsonSerializer
 
@@ -13,13 +12,20 @@ class Gfa:
         self.links = links
         self.paths = paths
 
+    def to_data_class(self) -> GfaDataClass:
+        return GfaDataClass(self.segments, self.links, self.paths)
+
+    @classmethod
+    def from_data_class(cls, gfa: GfaDataClass) -> "Gfa":
+        return cls(segments=gfa.segments, links=gfa.links, paths=gfa.paths)
+
     @classmethod
     def serialize(cls, gfa: "Gfa", out_file: str = None) -> str:
-        return JsonSerializer.serialize(gfa, out_file, GfaEncoder)
+        return JsonSerializer.serialize(gfa.to_data_class(), out_file)
 
     @classmethod
     def deserialize(cls, sb: Union[bytes, str] = None, from_file: str = None) -> "Gfa":
-        return cls(**JsonSerializer.deserialize(sb, from_file))
+        return cls.from_data_class(GfaDataClass.__pydantic_model__.parse_obj(JsonSerializer.deserialize(sb, from_file)))
 
     @classmethod
     def get_gfa_hash(cls, file_path: Path) -> Optional[str]:
@@ -71,6 +77,7 @@ class Gfa:
             raise PydanticConversionError(str(Line), str(GfaSegment), "'segment' is None")
 
         return GfaSegment(
+            type="segment",
             name=segment.name,
             sequence=str(segment.sequence),
             optionals=cls._convert_optional_fields_to_pydantic(segment, GFA_ELEMENT.SEGMENT),
@@ -93,6 +100,7 @@ class Gfa:
             raise PydanticConversionError(str(Line), str(GfaLink), "'link' is None")
 
         return GfaLink(
+            type="link",
             name=cls.get_link_name(link.from_segment.name, link.to_segment.name),
             from_segment=link.from_segment.name,
             from_orient=link.from_orient,
@@ -118,7 +126,11 @@ class Gfa:
             raise PydanticConversionError(str(Line), str(GfaPath), "'path' is None")
 
         return GfaPath(
-            name=path.path_name, segment_names=list(map(lambda segment: segment.name, path.segment_names)), index=i
+            type="path",
+            name=path.path_name,
+            segment_names=list(map(lambda segment: segment.name, path.segment_names)),
+            index=i,
+            optionals=cls._convert_optional_fields_to_pydantic(path, GFA_ELEMENT.PATH),
         )
 
     @classmethod
@@ -150,8 +162,3 @@ class Gfa:
     @classmethod
     def get_link_name(cls, from_segment: str, to_segment: str) -> str:
         return f"{from_segment}->{to_segment}"
-
-class GfaEncoder(JSONEncoder):
-    def default(self, o):
-        return o.__dict__
-

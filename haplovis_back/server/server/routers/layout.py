@@ -14,7 +14,7 @@ router = APIRouter(prefix="/layout", tags=["layout"])
     response_model=Layout,
     summary="Gets all nodes",
 )
-def get_all_layout_nodes():
+async def get_all_layout_nodes():
     """
     Gets all layout nodes from the index. # TODO: Containing bounds
     """
@@ -41,7 +41,7 @@ def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
     response_model=Layout,
     summary="Gets all nodes in given range",
 )
-def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_range)):
+async def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_range)):
     """
     Gets all layout nodes from the index inside the given range. # TODO: Containing bounds
     """
@@ -52,7 +52,10 @@ def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_range)):
             detail="Could not get nodes because there is no index available",
         )
     else:
-        return LayoutManager.get_all_layout_nodes_in_range(range)
+        print("Get layout")
+        s = LayoutManager.get_all_layout_nodes_in_range(range)
+        print("Got layout")
+        return s
 
 
 @router.get(
@@ -66,7 +69,7 @@ def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_range)):
     response_model=List[int],
     summary="Get variation densities along with their x coordinates",
 )
-def getDensities():
+async def getDensities():
     """
     Gets density values along with their respective x coordinates.
     """

@@ -40,16 +40,16 @@ const Graph: React.FC<GraphProps> = ({ graph, layout }) => {
       cy.on('unselect', () => setFeatureData(undefined));
       cy.on('select', (e) => setFeatureData(e.target.data('feature')));
       cy.on('pan dragpan', () => {
-        dispatch(updateViewport(extentToRectangleRange(cy.extent())));
-        dispatch(updatePan(cy.pan()));
-        const extent = cy.extent();
-        dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
+        // dispatch(updateViewport(extentToRectangleRange(cy.extent())));
+        // dispatch(updatePan(cy.pan()));
+        // const extent = cy.extent();
+        // dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
       });
       cy.on('zoom', () => {
-        dispatch(updateViewport(extentToRectangleRange(cy.extent())));
-        dispatch(updateZoom(cy.zoom()));
-        const extent = cy.extent();
-        dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
+        // dispatch(updateViewport(extentToRectangleRange(cy.extent())));
+        // dispatch(updateZoom(cy.zoom()));
+        // const extent = cy.extent();
+        // dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
       });
     }
   }, [cy, dispatch]);

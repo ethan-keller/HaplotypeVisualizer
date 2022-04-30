@@ -1,61 +1,63 @@
 from enum import IntEnum
 from typing import Any, Dict, List, Optional
-
-from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 
 segment_optional_fields = ["LN", "RC", "FC", "KC", "SH", "UR"]
 link_optional_fields = ["MQ", "NM", "RC", "FC", "KC", "ID"]
 
-
+@dataclass
 class GFA_ELEMENT(IntEnum):
     SEGMENT = 0
     LINK = 1
     PATH = 2
 
-
-class GfaElement(BaseModel):
+@dataclass
+class GfaElement:
     # TODO: change any to union of more specific types
     type: str
     name: str
-    optionals: Optional[Dict[str, Any]] = None
+    optionals: Optional[Dict[str, Any]]
 
-
+@dataclass
 class GfaPath(GfaElement):
-    type = "path"
     segment_names: List[str]
     index: int
+    type = "path"
+    optionals = None
     # TODO: overlaps
 
-
+@dataclass
 class GfaSegment(GfaElement):
-    type = "segment"
     sequence: str
     paths: List[GfaPath]
+    type = "segment"
+    optionals = None
 
-
-class GfaLink(GfaElement):
-    type = "link"
+@dataclass
+class GfaLink(GfaElement): 
     from_segment: str
     from_orient: str
     to_segment: str
     to_orient: str
     paths: List[GfaPath]
+    type = "link"
+    optionals = None
     # TODO: overlap
 
-
-class Gfa(BaseModel):
+@dataclass
+class Gfa:
     segments: List[GfaSegment]
     links: List[GfaLink]
     paths: List[GfaPath]
 
-
-class GfaInfo(BaseModel):
+@dataclass
+class GfaInfo:
     # TODO:  add more
     n_segments: int
     n_links: int
     n_paths: int
 
-
-class GfaHist(BaseModel):
+@dataclass
+class GfaHist:
     hist: List[float]
     bin_edges: List[float]

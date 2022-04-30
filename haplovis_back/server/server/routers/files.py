@@ -2,7 +2,6 @@ from typing import List
 
 from fastapi import APIRouter, Query, status, UploadFile, File as FastApiFile
 from fastapi.exceptions import HTTPException
-from server import managers
 from server.schemas.file import File, FileStatus, FileIndex
 from server.managers import FileManager, GfaManager, LayoutManager
 
@@ -33,7 +32,7 @@ def are_all_files_ready():
     return FileManager.are_required_files_ready_for_visualization()
 
 
-@router.get("/all", response_model=List[File], summary="Get all needed files")
+@router.get("/all", response_model=List[File], summary="Get all files")
 def get_files():
     """
     Get the list of all needed files.

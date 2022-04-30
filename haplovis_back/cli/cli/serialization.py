@@ -1,13 +1,7 @@
 import os
-import sys
 from typing import Any, Type, Union
 from pickle import loads as p_loads, dumps as p_dumps, load as p_load, dump as p_dump
-from json import JSONDecoder, JSONEncoder, loads as j_loads, dumps as j_dumps, load as j_load, dump as j_dump
-
-# Otherwise unpickling doesn't work since it cannot find the kdtree module
-# Not that clean
-# sys.path.append('./server/cli')
-
+from orjson import loads as j_loads, dumps as j_dumps
 
 # TODO: Add try except blocks?
 
@@ -34,21 +28,21 @@ class PickleSerializer:
 
 class JsonSerializer:
     @classmethod
-    def serialize(cls, o: Any, out_file: str = None, encoder: Type[JSONEncoder] = None) -> str:
+    def serialize(cls, o: Any, out_file: str = None) -> str:
         if out_file:
             file_path = out_file
             os.makedirs(os.path.dirname(file_path), exist_ok=True)
-            with open(file_path, "w") as f:
-                j_dump(o, f, cls=encoder)
+            with open(file_path, "wb") as f:
+                f.write(j_dumps(o))
                 return f.name
         else:
-            return j_dumps(o, cls=encoder)
+            return j_dumps(o)
 
     @classmethod
-    def deserialize(cls, sb: Union[str, bytes] = None, from_file: str = None, decoder: Type[JSONDecoder] = None) -> Any:
+    def deserialize(cls, sb: Union[str, bytes] = None, from_file: str = None) -> Any:
         if from_file:
             with open(from_file, "r") as f:
-                return j_load(f, cls=decoder)
+                return j_loads(f.read())
         elif sb:
-            return j_loads(sb, cls=decoder)
+            return j_loads(sb)
 
