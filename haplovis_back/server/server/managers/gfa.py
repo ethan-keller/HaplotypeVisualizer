@@ -37,7 +37,7 @@ class GfaManager:
             
     @classmethod
     def recognize(cls, file_path: str) -> Optional[Path]:
-        return managers.LayoutManager.layout_for_gfa_exists(file_path)
+        return managers.LayoutManager.index_for_gfa_exists(file_path)
 
     @classmethod
     def get_hash(cls) -> Optional[str]:
@@ -51,11 +51,11 @@ class GfaManager:
         cls.prepare_gfa()
         file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
         layout = Layout.compute_layout(cls.gfa, file_path)
-        LayoutManager.get_index_from_layout(layout)
+        LayoutManager.index = LayoutManager.get_index_from_layout(layout)
         gfa_hash = Gfa.get_gfa_hash(file_path)
         if gfa_hash:
             layout_path = KDTree.serialize(LayoutManager.index, "../cli/cli/out/" + gfa_hash + ".pickle")
-            LayoutManager.layout_file_path = layout_path
+            LayoutManager.index_file_path = layout_path
         else:
             raise Exception("Could not compute gfa hash")
 

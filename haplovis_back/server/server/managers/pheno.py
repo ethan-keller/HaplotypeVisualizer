@@ -25,6 +25,10 @@ class PhenoManager:
             raise ValueError(f"Reading pandas dataframe from {file_name} failed.")
 
     @classmethod
+    def is_empty(cls):
+        return cls.phenoTable is None
+
+    @classmethod
     def get_possible_phenotypes(cls, phenos_dp: pd.DataFrame) -> Dict[str, List[Any]]:
         result = {}
         phenotypes = phenos_dp.columns

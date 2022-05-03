@@ -20,3 +20,13 @@ def get_density_values(xs: List[Bounds], down_sample_factor: int = 1) -> List[in
         density[l : seg.xr] += 1
 
     return density[::down_sample_factor].tolist()
+
+def get_down_sample_factor(size: int) -> int:
+    if size < 1000:
+        return 1
+    elif size < 5000:
+        return 4
+    elif size < 10000:
+        return 8
+    else:
+        return 16

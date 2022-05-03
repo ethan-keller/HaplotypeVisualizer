@@ -2,29 +2,29 @@ from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import Json
 from server.schemas.layout import Density, Layout, Position, RectangleRange
-from server.logic.density import get_density_values
+from server.logic.density import get_density_values, get_down_sample_factor
 
 from server.managers import LayoutManager
 
 router = APIRouter(prefix="/layout", tags=["layout"])
 
 
-@router.get(
-    "/",
-    response_model=Layout,
-    summary="Gets all nodes",
-)
-async def get_all_layout_nodes():
-    """
-    Gets all layout nodes from the index. # TODO: Containing bounds
-    """
-    if LayoutManager.is_index_empty():
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Could not get nodes because there is no index available",
-        )
-    else:
-        return LayoutManager.get_all_layout_nodes()
+# @router.get(
+#     "/",
+#     response_model=Layout,
+#     summary="Gets all nodes",
+# )
+# async def get_all_layout_nodes():
+#     """
+#     Gets all layout nodes from the index. # TODO: Containing bounds
+#     """
+#     if LayoutManager.is_index_empty():
+#         raise HTTPException(
+#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+#             detail="Could not get nodes because there is no index available",
+#         )
+#     else:
+#         return LayoutManager.get_all_layout_nodes()
 
 def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
     try:
@@ -43,7 +43,7 @@ def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
 )
 async def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_range)):
     """
-    Gets all layout nodes from the index inside the given range. # TODO: Containing bounds
+    Gets all layout nodes from the index inside the given range.
     """
     # TODO: validate range
     if LayoutManager.is_index_empty():
@@ -69,7 +69,7 @@ async def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_rang
     response_model=List[int],
     summary="Get variation densities along with their x coordinates",
 )
-async def getDensities():
+async def get_densities():
     """
     Gets density values along with their respective x coordinates.
     """
@@ -79,7 +79,8 @@ async def getDensities():
             detail="Could not compute densities because there is no bound information",
         )
 
-    densities = get_density_values(LayoutManager.get_all_bounds())
+    bounds = LayoutManager.get_all_bounds()
+    densities = get_density_values(bounds, get_down_sample_factor(len(bounds)))
 
     return densities
 

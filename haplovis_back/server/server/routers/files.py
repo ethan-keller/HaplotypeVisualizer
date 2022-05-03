@@ -69,7 +69,7 @@ def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))
     if id == FileIndex.GFA:
         layout_file_path = GfaManager.recognize(file_path)
         if layout_file_path:
-            LayoutManager.layout_file_path = layout_file_path
+            LayoutManager.index_file_path = layout_file_path
             file.status = FileStatus.READY
         else:
             file.status = FileStatus.NEEDS_PRE_PROCESSING
@@ -145,8 +145,8 @@ def layout(layout_file: UploadFile = FastApiFile(...)):
     gfa_hash = GfaManager.get_hash()
     if gfa_hash:
         try:
-            layout_file_path = LayoutManager.store_layout_in_default_out_dir(layout_file, gfa_hash)
-            LayoutManager.layout_file_path = layout_file_path
+            layout_file_path = LayoutManager.store_index_in_default_out_dir(layout_file, gfa_hash)
+            LayoutManager.index_file_path = layout_file_path
             FileManager.set_file_status(FileIndex.GFA, FileStatus.READY)
         except:
             raise HTTPException(

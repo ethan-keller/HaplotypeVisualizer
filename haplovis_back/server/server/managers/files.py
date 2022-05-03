@@ -90,12 +90,15 @@ class FileManager:
 
     @classmethod
     def prepare_files(cls) -> None:
-        print("preparing gfa")
-        managers.GfaManager.prepare_gfa()
-        print("preparing layout")
-        managers.LayoutManager.prepare_layout()
-        print("preparing pheno")
-        managers.PhenoManager.prepare_pheno()
+        if managers.GfaManager.is_empty():
+            print("preparing gfa")
+            managers.GfaManager.prepare_gfa()
+        if managers.LayoutManager.is_index_empty():            
+            print("preparing index")
+            managers.LayoutManager.prepare_layout()
+        if managers.PhenoManager.is_empty():
+            print("preparing pheno")
+            managers.PhenoManager.prepare_pheno()
 
     @classmethod
     def clear_file(cls, id: int) -> None:
