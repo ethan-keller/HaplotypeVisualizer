@@ -1,10 +1,13 @@
+import { useState } from 'react';
 import { VictoryAxis, VictoryChart, VictoryHistogram } from 'victory';
+import RangeHistogramBins from './range/RangeHistogramBins';
 
 interface BarPlotProps {
   values: number[];
 }
 
 const Histogram: React.FC<BarPlotProps> = (props) => {
+  const [bins, setBins] = useState<number>(6);
   const sharedAxisStyles = {
     axis: {
       stroke: 'transparent',
@@ -40,8 +43,12 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
           data={props.values.map((e) => ({
             x: e,
           }))}
+          bins={bins}
         />
       </VictoryChart>
+      <div style={{ width: '85%', margin: 'auto' }}>
+        <RangeHistogramBins onChange={(newBins) => setBins(newBins)} />
+      </div>
     </div>
   );
 };

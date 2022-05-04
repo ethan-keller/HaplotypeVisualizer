@@ -8,7 +8,7 @@ interface RangeWithLabelProps {
   step: number;
   value: number;
   onChange: ChangeEventHandler<HTMLInputElement>;
-  onMouseUp: MouseEventHandler<HTMLInputElement>;
+  onMouseUp?: MouseEventHandler<HTMLInputElement>;
 }
 
 const RangeWithLabels: React.FC<RangeWithLabelProps> = (props) => {
