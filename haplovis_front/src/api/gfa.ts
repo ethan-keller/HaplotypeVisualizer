@@ -6,7 +6,7 @@ import {
   getPaths,
   getGfaInfo,
   gfaBaseUrl,
-  getGfaHistValues,
+  getGfaSegmentLengths,
   getSegment,
   getLink,
 } from '../endpoints_config/GfaEndpoints';
@@ -37,8 +37,8 @@ const gfaApi = createApi({
     getGraphInfo: builder.query<GfaInfo, void>({
       query: () => ({ url: getGfaInfo }),
     }),
-    getGfaHistValues: builder.query<GfaHist, void>({
-      query: () => ({ url: getGfaHistValues }),
+    getGfaSegmentLengths: builder.query<number[], void>({
+      query: () => ({ url: getGfaSegmentLengths }),
     }),
   }),
 });

@@ -118,10 +118,10 @@ async def get_graph_info():
         )
 
 
-@router.get("/gfa_hist", response_model=GfaHist, responses=responses, summary="Gets segment length histogram values")
+@router.get("/segment_lengths", response_model=List[int], responses=responses, summary="Gets segment lengths")
 async def get_hist_values():
     """
-    For the visualization of segment lengths, this endpoint returns the computed histogram values.
+    For the visualization of segment lengths, this endpoint returns the segment lengths.
     """
     if not GfaManager.is_gfa_empty():
         segment_lengths = list(
@@ -130,7 +130,7 @@ async def get_hist_values():
                 GfaManager.gfa.segments,
             )
         )
-        return compute_histogram(segment_lengths)
+        return segment_lengths
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

@@ -1,6 +1,6 @@
 import { Modal } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
-import BarPlot from '../BarPlot';
+import Histogram from '../Histogram';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import StatTable from '../StatTable';
 
@@ -11,7 +11,7 @@ interface GraphInfoModalProps {
 
 const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
   const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
-  const { data: gfaHist } = gfaApi.useGetGfaHistValuesQuery();
+  const { data: segmentLengths } = gfaApi.useGetGfaSegmentLengthsQuery();
 
   return (
     <Modal onHide={props.onHide} show={props.show}>
@@ -27,7 +27,11 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
           }}
         />
         <h6 style={{ textAlign: 'center' }}>Segment length histogram</h6>
-        {gfaHist ? <BarPlot hist={gfaHist} /> : <SpinnerAnnotated message='Calculating plot' />}
+        {segmentLengths ? (
+          <Histogram values={segmentLengths} />
+        ) : (
+          <SpinnerAnnotated message='Calculating plot' />
+        )}
       </Modal.Body>
     </Modal>
   );

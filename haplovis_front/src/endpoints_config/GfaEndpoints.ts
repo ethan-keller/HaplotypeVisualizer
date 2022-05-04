@@ -10,4 +10,4 @@ export const getSegment = '/segment';
 export const getLink = '/link';
 export const getPaths = '/paths';
 export const getGfaInfo = '/gfa_info';
-export const getGfaHistValues = '/gfa_hist';
+export const getGfaSegmentLengths = '/segment_lengths';
