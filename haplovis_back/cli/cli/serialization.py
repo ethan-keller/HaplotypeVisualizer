@@ -1,5 +1,5 @@
 import os
-from typing import Any, Type, Union
+from typing import Any, Union
 from pickle import loads as p_loads, dumps as p_dumps, load as p_load, dump as p_dump
 from orjson import loads as j_loads, dumps as j_dumps
 

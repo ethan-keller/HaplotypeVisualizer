@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Union
+from cli.serialization import JsonSerializer
 
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Query, Response, status
 from fastapi.exceptions import HTTPException
 from server.managers import GfaManager
 from cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaHist, GfaInfo
@@ -19,7 +20,7 @@ def get_gfa():
     """
     Gets the full GFA object.
     """
-    if not GfaManager.is_empty():
+    if not GfaManager.is_gfa_empty():
         print("Getting gfa")
         s = GfaManager.gfa.to_data_class()
         print("Got gfa")
@@ -28,36 +29,36 @@ def get_gfa():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a gfa object")
 
 
-@router.get(
+@router.put(
     "/segments", response_model=List[GfaSegment], responses=responses, summary="Gets the GFA segments",
 )
-async def get_segments():
+async def get_segments(segment_ids: List[str]):
     """
     Gets the segments from the GFA object.
     """
-    if not GfaManager.is_empty():
+    if not GfaManager.is_segment_map_empty():
         print("getting segments")
-        s = GfaManager.gfa.segments
+        s = GfaManager.get_segments_from_ids(segment_ids)
         print("Got segments")
-        return s
+        return Response(JsonSerializer.serialize(s))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segments from a non-existent gfa object"
         )
 
 
-@router.get(
+@router.put(
     "/links", response_model=List[GfaLink], responses=responses, summary="Gets the GFA links",
 )
-async def get_links():
+async def get_links(segment_ids: List[str]):
     """
     Gets the links from the GFA object.
     """
-    if not GfaManager.is_empty():
+    if not GfaManager.is_link_map_empty():
         print("getting links")
-        s = GfaManager.gfa.links
+        s = GfaManager.get_links_from_segments(segment_ids)
         print("Got links")
-        return s
+        return Response(JsonSerializer.serialize(s))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve links from a non-existent gfa object"
@@ -71,11 +72,11 @@ async def get_paths():
     """
     Gets the paths from the GFA object.
     """
-    if not GfaManager.is_empty():
+    if not GfaManager.is_gfa_empty():
         print("Getting paths")
         s = GfaManager.gfa.paths
         print("Got paths")
-        return s
+        return Response(JsonSerializer.serialize(s))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
@@ -87,7 +88,7 @@ async def get_graph_info():
     """
     Gets graph information.
     """
-    if not GfaManager.is_empty():
+    if not GfaManager.is_gfa_empty():
         g = GfaManager.gfa
         return GfaInfo(n_segments=len(g.segments), n_links=len(g.links), n_paths=len(g.paths))
     else:
@@ -101,7 +102,7 @@ async def get_hist_values():
     """
     For the visualization of segment lengths, this endpoint returns the computed histogram values.
     """
-    if not GfaManager.is_empty():
+    if not GfaManager.is_gfa_empty():
         segment_lengths = list(
             map(
                 lambda segment: segment.optionals["LN"] if segment.optionals else len(segment.sequence),

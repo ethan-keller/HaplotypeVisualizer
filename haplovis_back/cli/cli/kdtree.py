@@ -9,11 +9,10 @@ from cli.schemas.layout import Position, Bounds
 
 class KDTreeNode:
     # TODO: add parent as field?
-    def __init__(self, segment: str, bounds: Bounds, x, y, split_x=True):
-        self.segment = segment
+    def __init__(self, segment_id: str, bounds: Bounds, position: Position, split_x=True):
+        self.segment_id = segment_id
         self.bounds = bounds
-        self.x = x
-        self.y = y
+        self.position = position
         self.xmax = np.inf
         self.ymax = np.inf
         self.xmin = -np.inf
@@ -30,22 +29,22 @@ class KDTreeNode:
         self.ymax = parent.ymax
 
         if split_x:
-            if self.y <= parent.y:
-                self.ymax = parent.y
+            if self.position.y <= parent.position.y:
+                self.ymax = parent.position.y
             else:
-                self.ymin = parent.y
+                self.ymin = parent.position.y
         else:
-            if self.x <= parent.x:
-                self.xmax = parent.x
+            if self.position.x <= parent.position.x:
+                self.xmax = parent.position.x
             else:
-                self.xmin = parent.x
+                self.xmin = parent.position.x
 
     def is_leaf(self) -> bool:
         return self.left == None and self.right == None
 
     def __str__(self) -> str:
-        # return "[(" + str(self.x) + ", " + str(self.y) + ")]"
-        return f"[{self.segment} pos: (x: {self.x}, y: {self.y}) bounds: (xl: {self.bounds.xl}, xr: {self.bounds.xr})]"
+        # return "[(" + str(self.position.x) + ", " + str(self.position.y) + ")]"
+        return f"[{self.segment_id} pos: (x: {self.position.x}, y: {self.position.y}) bounds: (xl: {self.bounds.xl}, xr: {self.bounds.xr})]"
 
     def __repr__(self) -> str:
         return "<KDTreeNode " + self.__str__() + ">"
@@ -55,14 +54,14 @@ class KDTree:
     def __init__(self, data: np.ndarray) -> None:
         assert data.shape[1] == 4
 
-        segments = data[:, 0]
+        segment_ids = data[:, 0]
         bounds = data[:, 1]
         xs = data[:, 2]
         ys = data[:, 3]
         
         sorted_x_indices = np.argsort(xs)
         sorted_y_indices = np.argsort(ys)
-        self.root = self._construct_tree(xs, ys, segments, bounds, sorted_x_indices, sorted_y_indices, True)
+        self.root = self._construct_tree(xs, ys, segment_ids, bounds, sorted_x_indices, sorted_y_indices, True)
 
     def _select(self, truncated_sorted_first_indices, sorted_second_indices) -> np.ndarray:
         """
@@ -85,7 +84,7 @@ class KDTree:
 
         # split on x-coordinate
         if split_x:
-            node = KDTreeNode(segments[ix[median]], bounds[ix[median]], xs[ix[median]], ys[ix[median]], True)
+            node = KDTreeNode(segments[ix[median]], bounds[ix[median]], Position(x=xs[ix[median]], y=ys[ix[median]]), True)
 
             if parent is not None:
                 # set min and max fields
@@ -104,7 +103,7 @@ class KDTree:
 
         # split on y-coordinate
         else:
-            node = KDTreeNode(segments[iy[median]], bounds[iy[median]], xs[iy[median]], ys[iy[median]], False)
+            node = KDTreeNode(segments[iy[median]], bounds[iy[median]], Position(x=xs[iy[median]], y=ys[iy[median]]), False)
 
             if parent is not None:
                 # set min and max fields
@@ -169,10 +168,10 @@ class KDTree:
         xmin, xmax, ymin, ymax = self._expand_bounds(lu, rd)
 
         if node.is_leaf():
-            if xmin <= node.x and xmax >= node.x and ymin <= node.y and ymax >= node.y:
+            if xmin <= node.position.x and xmax >= node.position.x and ymin <= node.position.y and ymax >= node.position.y:
                 result.append(node)
         else:
-            if xmin <= node.x and xmax >= node.x and ymin <= node.y and ymax >= node.y:
+            if xmin <= node.position.x and xmax >= node.position.x and ymin <= node.position.y and ymax >= node.position.y:
                 result.append(node)
 
             result += self._retrieve_nodes(node.left, lu, rd)

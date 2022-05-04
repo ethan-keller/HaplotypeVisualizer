@@ -1,6 +1,7 @@
-import { EdgeDefinition, NodeDefinition } from 'cytoscape';
+import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
+import { GfaFeature } from './gfa';
 
-interface Graph {
+export interface Graph {
   nodes: NodeDefinition[];
   edges: EdgeDefinition[];
 }
@@ -14,4 +15,6 @@ export interface GraphSettings {
   activePaths: boolean[];
 }
 
-export default Graph;
+export interface GraphSelectionState {
+  feature?: GfaFeature;
+}

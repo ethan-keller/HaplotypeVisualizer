@@ -18,7 +18,12 @@ export interface RectangleRange {
   rd: Position;
 }
 
-export type Layout = Record<string, Position>;
+export interface LayoutNode {
+  segment_id: string;
+  position: Position;
+}
+
+export type Layout = Record<string, LayoutNode>;
 
 export interface GraphLayoutState {
   viewport: RectangleRange;

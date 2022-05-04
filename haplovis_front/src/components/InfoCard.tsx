@@ -2,143 +2,100 @@ import { useState } from 'react';
 import { Button, Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
 import bookmarksApi from '../api/bookmarks';
 import { useAppSelector } from '../store';
-import { getSegmentLength, GfaFeature } from '../types/gfa';
+import { getSegmentLength } from '../types/gfa';
 import { isBookmarked } from '../utils/bookmarks';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
 import BookmarkModal from './modals/BookmarkModal';
 import VerticalSpacer from './VerticalSpacer';
 
-interface InfoCardProps {
-  data: GfaFeature;
-}
+interface InfoCardProps {}
 
 const InfoCard: React.FC<InfoCardProps> = (props) => {
-  const f = props.data;
+  const feature = useAppSelector((state) => state.graphSelection.feature);
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
   const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const [showBookmarkModal, setShowBookmarkModal] = useState<boolean>(false);
-  return (
-    <Card style={{ border: 0 }}>
-      <Card.Body>
-        <Card.Title>{f.name}</Card.Title>
-        <Card.Subtitle className='mb-2- text-muted'>{capitalizeFirstLetter(f.type)}</Card.Subtitle>
+  return feature ? (
+    <div className='info-card'>
+      <Card style={{ border: 0 }}>
+        <Card.Body>
+          <Card.Title>{feature.name}</Card.Title>
+          <Card.Subtitle className='mb-2- text-muted'>
+            {capitalizeFirstLetter(feature.type)}
+          </Card.Subtitle>
 
-        <VerticalSpacer space={5} />
+          <VerticalSpacer space={5} />
 
-        {f.type === 'segment' ? (
-          <>
-            <Card.Text style={{ fontWeight: 100 }}>
-              {'length: ' + getSegmentLength(f)}
-              <br />
-              {'sequence: ' + truncateIfLongerThan(f.sequence, 20)}
-            </Card.Text>
-          </>
-        ) : null}
+          {feature.type === 'segment' ? (
+            <>
+              <Card.Text style={{ fontWeight: 100 }}>
+                {'length: ' + getSegmentLength(feature)}
+                <br />
+                {'sequence: ' + truncateIfLongerThan(feature.sequence, 20)}
+              </Card.Text>
+            </>
+          ) : null}
 
-        <VerticalSpacer space={10} />
+          <VerticalSpacer space={10} />
 
-        <Card.Subtitle className='mb-2 text-muted'>Paths</Card.Subtitle>
-        <Card.Text>
-          <b>{f.paths.length}</b> paths through this {f.type}
-        </Card.Text>
-        <ListGroup>
-          {f.paths.map((path, i) => {
-            const c =
-              activePaths.length === 0
-                ? pathColors[path.index]
-                : activePaths[path.index]
-                ? pathColors[path.index]
-                : '#999999';
-            return (
-              <ListGroupItem key={'path_' + i} style={{ backgroundColor: c + '60' }}>
-                {path.name}
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
+          <Card.Subtitle className='mb-2 text-muted'>Paths</Card.Subtitle>
+          <Card.Text>
+            <b>{feature.paths.length}</b> paths through this {feature.type}
+          </Card.Text>
+          <ListGroup>
+            {feature.paths.map((path, i) => {
+              const c =
+                activePaths.length === 0
+                  ? pathColors[path.index]
+                  : activePaths[path.index]
+                  ? pathColors[path.index]
+                  : '#999999';
+              return (
+                <ListGroupItem key={'path_' + i} style={{ backgroundColor: c + '60', padding: '0.2rem 1rem'}}>
+                  {path.name}
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
 
-        {f.optionals ? (
-          <Table className='align-middle'>
-            <thead>
-              <tr>
-                <th>Tag</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(f.optionals).map(([k, v], i) => (
-                <tr key={'tag_entry_' + i}>
-                  <td>{k}</td>
-                  <td>{v}</td>
+          {feature.optionals ? (
+            <Table className='align-middle'>
+              <thead>
+                <tr>
+                  <th>Tag</th>
+                  <th>Value</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        ) : null}
+              </thead>
+              <tbody>
+                {Object.entries(feature.optionals).map(([k, v], i) => (
+                  <tr key={'tag_entry_' + i}>
+                    <td>{k}</td>
+                    <td>{v}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : null}
 
-        <VerticalSpacer space={10} />
+          <VerticalSpacer space={10} />
 
-        <Button onClick={() => setShowBookmarkModal(true)} size='sm'>
-          Bookmark
-        </Button>
-        <BookmarkModal
-          elem={f}
-          show={showBookmarkModal}
-          onHide={() => setShowBookmarkModal(false)}
-        />
+          <Button onClick={() => setShowBookmarkModal(true)} size='sm'>
+            Bookmark
+          </Button>
+          <BookmarkModal
+            elem={feature}
+            show={showBookmarkModal}
+            onHide={() => setShowBookmarkModal(false)}
+          />
 
-        {bookmarks && isBookmarked(Object.values(bookmarks), f.name) ? <div className='bookmarked'>Bookmarked ✓</div> : null}
-      </Card.Body>
-    </Card>
-  );
+          {bookmarks && isBookmarked(Object.values(bookmarks), feature.name) ? (
+            <div className='bookmarked'>Bookmarked ✓</div>
+          ) : null}
+        </Card.Body>
+      </Card>
+    </div>
+  ) : null;
 };
 
 export default InfoCard;
-
-// import {Button, Card, ListGroup, ListGroupItem} from "react-bootstrap";
-// import {GFAFeature} from "./graph";
-// import {capitalizeFirstLetter} from "../utilities";
-
-// export function InfoCard({data}: {
-//   data: GFAFeature
-// }) {
-//   return (
-//     <div className={"infoCard"}>
-//       <Card>
-//         <Card.Body>
-//           <Card.Title>{data.name}</Card.Title>
-//           <Card.Subtitle className={"mb-2 text-muted"}>{capitalizeFirstLetter(data.type)}</Card.Subtitle>
-//           {data.type === "segment" ?
-//             (<>
-//               <Card.Text>
-//                 {"Length: " + data.length}
-//                 <br/>
-//                 {"Sequence: " + data.sequence.substring(0, 20) + "..."}
-//               </Card.Text>
-//               <Button>JBrowse</Button></>)
-//             :
-//             (<>
-//               <Card.Text as={"div"}>
-//                 <b>{data.paths.length}</b> path(s) through this link
-//                 <br/>
-//                 <br/>
-//                 {data.paths.length !== 0 ?
-//                   <>
-//                     <Card.Subtitle className={"mb-2 text-muted"}>Paths</Card.Subtitle>
-//                     <ListGroup>
-//                       {data.paths.map(path => (
-//                         <ListGroupItem>{path.pathName}</ListGroupItem>
-//                       ))}
-//                     </ListGroup>
-//                   </>
-//                   : null}
-//               </Card.Text>
-//             </>)
-//           }
-//         </Card.Body>
-//       </Card>
-//     </div>
-
-//   );
-// }

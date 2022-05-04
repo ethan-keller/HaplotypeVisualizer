@@ -1,25 +1,23 @@
 import os
 from pathlib import Path
 from typing import List, Optional
+from cli.layout import Layout
+from cli.schemas.layout import Bounds
 from fastapi import UploadFile
 from cli.gfa import Gfa
 from cli.kdtree import KDTree
-from server.schemas.layout import Layout, Position, RectangleRange, Bounds
+from server import managers
+from server.schemas.layout import Layout as LayoutType, LayoutNode, RectangleRange
 
 
 class LayoutManager:
     index: Optional[KDTree] = None
-    layout: Layout = None
     bounds: List[Bounds] = None
     index_file_path: Path = None
 
     @classmethod
     def is_index_empty(cls) -> bool:
         return cls.index is None
-
-    @classmethod
-    def is_layout_empty(cls) -> bool:
-        return cls.layout is None
 
     @classmethod
     def is_bounds_empty(cls) -> bool:
@@ -31,19 +29,18 @@ class LayoutManager:
             return cls.bounds
         elif not cls.is_index_empty():
             kdtree_nodes = cls.index.in_order_traversal()
-            cls.bounds = [Bounds(xl=node.bounds.xl, xr=node.bounds.xr) for node in set(kdtree_nodes)]
+            cls.bounds = [node.bounds for node in set(kdtree_nodes)]
             return cls.bounds
         else:
             return []
 
     @classmethod
-    def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> Layout:
+    def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> LayoutType:
         if cls.index is not None:
-            kdtree_nodes = cls.index.range_query(Position(x=range.lu.x, y=range.lu.y), Position(x=range.rd.x, y=range.rd.y))
-            return { node.segment : Position(x=node.x, y=node.y) for node in kdtree_nodes }
+            kdtree_nodes = cls.index.range_query(range.lu, range.rd)
+            return { node.segment_id : LayoutNode(segment_id=node.segment_id, position=node.position) for node in kdtree_nodes }
         else:
             return {}
-
 
     @classmethod
     def prepare_layout(cls) -> None:
@@ -83,6 +80,5 @@ class LayoutManager:
     @classmethod
     def clear(cls) -> None:
         cls.index = None
-        cls.layout = None
         cls.bounds = None
         cls.index_file_path = None

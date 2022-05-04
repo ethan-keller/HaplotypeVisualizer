@@ -1,8 +1,8 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
-import { Layout, Position } from '../types/layout';
-import Graph, { GraphSettings } from '../types/graph';
-import { GfaLink, GfaSegment } from '../types/gfa';
+import { Layout, Position } from '../../types/layout';
+import { Graph, GraphSettings } from '../../types/graph';
+import { GfaLink, GfaSegment } from '../../types/gfa';
 
 cytoscape.use(dagre);
 
@@ -111,7 +111,11 @@ export function createCytoscape(
       nodes: graph.nodes,
       edges: graph.edges,
     },
-    layout: { name: 'preset', positions: layout, fit: false },
+    layout: {
+      name: 'preset',
+      positions: Object.fromEntries(Object.entries(layout).map(([k, v], i) => [k, v.position])),
+      fit: false,
+    },
     style: [
       {
         selector: 'node',
@@ -133,6 +137,8 @@ export function createCytoscape(
     zoom: zoom,
     pan: pan,
     autoungrabify: true,
+    userPanningEnabled: false,
+    userZoomingEnabled: false,
     selectionType: 'single',
     hideEdgesOnViewport: true,
     hideLabelsOnViewport: true,

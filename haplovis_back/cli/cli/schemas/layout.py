@@ -12,6 +12,4 @@ class Bounds:
     xl: float
     xr: float
 
-@dataclass
-class Layout:
-    nodes: Dict[str, Tuple[Position, Bounds]]
+Layout = Dict[str, Tuple[Position, Bounds]]

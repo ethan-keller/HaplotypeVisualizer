@@ -19,6 +19,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import bookmarksApi from './api/bookmarks';
+import graphSelectionReducer, { graphSelectionSlice } from './slices/graphSelection';
 
 const persistConfig = {
   key: 'root',
@@ -29,6 +30,7 @@ const persistConfig = {
     layoutApi.reducerPath,
     phenoApi.reducerPath,
     bookmarksApi.reducerPath,
+    graphSelectionSlice.name,
   ],
 };
 
@@ -36,6 +38,7 @@ const reducers = combineReducers({
   graphSettings: graphSettingsReducer,
   pheno: phenoReducer,
   graphLayout: graphLayoutReducer,
+  graphSelection: graphSelectionReducer,
   [filesApi.reducerPath]: filesApi.reducer,
   [gfaApi.reducerPath]: gfaApi.reducer,
   [layoutApi.reducerPath]: layoutApi.reducer,

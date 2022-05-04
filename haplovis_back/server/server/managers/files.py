@@ -90,7 +90,7 @@ class FileManager:
 
     @classmethod
     def prepare_files(cls) -> None:
-        if managers.GfaManager.is_empty():
+        if managers.GfaManager.is_gfa_empty():
             print("preparing gfa")
             managers.GfaManager.prepare_gfa()
         if managers.LayoutManager.is_index_empty():            

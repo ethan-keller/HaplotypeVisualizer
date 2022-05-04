@@ -96,5 +96,5 @@ fs.readFile(gfa_file_path, (err, data) => {
   });
   cy.destroy();
 
-  process.stdout.write(JSON.stringify({ nodes: layout }));
+  process.stdout.write(JSON.stringify(layout));
 });

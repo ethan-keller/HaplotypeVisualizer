@@ -1,7 +1,7 @@
 from typing import Any, List
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import Json
-from server.schemas.layout import Density, Layout, Position, RectangleRange
+from server.schemas.layout import Layout, Position, RectangleRange
 from server.logic.density import get_density_values, get_down_sample_factor
 
 from server.managers import LayoutManager
@@ -73,6 +73,7 @@ async def get_densities():
     """
     Gets density values along with their respective x coordinates.
     """
+    print("Get density")
     if LayoutManager.is_index_empty():
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -81,6 +82,6 @@ async def get_densities():
 
     bounds = LayoutManager.get_all_bounds()
     densities = get_density_values(bounds, get_down_sample_factor(len(bounds)))
-
+    print("Got density")
     return densities
 

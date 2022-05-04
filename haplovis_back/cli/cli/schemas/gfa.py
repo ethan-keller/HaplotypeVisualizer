@@ -44,6 +44,9 @@ class GfaLink(GfaElement):
     optionals = None
     # TODO: overlap
 
+    def __hash__(self):
+        return hash(self.name)
+
 @dataclass
 class Gfa:
     segments: List[GfaSegment]

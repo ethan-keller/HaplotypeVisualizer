@@ -17,11 +17,11 @@ const gfaApi = createApi({
     getGfa: builder.query<Gfa, void>({
       query: () => ({ url: getGfa }),
     }),
-    getSegments: builder.query<GfaSegment[], void>({
-      query: () => ({ url: getSegments }),
+    getSegments: builder.query<GfaSegment[], string[]>({
+      query: (body) => ({ url: getSegments, body, method: 'PUT' }),
     }),
-    getLinks: builder.query<GfaLink[], void>({
-      query: () => ({ url: getLinks }),
+    getLinks: builder.query<GfaLink[], string[]>({
+      query: (body) => ({ url: getLinks, body, method: 'PUT' }),
     }),
     getPaths: builder.query<GfaPath[], void>({
       query: () => ({ url: getPaths }),

@@ -1,9 +1,7 @@
 from typing import Dict, List
-from pydantic import BaseModel
-
-class Position(BaseModel):
-    x: float
-    y: float
+from cli.schemas.gfa import GfaSegment
+from cli.schemas.layout import Position
+from pydantic import BaseModel, dataclasses
 
 class RectangleRange(BaseModel):
     lu: Position
@@ -13,16 +11,9 @@ class Density(BaseModel):
     xs: List[int]
     densities: List[int]
 
-class Bounds(BaseModel):
-    xl: int
-    xr: int
- 
-Layout = Dict[str, Position]
+@dataclasses.dataclass
+class LayoutNode:
+    segment_id: str
+    position: Position
 
-# class LayoutNode(BaseModel):
-#     segment: str
-#     position: Position
-#     # TODO: bounds
-#     # xl: float
-#     # xr: float
-
+Layout = Dict[str, LayoutNode]
