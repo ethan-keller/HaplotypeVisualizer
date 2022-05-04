@@ -23,8 +23,6 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) =>
   const dispatch = useAppDispatch();
   const [cy, setCy] = useState<cytoscape.Core>();
 
-  useEffect(() => {console.count("Cy wrapper")}, []);
-
   useEffect(() => {
     try {
       setCy(createCytoscape(graph, settings, layout, zoom, pan));
@@ -34,21 +32,26 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) =>
     }
   }, [graph, layout, settings]);
 
+  const dispatchExtent = () => {
+    if (cy) {
+      const extent = cy.extent();
+      dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
+    }
+  };
+
   useEffect(() => {
     if (cy) {
       cy.on('unselect', () => dispatch(updateFeature(undefined)));
       cy.on('select', (e) => dispatch(updateFeature(e.target.data('feature'))));
       cy.on('pan dragpan', () => {
         // dispatch(updateViewport(extentToRectangleRange(cy.extent())));
-        // dispatch(updatePan(cy.pan()));
-        // const extent = cy.extent();
-        // dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
+        dispatch(updatePan(cy.pan()));
+        dispatchExtent();
       });
       cy.on('zoom', () => {
         // dispatch(updateViewport(extentToRectangleRange(cy.extent())));
-        // dispatch(updateZoom(cy.zoom()));
-        // const extent = cy.extent();
-        // dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
+        dispatch(updateZoom(cy.zoom()));
+        dispatchExtent();
       });
     }
   }, [cy, dispatch]);

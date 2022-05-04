@@ -139,6 +139,7 @@ export function createCytoscape(
     autoungrabify: true,
     userPanningEnabled: false,
     userZoomingEnabled: false,
+    boxSelectionEnabled: false,
     selectionType: 'single',
     hideEdgesOnViewport: true,
     hideLabelsOnViewport: true,
