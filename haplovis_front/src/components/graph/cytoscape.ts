@@ -67,7 +67,7 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
         ]),
-        feature: segment,
+        feature: { type: segment.type, name: segment.name },
       },
     };
   }) as NodeDefinition[];
@@ -92,7 +92,7 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
         ]),
-        feature: link,
+        feature: { type: link.type, name: link.name },
       },
     };
   }) as EdgeDefinition[];

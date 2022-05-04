@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import layoutApi from '../../api/layout';
 import { useAppSelector } from '../../store';
 import '../../styles/graph.css';
@@ -11,14 +10,11 @@ interface GraphWrapperProps {}
 const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
   const viewport = useAppSelector((state) => state.graphLayout.viewport);
   const { data: layout } = layoutApi.useGetRangeLayoutNodesQuery(viewport);
-
-  useEffect(() => {
-    console.count("Graph wrapper")
-  }, []);
+  const f = useAppSelector((state) => state.graphSelection.feature);
 
   return layout ? (
     <>
-      <InfoCard />
+      {f ? <InfoCard feature={f} /> : null}
       <GraphComponent layout={layout} />
     </>
   ) : (

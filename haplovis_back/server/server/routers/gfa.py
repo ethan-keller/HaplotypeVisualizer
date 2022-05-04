@@ -46,6 +46,16 @@ async def get_segments(segment_ids: List[str]):
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segments from a non-existent gfa object"
         )
 
+@router.get(
+    "/segment", response_model=GfaSegment, summary="Gets a gfa segment"
+)
+async def get_segment(segment_id: str):
+    if not GfaManager.is_segment_map_empty():
+        return GfaManager.get_segment_from_id(segment_id)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segment from a non-existent gfa object"
+        )
 
 @router.put(
     "/links", response_model=List[GfaLink], responses=responses, summary="Gets the GFA links",
@@ -62,6 +72,17 @@ async def get_links(segment_ids: List[str]):
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve links from a non-existent gfa object"
+        )
+
+@router.get(
+    "/link", response_model=GfaLink, summary="Gets a gfa link"
+)
+async def get_link(link_id: str):
+    if not GfaManager.is_link_map_empty():
+        return GfaManager.get_link_from_link_id(link_id)
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segment from a non-existent gfa object"
         )
 
 

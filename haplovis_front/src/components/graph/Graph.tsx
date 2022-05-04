@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { cytoscapeEdges, cytoscapeNodes } from './cytoscape';
 import { Layout } from '../../types/layout';
 import { Graph as GraphType } from '../../types/graph';
@@ -12,7 +12,6 @@ interface GraphProps {
 }
 
 const Graph: React.FC<GraphProps> = ({ layout }) => {
-  useEffect(() => {console.count("graph")}, [])
   const segmentIds = useMemo(
     () => Object.values(layout).map((layoutNode) => layoutNode.segment_id),
     [layout],

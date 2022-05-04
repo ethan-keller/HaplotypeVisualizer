@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 from gfapy import Line, Gfa as GfaPy
 import hashlib
 from cli.schemas.gfa import Gfa as GfaDataClass, GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
@@ -162,3 +162,8 @@ class Gfa:
     @classmethod
     def get_link_name(cls, from_segment: str, to_segment: str) -> str:
         return f"{from_segment}->{to_segment}"
+    
+    @classmethod
+    def split_link_name(cls, link_name: str) -> Tuple[str, str]:
+        s = link_name.split("->")
+        return s[0], s[1]

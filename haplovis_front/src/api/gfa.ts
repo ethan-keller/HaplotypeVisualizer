@@ -7,6 +7,8 @@ import {
   getGfaInfo,
   gfaBaseUrl,
   getGfaHistValues,
+  getSegment,
+  getLink,
 } from '../endpoints_config/GfaEndpoints';
 import Gfa, { GfaLink, GfaPath, GfaSegment, GfaInfo, GfaHist } from '../types/gfa';
 
@@ -20,8 +22,14 @@ const gfaApi = createApi({
     getSegments: builder.query<GfaSegment[], string[]>({
       query: (body) => ({ url: getSegments, body, method: 'PUT' }),
     }),
+    getSegment: builder.query<GfaSegment, { segment_id: string }>({
+      query: (params) => ({ url: getSegment, params: params }),
+    }),
     getLinks: builder.query<GfaLink[], string[]>({
       query: (body) => ({ url: getLinks, body, method: 'PUT' }),
+    }),
+    getLink: builder.query<GfaLink, { link_id: string }>({
+      query: (params) => ({ url: getLink, params: params }),
     }),
     getPaths: builder.query<GfaPath[], void>({
       query: () => ({ url: getPaths }),

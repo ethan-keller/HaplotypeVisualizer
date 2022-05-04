@@ -47,6 +47,17 @@ class GfaManager:
         return result
 
     @classmethod
+    def get_link_from_link_id(cls, link_id: str) -> GfaLink:
+        if cls.is_link_map_empty():
+            raise Exception("Cannot retrieve links because there is no link map")
+        seg1, seg2 = Gfa.split_link_name(link_id) 
+        links = cls.get_links_from_segments([seg1])
+        for link in links:
+            if link.to_segment == seg2:
+                return link
+        raise Exception(f"Did not find link with id: {link_id}")
+
+    @classmethod
     def get_links_from_segments(cls, segment_ids: List[str]) -> List[GfaLink]:
         result = set()
         if cls.is_link_map_empty():

@@ -1,20 +1,29 @@
 import { useState } from 'react';
 import { Button, Card, ListGroup, ListGroupItem, Table } from 'react-bootstrap';
 import bookmarksApi from '../api/bookmarks';
+import gfaApi from '../api/gfa';
 import { useAppSelector } from '../store';
 import { getSegmentLength } from '../types/gfa';
+import { FeatureSelection } from '../types/graph';
 import { isBookmarked } from '../utils/bookmarks';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
 import BookmarkModal from './modals/BookmarkModal';
+import SpinnerAnnotated from './SpinnerAnnotated';
 import VerticalSpacer from './VerticalSpacer';
 
-interface InfoCardProps {}
+interface InfoCardProps {
+  feature: FeatureSelection;
+}
 
 const InfoCard: React.FC<InfoCardProps> = (props) => {
-  const feature = useAppSelector((state) => state.graphSelection.feature);
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
   const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
+  const { data: feature } =
+    props.feature.type === 'segment'
+      ? gfaApi.useGetSegmentQuery({ segment_id: props.feature.name })
+      : gfaApi.useGetLinkQuery({ link_id: props.feature.name });
+
   const [showBookmarkModal, setShowBookmarkModal] = useState<boolean>(false);
   return feature ? (
     <div className='info-card'>
@@ -52,7 +61,10 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
                   ? pathColors[path.index]
                   : '#999999';
               return (
-                <ListGroupItem key={'path_' + i} style={{ backgroundColor: c + '60', padding: '0.2rem 1rem'}}>
+                <ListGroupItem
+                  key={'path_' + i}
+                  style={{ backgroundColor: c + '60', padding: '0.2rem 1rem' }}
+                >
                   {path.name}
                 </ListGroupItem>
               );
@@ -95,7 +107,11 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
         </Card.Body>
       </Card>
     </div>
-  ) : null;
+  ) : (
+    <div className='info-card'>
+      <SpinnerAnnotated message='Loading info card' />
+    </div>
+  );
 };
 
 export default InfoCard;
