@@ -1,22 +1,18 @@
 import { Form } from 'react-bootstrap';
 import Select from 'react-select';
+import phenoApi from '../../../api/pheno';
 import { addPhenoFilter, addSampleFilter } from '../../../slices/pheno';
 import { useAppDispatch } from '../../../store';
-import { PhenoOption, PhenoRecord, PhenotypeValues, SampleOption } from '../../../types/pheno';
-import SpinnerAnnotated from '../../SpinnerAnnotated';
+import { PhenoOption, PhenoRecord, SampleOption } from '../../../types/pheno';
 import VerticalSpacer from '../../VerticalSpacer';
 import SidebarSection from './SidebarSection';
 
-interface PhenoFilterSidebarSectionProps {
-  samples?: string[];
-  phenotypes?: PhenotypeValues;
-}
+interface PhenoFilterSidebarSectionProps {}
 
-const PhenoFilterSidebarSection: React.FC<PhenoFilterSidebarSectionProps> = ({
-  samples,
-  phenotypes,
-}) => {
+const PhenoFilterSidebarSection: React.FC<PhenoFilterSidebarSectionProps> = (props) => {
   const dispatch = useAppDispatch();
+  const { data: phenotypes } = phenoApi.useGetPhenotypesQuery();
+  const { data: samples } = phenoApi.useGetSampleNamesQuery();
 
   return (
     <SidebarSection title='Filters'>
@@ -41,7 +37,7 @@ const PhenoFilterSidebarSection: React.FC<PhenoFilterSidebarSectionProps> = ({
           }))}
         />
       ) : (
-        <SpinnerAnnotated message={'Loading phenotype filter'} />
+        <Select isDisabled />
       )}
 
       <VerticalSpacer space={10} />
@@ -58,7 +54,7 @@ const PhenoFilterSidebarSection: React.FC<PhenoFilterSidebarSectionProps> = ({
           options={samples.map((sample) => ({ value: sample, label: sample }))}
         />
       ) : (
-        <SpinnerAnnotated message={'Loading sample filter'} />
+        <Select isDisabled />
       )}
     </SidebarSection>
   );

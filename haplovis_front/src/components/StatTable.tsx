@@ -10,8 +10,8 @@ const StatTable: React.FC<StatTableProps> = (props) => {
       <tbody>
         {Object.entries(props.tableEntries).map(([k, v], i) => {
           return (
-            <tr key={'row_' + i}>
-              <td>{k}</td>
+            <tr className="d-flex" key={'row_' + i}>
+              <td className='col-9'>{k}</td>
               <td>{v}</td>
             </tr>
           );

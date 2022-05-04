@@ -6,7 +6,7 @@ from server.schemas.file import FileIndex
 
 class PhenoManager:
     phenoTable: Optional[pd.DataFrame] = None
-    phenotypes: Dict[str, List[Any]] = {}
+    phenotypes: Dict[str, List[Any]] = None
 
     @classmethod
     def prepare_pheno(cls) -> None:
@@ -40,4 +40,4 @@ class PhenoManager:
     @classmethod
     def clear(cls):
         cls.phenoTable = None
-        cls.phenotypes = {}
+        cls.phenotypes = None

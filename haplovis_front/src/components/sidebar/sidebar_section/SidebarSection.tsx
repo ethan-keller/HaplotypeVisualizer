@@ -7,11 +7,10 @@ interface SidebarSectionProps {
 const SidebarSection: React.FC<SidebarSectionProps> = (props) => {
   return (
     <>
-      <FormGroup>
+      <FormGroup style={{ marginBottom: 20 }}>
         <h6>{props.title}</h6>
         {props.children}
       </FormGroup>
-      <br />
     </>
   );
 };
