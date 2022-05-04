@@ -22,7 +22,7 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
   }, [dispatch, paths]);
 
   return (
-    <Modal onHide={props.onHide} show={props.show}>
+    <Modal onHide={props.onHide} show={props.show} scrollable>
       <Modal.Header closeButton>
         <Modal.Title>Edit paths</Modal.Title>
       </Modal.Header>

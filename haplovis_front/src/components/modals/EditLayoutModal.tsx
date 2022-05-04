@@ -7,7 +7,7 @@ interface EditLayoutModalProps {
 
 const EditLayoutModal: React.FC<EditLayoutModalProps> = (props) => {
   return (
-    <Modal onHide={props.onHide} show={props.show} backdrop='static'>
+    <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
         <Modal.Title>Edit layout</Modal.Title>
       </Modal.Header>
