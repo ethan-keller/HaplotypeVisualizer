@@ -2,7 +2,7 @@ import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { Layout, Position } from '../../types/layout';
 import { Graph, GraphSettings } from '../../types/graph';
-import { GfaLink, GfaSegment } from '../../types/gfa';
+import { GfaLink, GfaPath, GfaSegment } from '../../types/gfa';
 
 cytoscape.use(dagre);
 
@@ -40,8 +40,13 @@ const overlayStyle = (color: string) => {
   };
 };
 
-export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) => {
+export const cytoscapeNodes = (
+  segments: GfaSegment[],
+  paths: GfaPath[],
+  settings: GraphSettings,
+) => {
   return segments.map((segment: GfaSegment) => {
+    const segmentPaths = segment.paths.map((pathIndex) => paths[pathIndex]);
     return {
       // TODO: create types for custom node data (and edge data) to be used on other files
       data: {
@@ -55,7 +60,7 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
           ),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
-        stopColors: segment.paths.flatMap((path) => {
+        stopColors: segmentPaths.flatMap((path) => {
           if (settings.activePaths.length === 0) {
             return [settings.pathColors[path.index], settings.pathColors[path.index]];
           } else {
@@ -63,7 +68,7 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
             return [c, c];
           }
         }),
-        stopPositions: segment.paths.flatMap((_, i, array) => [
+        stopPositions: segmentPaths.flatMap((_, i, array) => [
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
         ]),
@@ -73,14 +78,15 @@ export const cytoscapeNodes = (segments: GfaSegment[], settings: GraphSettings) 
   }) as NodeDefinition[];
 };
 
-export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
+export const cytoscapeEdges = (links: GfaLink[], paths: GfaPath[], settings: GraphSettings) => {
   return links.map((link: GfaLink) => {
+    const linkPaths = link.paths.map((pathIndex) => paths[pathIndex]);
     return {
       data: {
         source: link.from_segment,
         target: link.to_segment,
         width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
-        stopColors: link.paths.flatMap((path) => {
+        stopColors: linkPaths.flatMap((path) => {
           if (settings.activePaths.length === 0) {
             return [settings.pathColors[path.index], settings.pathColors[path.index]];
           } else {
@@ -88,7 +94,7 @@ export const cytoscapeEdges = (links: GfaLink[], settings: GraphSettings) => {
             return [c, c];
           }
         }),
-        stopPositions: link.paths.flatMap((_, i, array) => [
+        stopPositions: linkPaths.flatMap((_, i, array) => [
           (i / array.length) * 100,
           ((i + 1) / array.length) * 100,
         ]),

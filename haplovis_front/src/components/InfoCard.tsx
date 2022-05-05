@@ -18,6 +18,7 @@ interface InfoCardProps {
 const InfoCard: React.FC<InfoCardProps> = (props) => {
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
+  const { data: paths } = gfaApi.useGetPathsQuery();
   const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const { data: feature } =
     props.feature.type === 'segment'
@@ -53,22 +54,25 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
             <b>{feature.paths.length}</b> paths through this {feature.type}
           </Card.Text>
           <ListGroup>
-            {feature.paths.map((path, i) => {
-              const c =
-                activePaths.length === 0
-                  ? pathColors[path.index]
-                  : activePaths[path.index]
-                  ? pathColors[path.index]
-                  : '#999999';
-              return (
-                <ListGroupItem
-                  key={'path_' + i}
-                  style={{ backgroundColor: c + '60', padding: '0.2rem 1rem' }}
-                >
-                  {path.name}
-                </ListGroupItem>
-              );
-            })}
+            {paths
+              ? feature.paths.map((pathIndex, i) => {
+                  const path = paths[pathIndex];
+                  const c =
+                    activePaths.length === 0
+                      ? pathColors[path.index]
+                      : activePaths[path.index]
+                      ? pathColors[path.index]
+                      : '#999999';
+                  return (
+                    <ListGroupItem
+                      key={'path_' + i}
+                      style={{ backgroundColor: c + '60', padding: '0.2rem 1rem' }}
+                    >
+                      {path.name}
+                    </ListGroupItem>
+                  );
+                })
+              : null}
           </ListGroup>
 
           {feature.optionals ? (

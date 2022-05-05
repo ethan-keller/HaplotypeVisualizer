@@ -16,7 +16,6 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
   const sampleFilters = useAppSelector((state) => state.pheno.sampleFilters);
   const phenoFilters = useAppSelector((state) => state.pheno.phenoFilters);
 
-  
   useEffect(() => {
     dispatch(reset());
   }, [dispatch]);

@@ -19,17 +19,19 @@ const Graph: React.FC<GraphProps> = ({ layout }) => {
   const graphSettings = useAppSelector((state) => state.graphSettings);
   const { data: segments } = gfaApi.useGetSegmentsQuery(segmentIds);
   const { data: links } = gfaApi.useGetLinksQuery(segmentIds);
+  const { data: paths } = gfaApi.useGetPathsQuery();
   const graph = useMemo(() => {
-    if (segments && links) {
+    if (segments && links && paths) {
       return {
-        nodes: cytoscapeNodes(segments, graphSettings),
+        nodes: cytoscapeNodes(segments, paths, graphSettings),
         edges: cytoscapeEdges(
           links.filter((link) => link.from_segment in layout && link.to_segment in layout),
+          paths,
           graphSettings,
         ),
       } as GraphType;
     }
-  }, [segments, links, layout, graphSettings]);
+  }, [segments, paths, links, layout, graphSettings]);
 
   return graph ? (
     <CytoscapeWrapper graph={graph} layout={layout} />
