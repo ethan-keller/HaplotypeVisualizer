@@ -23,9 +23,9 @@ const EditPhenotypesModal: React.FC<EditPhenotypesModalProps> = (props) => {
           Object.entries(phenotypes).map(([k, vs], i) => (
             <>
               <h6>{k}</h6>
-              <ListGroup>
-                {vs.map((v) => (
-                  <ListGroup.Item style={{ padding: '0.2rem 1rem' }}>
+              <ListGroup key={'phenotype_' + i}>
+                {vs.map((v, i) => (
+                  <ListGroup.Item key={'pheno_value_' + i} style={{ padding: '0.2rem 1rem' }}>
                     <Table bordered={false} borderless style={{ margin: 0 }}>
                       <tbody>
                         <tr className='d-flex'>

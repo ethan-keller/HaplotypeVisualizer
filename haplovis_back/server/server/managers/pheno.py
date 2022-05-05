@@ -5,8 +5,9 @@ from server.schemas.file import FileIndex
 
 
 class PhenoManager:
-    phenoTable: Optional[pd.DataFrame] = None
+    pheno_table: Optional[pd.DataFrame] = None
     phenotypes: Optional[Dict[str, List[Any]]] = None
+    pheno_per_sample: Optional[Dict[str, Dict[str, Any]]] = None
 
     @classmethod
     def prepare_pheno(cls) -> None:
@@ -18,21 +19,39 @@ class PhenoManager:
         try:
             phenos_dp = pd.read_csv(managers.FileManager.FILE_BASE_PATH + file_name)
             phenos_dp.set_index(phenos_dp.columns.values[0], inplace=True)
-            cls.phenoTable = phenos_dp
-            cls.phenotypes = cls.get_possible_phenotypes(phenos_dp)
-        except:
-            raise ValueError(f"Reading pandas dataframe from {file_name} failed.")
+            cls.pheno_table = phenos_dp
+            cls.phenotypes = cls.get_possible_phenotypes()
+            cls.pheno_per_sample = cls.create_pheno_per_sample()
+        except Exception as e:
+            raise ValueError(f"Reading pandas dataframe from {file_name} failed: [{e}]")
 
     @classmethod
-    def get_possible_phenotypes(cls, phenos_dp: pd.DataFrame) -> Dict[str, List[Any]]:
-        result = {}
-        phenotypes = phenos_dp.columns
-        for phenotype in phenotypes:
-            result[phenotype] = phenos_dp[phenotype].unique().tolist()
+    def create_pheno_per_sample(cls) -> Optional[Dict[str, Dict[str, Any]]]:
+        if cls.pheno_table is not None:
+            samples = cls.pheno_table.index.values
+            phenotypes = cls.pheno_table.to_dict("records")
 
-        return result
+            result = {}
+            for sample, phenotype in zip(samples, phenotypes):
+                result[sample] = phenotype
+
+            return result
+        else:
+            return None
+
+    @classmethod
+    def get_possible_phenotypes(cls) -> Optional[Dict[str, List[Any]]]:
+        if cls.pheno_table is not None:
+            result = {}
+            phenotypes = cls.pheno_table.columns
+            for phenotype in phenotypes:
+                result[phenotype] = cls.pheno_table[phenotype].unique().tolist()
+
+            return result
+        else:
+            return None
 
     @classmethod
     def clear(cls):
-        cls.phenoTable = None
+        cls.pheno_table = None
         cls.phenotypes = None

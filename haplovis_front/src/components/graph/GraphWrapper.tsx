@@ -1,11 +1,14 @@
 import layoutApi from '../../api/layout';
 import { useAppSelector } from '../../store';
 import '../../styles/graph.css';
-import InfoCard from '../InfoCard';
+import PhenoGraphInfoCard from '../info_card/PhenoGraphInfoCard';
+import PopuViewInfoCard from '../info_card/PopuViewInfoCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import GraphComponent from './Graph';
 
-interface GraphWrapperProps {}
+interface GraphWrapperProps {
+  pheno?: boolean;
+}
 
 const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
   const viewport = useAppSelector((state) => state.graphLayout.viewport);
@@ -14,7 +17,13 @@ const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
 
   return layout ? (
     <>
-      {f ? <InfoCard feature={f} showPheno/> : null}
+      {f ? (
+        props.pheno ? (
+          <PhenoGraphInfoCard feature={f} />
+        ) : (
+          <PopuViewInfoCard feature={f} />
+        )
+      ) : null}
       <GraphComponent layout={layout} />
     </>
   ) : (

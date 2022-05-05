@@ -4,6 +4,7 @@ import {
   getPhenotypes,
   phenoBaseUrl,
   getSampleNames,
+  getPhenotype,
 } from '../endpoints_config/PhenoEndpoints';
 import { PhenosPerSample, PhenotypeValues } from '../types/pheno';
 
@@ -19,6 +20,9 @@ const phenoApi = createApi({
     }),
     getSampleNames: builder.query<string[], void>({
       query: () => ({ url: getSampleNames }),
+    }),
+    getPhenotype: builder.query<Record<string, Record<number, any>>, number[]>({
+      query: (body) => ({ url: getPhenotype, body, method: 'PUT' }),
     }),
   }),
 });

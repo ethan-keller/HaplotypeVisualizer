@@ -99,7 +99,7 @@ def prepare():
     """
     try:
         FileManager.prepare_files()
-    except ValueError:
+    except Exception:
         raise HTTPException(
             status_code=status.HTTP_424_FAILED_DEPENDENCY,
             detail="The needed file paths were not uploaded. Files are not ready for preparation",

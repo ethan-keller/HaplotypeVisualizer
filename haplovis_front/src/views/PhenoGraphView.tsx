@@ -17,7 +17,7 @@ const PhenoGraphView: React.FC<PhenoGraphViewProps> = (props) => {
         </div>
 
         <div className='ph-g-graph'>
-          <GraphWrapper />
+          <GraphWrapper pheno/>
         </div>
 
         <div className='ph-g-navigator'>

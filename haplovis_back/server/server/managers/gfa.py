@@ -101,11 +101,11 @@ class GfaManager:
         cls.path_map = cls.create_path_map(cls.gfa.paths)
 
     @classmethod
-    def create_path_map(cls, paths: List[GfaPath]) -> None:
+    def create_path_map(cls, paths: List[GfaPath]) -> Dict[int, GfaPath]:
         result: Dict[int, GfaPath] = {}
         for path in paths:
             result[path.index] = path
-        cls.path_map = result
+        return result
 
     @classmethod
     def recognize(cls, file_path: Path) -> Optional[Path]:
