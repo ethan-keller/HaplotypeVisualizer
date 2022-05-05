@@ -10,8 +10,8 @@ class BookmarkManager:
         cls.bookmarks[elem_id] = Bookmark(elem_id=elem_id, comment=comment)
 
     @classmethod
-    def remove_bookmark(cls, elem_id) -> None:
-        cls.bookmarks.pop(elem_id)
+    def remove_bookmark(cls, elem_id) -> Bookmark:
+        return cls.bookmarks.pop(elem_id)
 
     @classmethod
     def clear_bookmarks(cls) -> None:

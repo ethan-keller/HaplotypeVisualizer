@@ -14,7 +14,7 @@ const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
 
   return layout ? (
     <>
-      {f ? <InfoCard feature={f} /> : null}
+      {f ? <InfoCard feature={f} showPheno/> : null}
       <GraphComponent layout={layout} />
     </>
   ) : (

@@ -5,7 +5,6 @@ import gfaApi from '../api/gfa';
 import { useAppSelector } from '../store';
 import { getSegmentLength } from '../types/gfa';
 import { FeatureSelection } from '../types/graph';
-import { isBookmarked } from '../utils/bookmarks';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../utils/strings';
 import BookmarkModal from './modals/BookmarkModal';
 import SpinnerAnnotated from './SpinnerAnnotated';
@@ -13,17 +12,18 @@ import VerticalSpacer from './VerticalSpacer';
 
 interface InfoCardProps {
   feature: FeatureSelection;
+  showPheno: boolean;
 }
 
 const InfoCard: React.FC<InfoCardProps> = (props) => {
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
   const { data: paths } = gfaApi.useGetPathsQuery();
-  const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const { data: feature } =
     props.feature.type === 'segment'
       ? gfaApi.useGetSegmentQuery({ segment_id: props.feature.name })
       : gfaApi.useGetLinkQuery({ link_id: props.feature.name });
+  const { data: bookmark } = bookmarksApi.useGetBookmarkQuery({ elem_id: props.feature.name });
 
   const [showBookmarkModal, setShowBookmarkModal] = useState<boolean>(false);
   return feature ? (
@@ -105,9 +105,7 @@ const InfoCard: React.FC<InfoCardProps> = (props) => {
             onHide={() => setShowBookmarkModal(false)}
           />
 
-          {bookmarks && isBookmarked(Object.values(bookmarks), feature.name) ? (
-            <div className='bookmarked'>Bookmarked ✓</div>
-          ) : null}
+          {bookmark ? <div className='bookmarked'>Bookmarked ✓</div> : null}
         </Card.Body>
       </Card>
     </div>

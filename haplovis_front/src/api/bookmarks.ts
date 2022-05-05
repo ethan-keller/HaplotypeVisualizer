@@ -5,6 +5,8 @@ import {
   removeBookmark,
   bookmarkBaseUrl,
   removeAllBookmarks,
+  getBookmark,
+  isBookmarked,
 } from '../endpoints_config/BookmarkEndpoints';
 import { Bookmark } from '../types/bookmark';
 
@@ -19,7 +21,10 @@ const bookmarksApi = createApi({
         bookmarks
           ? [
               'Bookmark',
-              ...Object.values(bookmarks).map((bookmark) => ({ type: 'Bookmark' as const, id: bookmark.elem_id })),
+              ...Object.values(bookmarks).map((bookmark) => ({
+                type: 'Bookmark' as const,
+                id: bookmark.elem_id,
+              })),
             ]
           : ['Bookmark'],
     }),
@@ -27,13 +32,20 @@ const bookmarksApi = createApi({
       query: (params) => ({ url: addBookmark, params: params, method: 'POST' }),
       invalidatesTags: (result, error, args) => ['Bookmark'],
     }),
-    removeBookmark: builder.mutation<void, { elem_id: string }>({
+    removeBookmark: builder.mutation<Bookmark, { elem_id: string }>({
       query: (params) => ({ url: removeBookmark, params: params, method: 'DELETE' }),
-      invalidatesTags: (result, error, args) => ['Bookmark'],
+      invalidatesTags: (result, error, args) => [{ type: 'Bookmark', id: result?.elem_id }],
     }),
     removeAllBookmarks: builder.mutation<void, void>({
       query: () => ({ url: removeAllBookmarks, method: 'DELETE' }),
       invalidatesTags: (result, error, args) => ['Bookmark'],
+    }),
+    getBookmark: builder.query<Bookmark, { elem_id: string }>({
+      query: (params) => ({ url: getBookmark, params: params, method: 'GET' }),
+      providesTags: (result, error, arg) => [{ type: 'Bookmark', id: result?.elem_id }],
+    }),
+    isBookmarked: builder.query<boolean, { elem_id: string }>({
+      query: (params) => ({ url: isBookmarked, params: params, method: 'GET' }),
     }),
   }),
 });

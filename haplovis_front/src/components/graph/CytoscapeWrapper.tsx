@@ -32,14 +32,13 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) =>
     }
   }, [graph, layout, settings]);
 
-  const dispatchExtent = () => {
-    if (cy) {
-      const extent = cy.extent();
-      dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
-    }
-  };
-
   useEffect(() => {
+    const dispatchExtent = () => {
+      if (cy) {
+        const extent = cy.extent();
+        dispatch(updateExtent({ xl: extent.x1, xr: extent.x2 }));
+      }
+    };
     if (cy) {
       cy.on('unselect', () => dispatch(updateFeature(undefined)));
       cy.on('select', (e) => dispatch(updateFeature(e.target.data('feature'))));

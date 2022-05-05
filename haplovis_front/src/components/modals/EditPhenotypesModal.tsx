@@ -1,6 +1,7 @@
 import { ListGroup, Modal, Form, Table } from 'react-bootstrap';
 import phenoApi from '../../api/pheno';
 import ColorPicker from '../ColorPicker';
+import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import VerticalSpacer from '../VerticalSpacer';
 interface EditPhenotypesModalProps {
@@ -9,14 +10,16 @@ interface EditPhenotypesModalProps {
 }
 
 const EditPhenotypesModal: React.FC<EditPhenotypesModalProps> = (props) => {
-  const { data: phenotypes } = phenoApi.useGetPhenotypesQuery();
+  const { data: phenotypes, isError } = phenoApi.useGetPhenotypesQuery();
   return (
     <Modal onHide={props.onHide} show={props.show} scrollable>
       <Modal.Header closeButton>
         <Modal.Title>Edit phenotype colors</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        {phenotypes ? (
+        {isError ? (
+          <ErrorCard message='No phenotype information' />
+        ) : phenotypes ? (
           Object.entries(phenotypes).map(([k, vs], i) => (
             <>
               <h6>{k}</h6>
