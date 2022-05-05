@@ -55,8 +55,8 @@ def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))
     """
     file = FileManager.get_file(id)
     file.name = name
-    file_path = FileManager.files_base_path + name
-
+    file_path = FileManager.get_absolute_file_path(id)
+    
     try:
         FileManager.validate(file_path, id)
     except Exception as e:

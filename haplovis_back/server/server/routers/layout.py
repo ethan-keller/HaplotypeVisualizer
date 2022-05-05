@@ -26,7 +26,7 @@ router = APIRouter(prefix="/layout", tags=["layout"])
 #     else:
 #         return LayoutManager.get_all_layout_nodes()
 
-def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
+def get_range(range: Json = Query(...)) -> RectangleRange:
     try:
         viewport = RectangleRange.parse_obj(range)
         # swap y axis (js coordinate system)
@@ -34,7 +34,7 @@ def get_range(range: Json[Any] = Query(...)) -> RectangleRange:
         rangeRd = Position(x=viewport.rd.x, y=viewport.lu.y)
         return RectangleRange(lu=rangeLu, rd=rangeRd)
     except Exception as e:
-        print(e)
+        raise Exception(f"Could create rectangle range for range query: [{e}]")
 
 @router.get(
     "/range",
@@ -46,7 +46,7 @@ async def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_rang
     Gets all layout nodes from the index inside the given range.
     """
     # TODO: validate range
-    if LayoutManager.is_index_empty():
+    if LayoutManager.index is None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Could not get nodes because there is no index available",
@@ -74,7 +74,7 @@ async def get_densities():
     Gets density values along with their respective x coordinates.
     """
     print("Get density")
-    if LayoutManager.is_index_empty():
+    if LayoutManager.index is None:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Could not compute densities because there is no bound information",

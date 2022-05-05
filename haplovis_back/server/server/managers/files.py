@@ -7,7 +7,7 @@ import server.managers as managers
 
 
 class FileManager:
-    files_base_path = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\haplovis_back\\server\\server\\server_data\\"
+    FILE_BASE_PATH = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\haplovis_back\\server\\server\\server_data\\"
     files: List[File] = [
         File(id=0, description="GFA file", status=FileStatus.NO_FILE, required=True, file_extensions=[".gfa"]),
         File(id=1, description="Phenotype table", status=FileStatus.NO_FILE, required=False, file_extensions=[".csv"]),
@@ -16,7 +16,7 @@ class FileManager:
 
     @classmethod
     def get_absolute_file_path(cls, id: int) -> Path:
-        return Path(cls.files_base_path + cls.get_file(id).name)
+        return Path(cls.FILE_BASE_PATH + cls.get_file(id).name)
 
     @classmethod
     def _does_file_have_status(cls, id: int, status: FileStatus) -> bool:
@@ -50,7 +50,7 @@ class FileManager:
             raise Exception("Cannot get file with invalid file id: {id}")
 
     @classmethod
-    def validate(cls, file_path: str, id: int) -> bool:
+    def validate(cls, file_path: Path, id: int) -> bool:
         # TODO: Maybe some other validation? File size etc?
         if not cls.is_valid_id(id):
             raise Exception(f"Invalid file id: {id}")
@@ -66,7 +66,7 @@ class FileManager:
         return id >= 0 and id < len(cls.files)
 
     @classmethod
-    def is_valid_file_extension(cls, path: str, id: int) -> bool:
+    def is_valid_file_extension(cls, path: Path, id: int) -> bool:
         valid_extensions = cls.files[id].file_extensions
         file_extension = cls.get_file_extension(path)
 
@@ -80,23 +80,23 @@ class FileManager:
         return True
 
     @classmethod
-    def file_exists(cls, path: str) -> bool:
+    def file_exists(cls, path: Path) -> bool:
         return isfile(path)
 
     @classmethod
-    def get_file_extension(cls, path: str) -> str:
+    def get_file_extension(cls, path: Path) -> str:
         _, extension = splitext(path)
         return extension
 
     @classmethod
     def prepare_files(cls) -> None:
-        if managers.GfaManager.is_gfa_empty():
+        if managers.GfaManager.gfa is None:
             print("preparing gfa")
             managers.GfaManager.prepare_gfa()
-        if managers.LayoutManager.is_index_empty():            
+        if managers.LayoutManager.index is None:            
             print("preparing index")
             managers.LayoutManager.prepare_layout()
-        if managers.PhenoManager.is_empty():
+        if managers.PhenoManager.phenoTable is None:
             print("preparing pheno")
             managers.PhenoManager.prepare_pheno()
 

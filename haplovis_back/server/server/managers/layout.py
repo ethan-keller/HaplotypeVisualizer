@@ -6,28 +6,19 @@ from cli.schemas.layout import Bounds
 from fastapi import UploadFile
 from cli.gfa import Gfa
 from cli.kdtree import KDTree
-from server import managers
 from server.schemas.layout import Layout as LayoutType, LayoutNode, RectangleRange
 
 
 class LayoutManager:
     index: Optional[KDTree] = None
-    bounds: List[Bounds] = None
-    index_file_path: Path = None
-
-    @classmethod
-    def is_index_empty(cls) -> bool:
-        return cls.index is None
-
-    @classmethod
-    def is_bounds_empty(cls) -> bool:
-        return cls.bounds is None
+    bounds: Optional[List[Bounds]] = None
+    index_file_path: Optional[Path] = None
 
     @classmethod
     def get_all_bounds(cls) -> List[Bounds]:
-        if not cls.is_bounds_empty():
+        if cls.bounds is not None:
             return cls.bounds
-        elif not cls.is_index_empty():
+        elif cls.index is not None:
             kdtree_nodes = cls.index.in_order_traversal()
             cls.bounds = [node.bounds for node in set(kdtree_nodes)]
             return cls.bounds
@@ -69,7 +60,7 @@ class LayoutManager:
 
 
     @classmethod
-    def index_for_gfa_exists(cls, gfa_file_path: str) -> Optional[Path]:
+    def index_for_gfa_exists(cls, gfa_file_path: Path) -> Optional[Path]:
         hash_value = Gfa.get_gfa_hash(gfa_file_path)
         path = Path(f"../cli/cli/out/{hash_value}.pickle")
         if path.exists():

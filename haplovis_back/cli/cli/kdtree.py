@@ -1,4 +1,5 @@
-from typing import List, Tuple, Union
+from typing import List, Optional, Tuple, Union
+from pathlib import Path
 import numpy as np
 from cli.layout import Layout
 from cli.serialization import PickleSerializer
@@ -18,8 +19,8 @@ class KDTreeNode:
         self.xmin = -np.inf
         self.ymin = -np.inf
         self.split_x = split_x
-        self.left = None
-        self.right = None
+        self.left: Optional[KDTreeNode] = None
+        self.right: Optional[KDTreeNode] = None
         
 
     def set_min_max(self, parent: "KDTreeNode", split_x: bool) -> None:
@@ -40,7 +41,7 @@ class KDTreeNode:
                 self.xmin = parent.position.x
 
     def is_leaf(self) -> bool:
-        return self.left == None and self.right == None
+        return self.left is None and self.right is None
 
     def __str__(self) -> str:
         # return "[(" + str(self.position.x) + ", " + str(self.position.y) + ")]"
@@ -162,7 +163,7 @@ class KDTree:
     def _range_query(self, node: KDTreeNode, lu: Position, rd: Position) -> List[KDTreeNode]:
         result: List[KDTreeNode] = []
 
-        if node == None:
+        if node is None:
             return result
 
         xmin, xmax, ymin, ymax = self._expand_bounds(lu, rd)
@@ -174,8 +175,10 @@ class KDTree:
             if xmin <= node.position.x and xmax >= node.position.x and ymin <= node.position.y and ymax >= node.position.y:
                 result.append(node)
 
-            result += self._retrieve_nodes(node.left, lu, rd)
-            result += self._retrieve_nodes(node.right, lu, rd)
+            if node.left:
+                result += self._retrieve_nodes(node.left, lu, rd)
+            if node.right:
+                result += self._retrieve_nodes(node.right, lu, rd)
 
         return result
 
@@ -189,8 +192,8 @@ class KDTree:
 
         return result
 
-    def get_all_nodes_in_subtree(self, node: KDTreeNode) -> List[KDTreeNode]:
-        members = []
+    def get_all_nodes_in_subtree(self, node: Optional[KDTreeNode]) -> List[KDTreeNode]:
+        members: List[KDTreeNode] = []
 
         if node:
             members += self.get_all_nodes_in_subtree(node.left)
@@ -212,10 +215,10 @@ class KDTree:
         return cls(X)
 
     @classmethod
-    def serialize(cls, tree: "KDTree", to_file: str = None) -> Union[bytes, str]:
+    def serialize(cls, tree: "KDTree", to_file: Path = None) -> Union[Path, bytes]:
         return PickleSerializer.serialize(tree, to_file)
 
     @classmethod
-    def deserialize(cls, b: bytes = None, from_file: str = None) -> "KDTree":
+    def deserialize(cls, b: bytes = None, from_file: Path = None) -> "KDTree":
         return PickleSerializer.deserialize(b, from_file)
 

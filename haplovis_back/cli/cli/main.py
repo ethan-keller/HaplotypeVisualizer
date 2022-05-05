@@ -62,7 +62,7 @@ def layout(
         kdtree = KDTree.create_tree_from_layout(layout)
         gfa_hash = Gfa.get_gfa_hash(gfa)
         if gfa_hash:
-            index_file_path = str(Path(f".{output_folder}/{gfa_hash}.pickle").resolve())
+            index_file_path = Path(f".{output_folder}/{gfa_hash}.pickle").resolve()
             out_path = PickleSerializer.serialize(kdtree, index_file_path)
             typer.secho(f"Successfully computed layout for {gfa} --> Stored at {str(out_path)}", fg="green")
         else:
@@ -84,7 +84,7 @@ def see_layout(
     # for debugging puproses
     # visualization of index tree
     for layout in layouts:
-        kdtree: KDTree = PickleSerializer.deserialize(from_file="./out/" + layout.name)
+        kdtree: KDTree = PickleSerializer.deserialize(from_file=Path("./out/" + layout.name))
         kdtree.print()
 
 

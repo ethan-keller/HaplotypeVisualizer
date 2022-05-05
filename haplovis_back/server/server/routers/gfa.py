@@ -1,11 +1,10 @@
 from typing import Any, Dict, List, Union
 from cli.serialization import JsonSerializer
 
-from fastapi import APIRouter, Query, Response, status
+from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
 from server.managers import GfaManager
-from cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaHist, GfaInfo
-from server.utils.plots import compute_histogram
+from cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaInfo
 
 
 router = APIRouter(prefix="/gfa", tags=["gfa"])
@@ -20,7 +19,7 @@ def get_gfa():
     """
     Gets the full GFA object.
     """
-    if not GfaManager.is_gfa_empty():
+    if GfaManager.gfa is not None:
         print("Getting gfa")
         s = GfaManager.gfa.to_data_class()
         print("Got gfa")
@@ -36,7 +35,7 @@ async def get_segments(segment_ids: List[str]):
     """
     Gets the segments from the GFA object.
     """
-    if not GfaManager.is_segment_map_empty():
+    if GfaManager.segment_map is not None:
         print("getting segments")
         s = GfaManager.get_segments_from_ids(segment_ids)
         print("Got segments")
@@ -50,7 +49,7 @@ async def get_segments(segment_ids: List[str]):
     "/segment", response_model=GfaSegment, summary="Gets a gfa segment"
 )
 async def get_segment(segment_id: str):
-    if not GfaManager.is_segment_map_empty():
+    if GfaManager.segment_map is not None:
         return GfaManager.get_segment_from_id(segment_id)
     else:
         raise HTTPException(
@@ -64,7 +63,7 @@ async def get_links(segment_ids: List[str]):
     """
     Gets the links from the GFA object.
     """
-    if not GfaManager.is_link_map_empty():
+    if GfaManager.link_map is not None:
         print("getting links")
         s = GfaManager.get_links_from_segments(segment_ids)
         print("Got links")
@@ -78,7 +77,7 @@ async def get_links(segment_ids: List[str]):
     "/link", response_model=GfaLink, summary="Gets a gfa link"
 )
 async def get_link(link_id: str):
-    if not GfaManager.is_link_map_empty():
+    if GfaManager.link_map is not None:
         return GfaManager.get_link_from_link_id(link_id)
     else:
         raise HTTPException(
@@ -93,7 +92,7 @@ async def get_paths():
     """
     Gets the paths from the GFA object.
     """
-    if not GfaManager.is_gfa_empty():
+    if GfaManager.gfa is not None:
         print("Getting paths")
         s = GfaManager.gfa.paths
         print("Got paths")
@@ -109,7 +108,7 @@ async def get_graph_info():
     """
     Gets graph information.
     """
-    if not GfaManager.is_gfa_empty():
+    if not GfaManager.gfa is None:
         g = GfaManager.gfa
         return GfaInfo(n_segments=len(g.segments), n_links=len(g.links), n_paths=len(g.paths))
     else:
@@ -123,7 +122,7 @@ async def get_hist_values():
     """
     For the visualization of segment lengths, this endpoint returns the segment lengths.
     """
-    if not GfaManager.is_gfa_empty():
+    if GfaManager.gfa is not None:
         segment_lengths = list(
             map(
                 lambda segment: segment.optionals["LN"] if segment.optionals else len(segment.sequence),

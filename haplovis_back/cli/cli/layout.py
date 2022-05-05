@@ -1,7 +1,7 @@
 from pydantic import parse_obj_as
 import os
 from pathlib import Path
-from typing import Dict, Tuple, Union
+from typing import Union
 from subprocess import check_output
 from cli.gfa import Gfa
 from cli.schemas.layout import Layout as LayoutType
@@ -19,7 +19,7 @@ class Layout:
 
     @classmethod
     def get_layout_from_layout_file(cls, layout_path: Path) -> "Layout":
-        return cls.deserialize(from_file=layout_path.name)
+        return cls.deserialize(from_file=layout_path)
 
     @classmethod
     def compute_layout(cls, gfa_path: Path) -> "Layout":
@@ -39,9 +39,9 @@ class Layout:
             raise Exception(f"Could not compute layout: [{e}]")
 
     @classmethod
-    def serialize(cls, layout: "Layout", out_file: str = None) -> str:
+    def serialize(cls, layout: "Layout", out_file: Path = None) -> Union[bytes, Path]:
         return JsonSerializer.serialize(layout.nodes, out_file)
 
     @classmethod
-    def deserialize(cls, sb: Union[str, bytes] = None, from_file: str = None) -> "Layout":
+    def deserialize(cls, sb: Union[str, bytes] = None, from_file: Path = None) -> "Layout":
         return cls(nodes=parse_obj_as(LayoutType, JsonSerializer.deserialize(sb, from_file)))

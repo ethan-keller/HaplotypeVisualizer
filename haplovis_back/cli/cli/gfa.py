@@ -5,6 +5,7 @@ import hashlib
 from cli.schemas.gfa import Gfa as GfaDataClass, GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
 from cli.errors.PydanticConversionError import PydanticConversionError
 from cli.serialization import JsonSerializer
+from pydantic import parse_obj_as
 
 class Gfa:
     def __init__(self, segments: List[GfaSegment], links: List[GfaLink], paths: List[GfaPath]) -> None:
@@ -13,30 +14,28 @@ class Gfa:
         self.paths = paths
 
     def to_data_class(self) -> GfaDataClass:
-        return GfaDataClass(self.segments, self.links, self.paths)
+        return GfaDataClass(segments=self.segments, links=self.links, paths=self.paths)
 
     @classmethod
     def from_data_class(cls, gfa: GfaDataClass) -> "Gfa":
         return cls(segments=gfa.segments, links=gfa.links, paths=gfa.paths)
 
     @classmethod
-    def serialize(cls, gfa: "Gfa", out_file: str = None) -> str:
+    def serialize(cls, gfa: "Gfa", out_file: Path = None) -> Union[bytes, Path]:
         return JsonSerializer.serialize(gfa.to_data_class(), out_file)
 
     @classmethod
-    def deserialize(cls, sb: Union[bytes, str] = None, from_file: str = None) -> "Gfa":
-        return cls.from_data_class(GfaDataClass.__pydantic_model__.parse_obj(JsonSerializer.deserialize(sb, from_file)))
+    def deserialize(cls, sb: Union[bytes, str] = None, from_file: Path = None) -> "Gfa":
+        return cls.from_data_class(parse_obj_as(GfaDataClass, JsonSerializer.deserialize(sb, from_file)))
 
     @classmethod
     def get_gfa_hash(cls, file_path: Path) -> Optional[str]:
-        h = None
         try:
             with open(file_path, "rb") as f:
                 data = f.read()
-                h = hashlib.md5(data).hexdigest()
-        except:
-            h = None
-        return h
+                return hashlib.md5(data).hexdigest()
+        except Exception as e:
+            raise Exception(f"Could not get gfa hash from {file_path}: [{e}]")
 
     @classmethod
     def read_gfa_from_file(cls, path: Path) -> "Gfa":
@@ -55,9 +54,9 @@ class Gfa:
         for path in paths:
             s_names = path.segment_names
             for i in range(len(s_names) - 1):
-                segmentMap[s_names[i]].paths.append(path)
-                linkMap[cls.get_link_name(s_names[i], s_names[i + 1])].paths.append(path)
-            segmentMap[s_names[-1]].paths.append(path)
+                segmentMap[s_names[i]].paths.append(path.index)
+                linkMap[cls.get_link_name(s_names[i], s_names[i + 1])].paths.append(path.index)
+            segmentMap[s_names[-1]].paths.append(path.index)
 
         return Gfa(segments=segments, links=links, paths=paths)
 

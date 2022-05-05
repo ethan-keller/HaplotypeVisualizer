@@ -1,5 +1,4 @@
 from typing import Dict
-
 from server.schemas.bookmark import Bookmark
 
 
