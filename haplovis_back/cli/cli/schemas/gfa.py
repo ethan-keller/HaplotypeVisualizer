@@ -5,11 +5,13 @@ from pydantic.dataclasses import dataclass
 segment_optional_fields = ["LN", "RC", "FC", "KC", "SH", "UR"]
 link_optional_fields = ["MQ", "NM", "RC", "FC", "KC", "ID"]
 
+
 @dataclass
 class GFA_ELEMENT(IntEnum):
     SEGMENT = 0
     LINK = 1
     PATH = 2
+
 
 @dataclass
 class GfaElement:
@@ -17,6 +19,7 @@ class GfaElement:
     type: str
     name: str
     optionals: Optional[Dict[str, Any]]
+
 
 @dataclass
 class GfaPath(GfaElement):
@@ -26,6 +29,7 @@ class GfaPath(GfaElement):
     optionals = None
     # TODO: overlaps
 
+
 @dataclass
 class GfaSegment(GfaElement):
     sequence: str
@@ -33,8 +37,9 @@ class GfaSegment(GfaElement):
     type = "segment"
     optionals = None
 
+
 @dataclass
-class GfaLink(GfaElement): 
+class GfaLink(GfaElement):
     from_segment: str
     from_orient: str
     to_segment: str
@@ -47,11 +52,13 @@ class GfaLink(GfaElement):
     def __hash__(self):
         return hash(self.name)
 
+
 @dataclass
 class Gfa:
     segments: List[GfaSegment]
     links: List[GfaLink]
     paths: List[GfaPath]
+
 
 @dataclass
 class GfaInfo:

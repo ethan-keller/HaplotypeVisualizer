@@ -29,7 +29,10 @@ def get_gfa():
 
 
 @router.put(
-    "/segments", response_model=List[GfaSegment], responses=responses, summary="Gets the GFA segments",
+    "/segments",
+    response_model=List[GfaSegment],
+    responses=responses,
+    summary="Gets the GFA segments",
 )
 async def get_segments(segment_ids: List[str]):
     """
@@ -45,9 +48,8 @@ async def get_segments(segment_ids: List[str]):
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segments from a non-existent gfa object"
         )
 
-@router.get(
-    "/segment", response_model=GfaSegment, summary="Gets a gfa segment"
-)
+
+@router.get("/segment", response_model=GfaSegment, summary="Gets a gfa segment")
 async def get_segment(segment_id: str):
     if GfaManager.segment_map is not None:
         return GfaManager.get_segment_from_id(segment_id)
@@ -56,8 +58,12 @@ async def get_segment(segment_id: str):
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segment from a non-existent gfa object"
         )
 
+
 @router.put(
-    "/links", response_model=List[GfaLink], responses=responses, summary="Gets the GFA links",
+    "/links",
+    response_model=List[GfaLink],
+    responses=responses,
+    summary="Gets the GFA links",
 )
 async def get_links(segment_ids: List[str]):
     """
@@ -73,9 +79,8 @@ async def get_links(segment_ids: List[str]):
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve links from a non-existent gfa object"
         )
 
-@router.get(
-    "/link", response_model=GfaLink, summary="Gets a gfa link"
-)
+
+@router.get("/link", response_model=GfaLink, summary="Gets a gfa link")
 async def get_link(link_id: str):
     if GfaManager.link_map is not None:
         return GfaManager.get_link_from_link_id(link_id)
@@ -86,7 +91,10 @@ async def get_link(link_id: str):
 
 
 @router.get(
-    "/paths", response_model=List[GfaPath], responses=responses, summary="Gets the GFA paths",
+    "/paths",
+    response_model=List[GfaPath],
+    responses=responses,
+    summary="Gets the GFA paths",
 )
 async def get_paths():
     """
@@ -97,6 +105,24 @@ async def get_paths():
         s = GfaManager.gfa.paths
         print("Got paths")
         return Response(JsonSerializer.serialize(s))
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
+        )
+
+
+@router.get(
+    "/paths",
+    response_model=Dict[int, GfaPath],
+    responses=responses,
+    summary="Gets the GFA paths by their indices",
+)
+async def get_paths_by_index(indices: List[int]):
+    """
+    Gets the paths from the GFA object by index.
+    """
+    if GfaManager.gfa is not None:
+        return Response(JsonSerializer.serialize(GfaManager.get_paths_by_index(indices)))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
@@ -135,4 +161,3 @@ async def get_hist_values():
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Could compute histogram values from a non-existent gfa object",
         )
-

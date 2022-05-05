@@ -29,7 +29,9 @@ class LayoutManager:
     def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> LayoutType:
         if cls.index is not None:
             kdtree_nodes = cls.index.range_query(range.lu, range.rd)
-            return { node.segment_id : LayoutNode(segment_id=node.segment_id, position=node.position) for node in kdtree_nodes }
+            return {
+                node.segment_id: LayoutNode(segment_id=node.segment_id, position=node.position) for node in kdtree_nodes
+            }
         else:
             return {}
 
@@ -53,11 +55,10 @@ class LayoutManager:
     def store_index_in_default_out_dir(cls, index_file: UploadFile, gfa_hash: str) -> Path:
         index_file_path = f"../cli/cli/out/{gfa_hash}.pickle"
         os.makedirs(os.path.dirname(index_file_path), exist_ok=True)
-        with open(index_file_path, 'wb') as f:
+        with open(index_file_path, "wb") as f:
             index_content = index_file.file.read()
             f.write(index_content)
         return Path(index_file_path)
-
 
     @classmethod
     def index_for_gfa_exists(cls, gfa_file_path: Path) -> Optional[Path]:

@@ -9,7 +9,11 @@ class PydanticConversionError(Exception):
     """
 
     def __init__(
-        self, from_type: str, to_type: str, reason: str, message: str = "Could not convert thrid party type to Pydantic type"
+        self,
+        from_type: str,
+        to_type: str,
+        reason: str,
+        message: str = "Could not convert thrid party type to Pydantic type",
     ):
         self.from_type = from_type
         self.to_type = to_type

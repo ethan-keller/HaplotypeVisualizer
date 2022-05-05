@@ -48,9 +48,7 @@ def layout(
         case_sensitive=True,
         callback=path_validation_callback,
     ),
-    output_folder: Path = typer.Option(
-        DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True
-    ),
+    output_folder: Path = typer.Option(DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True),
     verbose: bool = typer.Option(False, "--verbose", "-v"),
 ):
     # TODO: add verbose texts

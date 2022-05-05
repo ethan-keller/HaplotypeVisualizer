@@ -19,7 +19,8 @@ def get_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
         return FileManager.get_file(id)
     except Exception as e:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=e.args[0],
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=e.args[0],
         )
 
 
@@ -49,14 +50,14 @@ def get_files():
 def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Update the file information for one of the needed files.
-    
+
     - **name**: File name
     - **id**: Id of the file
     """
     file = FileManager.get_file(id)
     file.name = name
     file_path = FileManager.get_absolute_file_path(id)
-    
+
     try:
         FileManager.validate(file_path, id)
     except Exception as e:
@@ -129,8 +130,10 @@ def preprocess_gfa():
     except Exception as e:
         gfa_file.status = FileStatus.NEEDS_PRE_PROCESSING
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not preprocess {gfa_file.name}: [{e}]",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Could not preprocess {gfa_file.name}: [{e}]",
         )
+
 
 @router.post("/layout", summary="Upload layout file")
 def layout(layout_file: UploadFile = FastApiFile(...)):
@@ -139,9 +142,10 @@ def layout(layout_file: UploadFile = FastApiFile(...)):
     """
     if FileManager.is_file_empty(FileIndex.GFA):
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot upload layout file for an unimported gfa file",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Cannot upload layout file for an unimported gfa file",
         )
-    
+
     gfa_hash = GfaManager.get_hash()
     if gfa_hash:
         try:
@@ -150,9 +154,11 @@ def layout(layout_file: UploadFile = FastApiFile(...)):
             FileManager.set_file_status(FileIndex.GFA, FileStatus.READY)
         except:
             raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot store layout file",
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Cannot store layout file",
             )
     else:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, detail=f"Cannot generate hash for gfa file",
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Cannot generate hash for gfa file",
         )

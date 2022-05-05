@@ -21,7 +21,6 @@ class KDTreeNode:
         self.split_x = split_x
         self.left: Optional[KDTreeNode] = None
         self.right: Optional[KDTreeNode] = None
-        
 
     def set_min_max(self, parent: "KDTreeNode", split_x: bool) -> None:
         self.xmin = parent.xmin
@@ -59,7 +58,7 @@ class KDTree:
         bounds = data[:, 1]
         xs = data[:, 2]
         ys = data[:, 3]
-        
+
         sorted_x_indices = np.argsort(xs)
         sorted_y_indices = np.argsort(ys)
         self.root = self._construct_tree(xs, ys, segment_ids, bounds, sorted_x_indices, sorted_y_indices, True)
@@ -78,14 +77,24 @@ class KDTree:
         return matching_indices
 
     def _construct_tree(
-        self, xs: np.ndarray, ys: np.ndarray, segments: np.ndarray, bounds: np.ndarray, ix: np.ndarray, iy: np.ndarray, split_x: bool, parent: KDTreeNode = None,
+        self,
+        xs: np.ndarray,
+        ys: np.ndarray,
+        segments: np.ndarray,
+        bounds: np.ndarray,
+        ix: np.ndarray,
+        iy: np.ndarray,
+        split_x: bool,
+        parent: KDTreeNode = None,
     ) -> KDTreeNode:
         n = ix.shape[0]
         median = n // 2
 
         # split on x-coordinate
         if split_x:
-            node = KDTreeNode(segments[ix[median]], bounds[ix[median]], Position(x=xs[ix[median]], y=ys[ix[median]]), True)
+            node = KDTreeNode(
+                segments[ix[median]], bounds[ix[median]], Position(x=xs[ix[median]], y=ys[ix[median]]), True
+            )
 
             if parent is not None:
                 # set min and max fields
@@ -104,7 +113,9 @@ class KDTree:
 
         # split on y-coordinate
         else:
-            node = KDTreeNode(segments[iy[median]], bounds[iy[median]], Position(x=xs[iy[median]], y=ys[iy[median]]), False)
+            node = KDTreeNode(
+                segments[iy[median]], bounds[iy[median]], Position(x=xs[iy[median]], y=ys[iy[median]]), False
+            )
 
             if parent is not None:
                 # set min and max fields
@@ -147,7 +158,7 @@ class KDTree:
         result: List[KDTreeNode] = []
         self._in_order_traversal(self.root, result)
         return result
-    
+
     def _in_order_traversal(self, curr: KDTreeNode, traversal: List[KDTreeNode]) -> None:
         if curr.left is not None:
             traversal.append(curr.left)
@@ -169,10 +180,20 @@ class KDTree:
         xmin, xmax, ymin, ymax = self._expand_bounds(lu, rd)
 
         if node.is_leaf():
-            if xmin <= node.position.x and xmax >= node.position.x and ymin <= node.position.y and ymax >= node.position.y:
+            if (
+                xmin <= node.position.x
+                and xmax >= node.position.x
+                and ymin <= node.position.y
+                and ymax >= node.position.y
+            ):
                 result.append(node)
         else:
-            if xmin <= node.position.x and xmax >= node.position.x and ymin <= node.position.y and ymax >= node.position.y:
+            if (
+                xmin <= node.position.x
+                and xmax >= node.position.x
+                and ymin <= node.position.y
+                and ymax >= node.position.y
+            ):
                 result.append(node)
 
             if node.left:
@@ -221,4 +242,3 @@ class KDTree:
     @classmethod
     def deserialize(cls, b: bytes = None, from_file: Path = None) -> "KDTree":
         return PickleSerializer.deserialize(b, from_file)
-

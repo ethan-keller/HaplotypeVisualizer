@@ -2,10 +2,19 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple, Union
 from gfapy import Line, Gfa as GfaPy
 import hashlib
-from cli.schemas.gfa import Gfa as GfaDataClass, GfaSegment, GfaLink, GfaPath, GFA_ELEMENT, segment_optional_fields, link_optional_fields
+from cli.schemas.gfa import (
+    Gfa as GfaDataClass,
+    GfaSegment,
+    GfaLink,
+    GfaPath,
+    GFA_ELEMENT,
+    segment_optional_fields,
+    link_optional_fields,
+)
 from cli.errors.PydanticConversionError import PydanticConversionError
 from cli.serialization import JsonSerializer
 from pydantic import parse_obj_as
+
 
 class Gfa:
     def __init__(self, segments: List[GfaSegment], links: List[GfaLink], paths: List[GfaPath]) -> None:
@@ -161,7 +170,7 @@ class Gfa:
     @classmethod
     def get_link_name(cls, from_segment: str, to_segment: str) -> str:
         return f"{from_segment}->{to_segment}"
-    
+
     @classmethod
     def split_link_name(cls, link_name: str) -> Tuple[str, str]:
         s = link_name.split("->")

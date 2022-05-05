@@ -26,6 +26,7 @@ router = APIRouter(prefix="/layout", tags=["layout"])
 #     else:
 #         return LayoutManager.get_all_layout_nodes()
 
+
 def get_range(range: Json = Query(...)) -> RectangleRange:
     try:
         viewport = RectangleRange.parse_obj(range)
@@ -35,6 +36,7 @@ def get_range(range: Json = Query(...)) -> RectangleRange:
         return RectangleRange(lu=rangeLu, rd=rangeRd)
     except Exception as e:
         raise Exception(f"Could create rectangle range for range query: [{e}]")
+
 
 @router.get(
     "/range",
@@ -84,4 +86,3 @@ async def get_densities():
     densities = get_density_values(bounds, get_down_sample_factor(len(bounds)))
     print("Got density")
     return densities
-

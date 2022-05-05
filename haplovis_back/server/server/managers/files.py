@@ -93,7 +93,7 @@ class FileManager:
         if managers.GfaManager.gfa is None:
             print("preparing gfa")
             managers.GfaManager.prepare_gfa()
-        if managers.LayoutManager.index is None:            
+        if managers.LayoutManager.index is None:
             print("preparing index")
             managers.LayoutManager.prepare_layout()
         if managers.PhenoManager.phenoTable is None:

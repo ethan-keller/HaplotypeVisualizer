@@ -6,6 +6,7 @@ from orjson import loads as j_loads, dumps as j_dumps
 
 # TODO: Add try except blocks?
 
+
 class PickleSerializer:
     @classmethod
     def serialize(cls, o: Any, out_file: Path = None) -> Union[bytes, Path]:
@@ -46,4 +47,3 @@ class JsonSerializer:
                 return j_loads(f.read())
         elif sb:
             return j_loads(sb)
-

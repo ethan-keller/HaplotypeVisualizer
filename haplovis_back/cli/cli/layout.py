@@ -28,10 +28,12 @@ class Layout:
             if gfa_hash:
                 cwd = "./graph_layout"
                 # TODO: folder should be what user specifies (e.g., temp)
-                if Path(os.getcwd()).name == 'server':
+                if Path(os.getcwd()).name == "server":
                     cwd = "../cli/cli/graph_layout"
-                
-                out = check_output(["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True)
+
+                out = check_output(
+                    ["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True
+                )
                 return cls.deserialize(out)
             else:
                 raise Exception("Could not compute gfa hash")

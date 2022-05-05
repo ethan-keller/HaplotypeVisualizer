@@ -10,7 +10,7 @@ import {
   getSegment,
   getLink,
 } from '../endpoints_config/GfaEndpoints';
-import Gfa, { GfaLink, GfaPath, GfaSegment, GfaInfo, GfaHist } from '../types/gfa';
+import Gfa, { GfaLink, GfaPath, GfaSegment, GfaInfo } from '../types/gfa';
 
 const gfaApi = createApi({
   reducerPath: 'gfaApi',

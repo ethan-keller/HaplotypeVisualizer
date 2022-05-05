@@ -12,7 +12,11 @@ server.include_router(layout.router)
 server.include_router(pheno.router)
 server.include_router(bookmarks.router)
 server.add_middleware(
-    CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"],
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 

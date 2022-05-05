@@ -1,7 +1,7 @@
-import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
-import dagre from 'cytoscape-dagre';
-import { Gfa, GfaSegment, GfaLink } from './types';
-import process from 'process';
+import cytoscape, { EdgeDefinition, NodeDefinition } from "cytoscape";
+import dagre from "cytoscape-dagre";
+import { Gfa, GfaSegment, GfaLink } from "./types";
+import process from "process";
 
 cytoscape.use(dagre);
 
@@ -9,13 +9,12 @@ cytoscape.use(dagre);
 const drawPaths = true;
 const linkThickness = 1.5;
 const segmentThickness = 10;
-const pathColors = ['#EF476F', '#FFD166', '#06D6A0', '#118AB2', '#073B4C'];
 
 const layoutSettings: dagre.DagreLayoutOptions = {
-  name: 'dagre',
-  rankDir: 'LR',
+  name: "dagre",
+  rankDir: "LR",
   //@ts-ignore 'align' is not in type declaration but it is in source code
-  align: 'UL',
+  align: "UL",
   nodeSep: 35,
 };
 
@@ -27,11 +26,13 @@ const cytoscapeNodes = (segments: GfaSegment[]) => {
         width:
           2 *
           Math.cbrt(
-            segment.optionals && 'LN' in segment.optionals
+            segment.optionals && "LN" in segment.optionals
               ? segment.optionals.LN
-              : segment.sequence.length,
+              : segment.sequence.length
           ),
-        height: segmentThickness * (drawPaths ? Math.max(segment.paths.length, 1) : 1),
+        height:
+          segmentThickness *
+          (drawPaths ? Math.max(segment.paths.length, 1) : 1),
       },
     };
   }) as NodeDefinition[];
@@ -58,20 +59,20 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
     },
     style: [
       {
-        selector: 'node',
+        selector: "node",
         style: {
-          shape: 'rectangle',
-          width: 'data(width)',
-          height: 'data(height)',
+          shape: "rectangle",
+          width: "data(width)",
+          height: "data(height)",
         },
       },
       {
-        selector: 'edge',
+        selector: "edge",
         style: {
-          'target-arrow-shape': 'triangle',
-          'arrow-scale': 0.8,
-          'curve-style': 'bezier',
-          width: 'data(width)',
+          "target-arrow-shape": "triangle",
+          "arrow-scale": 0.8,
+          "curve-style": "bezier",
+          width: "data(width)",
         },
       },
     ],
@@ -79,15 +80,16 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
   });
 }
 
-const gfa_file_path: string = '../' + process.argv[2];
-const fs = require('fs');
+const gfa_file_path: string = "../" + process.argv[2];
+const fs = require("fs");
 let gfa;
 
 fs.readFile(gfa_file_path, (err, data) => {
   if (err) throw err;
   gfa = JSON.parse(data);
 
-  let layout: Record<string, [cytoscape.Position, { xl: number; xr: number }]> = {};
+  let layout: Record<string, [cytoscape.Position, { xl: number; xr: number }]> =
+    {};
 
   const cy = createCytoscape(gfa);
   cy.nodes().forEach((node) => {

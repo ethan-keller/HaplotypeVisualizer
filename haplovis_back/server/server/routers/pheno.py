@@ -8,7 +8,9 @@ router = APIRouter(prefix="/pheno", tags=["pheno"])
 
 
 @router.get(
-    "/", response_model=Dict[str, Dict[str, Any]], summary="Get a list of phenotypes for every sample",
+    "/",
+    response_model=Dict[str, Dict[str, Any]],
+    summary="Get a list of phenotypes for every sample",
 )
 def getPhenotypesBySample():
     if PhenoManager.phenoTable is not None:
@@ -45,4 +47,3 @@ def getSampleNames():
         return list(PhenoManager.phenoTable.index.values)
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find phenotypes")
-

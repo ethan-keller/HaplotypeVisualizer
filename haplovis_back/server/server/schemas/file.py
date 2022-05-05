@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
 
@@ -24,4 +24,3 @@ class File(BaseModel):
     status: FileStatus
     required: bool
     file_extensions: List[str]
-

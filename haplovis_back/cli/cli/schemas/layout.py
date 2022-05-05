@@ -7,9 +7,11 @@ class Position:
     x: float
     y: float
 
+
 @dataclass
 class Bounds:
     xl: float
     xr: float
+
 
 Layout = Dict[str, Tuple[Position, Bounds]]

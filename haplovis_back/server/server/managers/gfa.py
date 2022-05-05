@@ -1,6 +1,6 @@
 from pathlib import Path
 from typing import Dict, List, Optional, Set
-from cli.schemas.gfa import Gfa as GfaDataclass, GfaLink, GfaSegment
+from cli.schemas.gfa import Gfa as GfaDataclass, GfaLink, GfaPath, GfaSegment
 from cli.gfa import Gfa
 from cli.kdtree import KDTree
 from cli.layout import Layout
@@ -14,15 +14,27 @@ class GfaManager:
     gfa: Optional[Gfa] = None
     segment_map: Optional[Dict[str, GfaSegment]] = None
     link_map: Optional[Dict[str, List[GfaLink]]] = None
+    path_map: Optional[Dict[int, GfaPath]] = None
 
     def to_data_class(self) -> GfaDataclass:
         if self.gfa is None:
             raise Exception("Cannot convert non-existent gfa to dataclass")
-        return GfaDataclass(segments=self.gfa.segments, links=self.gfa.links, paths=self.gfa.paths) 
+        return GfaDataclass(segments=self.gfa.segments, links=self.gfa.links, paths=self.gfa.paths)
+
+    @classmethod
+    def get_paths_by_index(cls, indices: List[int]) -> Dict[int, GfaPath]:
+        if cls.path_map is None:
+            raise Exception("Cannot get paths from empty GFA")
+        result: Dict[int, GfaPath] = {}
+        for i in indices:
+            if i not in cls.path_map:
+                raise Exception(f"Inexistent path with index {i}")
+            result[i] = cls.path_map[i]
+        return result
 
     @classmethod
     def create_segment_map(cls, segments: List[GfaSegment]) -> Dict[str, GfaSegment]:
-        return { segment.name : segment for segment in segments}
+        return {segment.name: segment for segment in segments}
 
     @classmethod
     def create_link_map(cls, links: List[GfaLink]) -> Dict[str, List[GfaLink]]:
@@ -40,7 +52,7 @@ class GfaManager:
     def get_link_from_link_id(cls, link_id: str) -> GfaLink:
         if cls.link_map is None:
             raise Exception("Cannot retrieve links because there is no link map")
-        seg1, seg2 = Gfa.split_link_name(link_id) 
+        seg1, seg2 = Gfa.split_link_name(link_id)
         links = cls.get_links_from_segments([seg1])
         for link in links:
             if link.to_segment == seg2:
@@ -86,7 +98,15 @@ class GfaManager:
             Gfa.serialize(cls.gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
         cls.segment_map = cls.create_segment_map(cls.gfa.segments)
         cls.link_map = cls.create_link_map(cls.gfa.links)
-            
+        cls.path_map = cls.create_path_map(cls.gfa.paths)
+
+    @classmethod
+    def create_path_map(cls, paths: List[GfaPath]) -> None:
+        result: Dict[int, GfaPath] = {}
+        for path in paths:
+            result[path.index] = path
+        cls.path_map = result
+
     @classmethod
     def recognize(cls, file_path: Path) -> Optional[Path]:
         return managers.LayoutManager.index_for_gfa_exists(file_path)
