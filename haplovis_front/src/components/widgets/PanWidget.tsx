@@ -42,6 +42,7 @@ const PanWidget: React.FC<PanWidgetProps> = (props) => {
       >
         <FaAngleLeft />
       </Button>
+      <div style={{ display: 'inline-block', width: 5 }} />
       <Button
         className={'widget-button'}
         size='sm'
@@ -58,6 +59,7 @@ const PanWidget: React.FC<PanWidgetProps> = (props) => {
       >
         <FaAngleDown />
       </Button>
+      <div style={{ display: 'inline-block', width: 5 }} />
       <Button
         className={'widget-button'}
         size='sm'
