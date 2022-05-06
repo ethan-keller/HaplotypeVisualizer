@@ -4,6 +4,10 @@ import { File, FileStatus } from '../../types/files';
 import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import filesApi from '../../api/files';
+import { persistor, useAppDispatch } from '../../store';
+import { reset as resetPheno } from '../../slices/pheno';
+import { reset as resetLayout } from '../../slices/graphLayout';
+import { reset as resetSelection } from '../../slices/graphSelection';
 
 interface FileTableProps {}
 
@@ -13,6 +17,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   const [updateFile] = filesApi.useUpdateFileMutation();
   const [preprocess, { isLoading: isPreprocessing }] = filesApi.usePreprocessMutation();
   const [uploadLayout] = filesApi.useUploadLayoutMutation();
+  const dispatch = useAppDispatch();
 
   // create refs for inputs
   const importInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
@@ -113,7 +118,17 @@ const FileTable: React.FC<FileTableProps> = (props) => {
             </>
           ) : null}
           {status !== FileStatus.NO_FILE ? (
-            <Button onClick={() => clearFile({ id: i })} variant='outline-danger' size='sm'>
+            <Button
+              onClick={() => {
+                dispatch(resetPheno());
+                dispatch(resetSelection());
+                dispatch(resetLayout());
+                persistor.purge();
+                clearFile({ id: i });
+              }}
+              variant='outline-danger'
+              size='sm'
+            >
               remove
             </Button>
           ) : (
