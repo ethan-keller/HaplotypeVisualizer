@@ -20,34 +20,36 @@ const EditPhenotypesModal: React.FC<EditPhenotypesModalProps> = (props) => {
         {isError ? (
           <ErrorCard message='No phenotype information' />
         ) : phenotypes ? (
-          Object.entries(phenotypes).map(([k, vs], i) => (
-            <>
-              <h6>{k}</h6>
-              <ListGroup key={'phenotype_' + i}>
-                {vs.map((v, i) => (
-                  <ListGroup.Item key={'pheno_value_' + i} style={{ padding: '0.2rem 1rem' }}>
-                    <Table bordered={false} borderless style={{ margin: 0 }}>
-                      <tbody>
-                        <tr className='d-flex'>
-                          <td className='col-5 my-auto'>
-                            <Form.Check />
-                          </td>
-                          <td className='col-5 my-auto'>{v}</td>
-                          <td className='col-2 my-auto'>
-                            <ColorPicker
-                              defaultColor='#ef9994'
-                              onPick={(color) => console.log(color)}
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </Table>
-                  </ListGroup.Item>
-                ))}
-              </ListGroup>
-              <VerticalSpacer space={10} />
-            </>
-          ))
+          Object.entries(phenotypes).map(([k, vs], i) => {
+            return (
+              <div key={i}>
+                <h6>{k}</h6>
+                <ListGroup>
+                  {vs.map((v, key) => (
+                    <ListGroup.Item key={key} style={{ padding: '0.2rem 1rem' }}>
+                      <Table bordered={false} borderless style={{ margin: 0 }}>
+                        <tbody>
+                          <tr className='d-flex'>
+                            <td className='col-5 my-auto'>
+                              <Form.Check />
+                            </td>
+                            <td className='col-5 my-auto'>{v}</td>
+                            <td className='col-2 my-auto'>
+                              <ColorPicker
+                                defaultColor='#ef9994'
+                                onPick={(color) => console.log(color)}
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </Table>
+                    </ListGroup.Item>
+                  ))}
+                </ListGroup>
+                <VerticalSpacer space={10} />
+              </div>
+            );
+          })
         ) : (
           <SpinnerAnnotated message='Loading phenotypes' />
         )}

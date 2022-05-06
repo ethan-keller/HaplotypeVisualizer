@@ -28,20 +28,20 @@ const PhenoGraphInfoCardSection: React.FC<PhenoGraphInfoCardSectionProps> = ({ f
 
         return (
           <ListGroupItem
-            key={'phenotype_entry_' + i}
             style={{
               backgroundColor: c + '60',
               padding: '0.2rem 1rem',
               wordWrap: 'normal',
               overflowX: 'auto',
             }}
+            key={i}
           >
             <span>
               <b>{pathName}</b>:{' '}
               {Object.entries(pheno).map(([_, v], j, arr) => {
                 return (
-                  <span>
-                    <span key={'pheno' + j}>{v}</span>
+                  <span key={j}>
+                    <span>{v}</span>
                     {j === arr.length - 1 ? null : ', '}
                   </span>
                 );

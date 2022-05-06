@@ -1,7 +1,6 @@
 import { Card } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { FeatureSelection } from '../../types/graph';
-import SpinnerAnnotated from '../SpinnerAnnotated';
 import InfoCard from './InfoCard';
 import PhenoGraphInfoCardSection from './info_card_section/PhenoGraphInfoCardSection';
 
