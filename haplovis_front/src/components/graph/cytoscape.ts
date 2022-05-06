@@ -2,7 +2,7 @@ import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { Layout, Position } from '../../types/layout';
 import { Graph, GraphSettings } from '../../types/graph';
-import { GfaLink, GfaPath, GfaSegment } from '../../types/gfa';
+import { GfaFeature, GfaLink, GfaPath, GfaSegment } from '../../types/gfa';
 
 cytoscape.use(dagre);
 
@@ -42,11 +42,11 @@ const overlayStyle = (color: string) => {
 
 export const cytoscapeNodes = (
   segments: GfaSegment[],
-  paths: GfaPath[],
+  paths: Record<string, GfaPath>,
   settings: GraphSettings,
 ) => {
   return segments.map((segment: GfaSegment) => {
-    const segmentPaths = segment.paths.map((pathIndex) => paths[pathIndex]);
+    const gradient = getGradient(segment, paths, settings);
     return {
       // TODO: create types for custom node data (and edge data) to be used on other files
       data: {
@@ -60,48 +60,51 @@ export const cytoscapeNodes = (
           ),
         height:
           settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
-        stopColors: segmentPaths.flatMap((path) => {
-          if (settings.activePaths.length === 0) {
-            return [settings.pathColors[path.index], settings.pathColors[path.index]];
-          } else {
-            let c = settings.activePaths[path.index] ? settings.pathColors[path.index] : '#999999';
-            return [c, c];
-          }
-        }),
-        stopPositions: segmentPaths.flatMap((_, i, array) => [
-          (i / array.length) * 100,
-          ((i + 1) / array.length) * 100,
-        ]),
+        stopColors: gradient.stopColors,
+        stopPositions: gradient.stopPositions,
         feature: { type: segment.type, name: segment.name },
       },
     };
   }) as NodeDefinition[];
 };
 
-export const cytoscapeEdges = (links: GfaLink[], paths: GfaPath[], settings: GraphSettings) => {
+export const cytoscapeEdges = (
+  links: GfaLink[],
+  paths: Record<string, GfaPath>,
+  settings: GraphSettings,
+) => {
   return links.map((link: GfaLink) => {
-    const linkPaths = link.paths.map((pathIndex) => paths[pathIndex]);
+    const gradient = getGradient(link, paths, settings);
     return {
       data: {
         source: link.from_segment,
         target: link.to_segment,
         width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
-        stopColors: linkPaths.flatMap((path) => {
-          if (settings.activePaths.length === 0) {
-            return [settings.pathColors[path.index], settings.pathColors[path.index]];
-          } else {
-            let c = settings.activePaths[path.index] ? settings.pathColors[path.index] : '#999999';
-            return [c, c];
-          }
-        }),
-        stopPositions: linkPaths.flatMap((_, i, array) => [
-          (i / array.length) * 100,
-          ((i + 1) / array.length) * 100,
-        ]),
+        stopColors: gradient.stopColors,
+        stopPositions: gradient.stopPositions,
         feature: { type: link.type, name: link.name },
       },
     };
   }) as EdgeDefinition[];
+};
+
+const getGradient = (
+  feature: GfaFeature,
+  paths: Record<string, GfaPath>,
+  settings: GraphSettings,
+) => {
+  const gradient: { stopColors: string[]; stopPositions: number[] } = {
+    stopColors: [],
+    stopPositions: [],
+  };
+  feature.paths.forEach((path, i, array) => {
+    const index = paths[path].index;
+    const c = settings.activePaths[index] ? settings.pathColors[index] : '#999999';
+    gradient.stopColors.push(c, c);
+
+    gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
+  });
+  return gradient;
 };
 
 export function createCytoscape(

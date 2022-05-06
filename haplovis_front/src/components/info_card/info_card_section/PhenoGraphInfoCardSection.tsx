@@ -10,40 +10,38 @@ interface PhenoGraphInfoCardSectionProps {
 }
 
 const PhenoGraphInfoCardSection: React.FC<PhenoGraphInfoCardSectionProps> = ({ feature }) => {
-  const { data: phenotypes } =
-    feature.type === 'segment'
-      ? phenoApi.useGetPhenotypeQuery(feature.paths)
-      : phenoApi.useGetPhenotypeQuery(feature.paths);
+  const { data: phenotypes } = phenoApi.useGetPhenosPerSampleQuery();
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
   const { data: paths } = gfaApi.useGetPathsQuery();
   return phenotypes && paths ? (
     <ListGroup>
-      {Object.entries(phenotypes).map(([k, pheno], i) => {
+      {feature.paths.map((pathName, i) => {
+        const pheno = phenotypes[pathName];
+        const sampleIndex = paths[pathName].index;
+        const c =
+          activePaths.length === 0
+            ? pathColors[sampleIndex]
+            : activePaths[sampleIndex]
+            ? pathColors[sampleIndex]
+            : '#999999';
+
         return (
           <ListGroupItem
             key={'phenotype_entry_' + i}
             style={{
-              backgroundColor: '#99999920',
+              backgroundColor: c + '60',
               padding: '0.2rem 1rem',
               wordWrap: 'normal',
               overflowX: 'auto',
             }}
           >
             <span>
-              <b>{k}</b>:{' '}
-              {Object.entries(pheno).map(([sampleIndex, v], j, arr) => {
-                const c =
-                  activePaths.length === 0
-                    ? pathColors[+sampleIndex]
-                    : activePaths[+sampleIndex]
-                    ? pathColors[+sampleIndex]
-                    : '#999999';
+              <b>{pathName}</b>:{' '}
+              {Object.entries(pheno).map(([_, v], j, arr) => {
                 return (
                   <span>
-                    <span key={'pheno' + j} style={{ backgroundColor: c + '60' }}>
-                      {v}
-                    </span>
+                    <span key={'pheno' + j}>{v}</span>
                     {j === arr.length - 1 ? null : ', '}
                   </span>
                 );

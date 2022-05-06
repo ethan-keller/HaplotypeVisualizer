@@ -61,7 +61,12 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) =>
       {cy ? (
         <>
           <div className='zoom-widget'>
-            <ZoomWidget zoom={zoom} onZoom={(newZoom) => cy.zoom(newZoom)} onFit={() => cy.fit()} />
+            <ZoomWidget
+              zoom={zoom}
+              onZoom={(newZoom) => cy.zoom(newZoom)}
+              onFit={() => cy.fit()}
+              onCenter={() => cy.center()}
+            />
           </div>
           <div className='pan-widget'>
             <PanWidget onPan={(p) => cy.panBy(p)} />

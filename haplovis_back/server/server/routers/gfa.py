@@ -92,7 +92,7 @@ async def get_link(link_id: str):
 
 @router.get(
     "/paths",
-    response_model=List[GfaPath],
+    response_model=Dict[str, GfaPath],
     responses=responses,
     summary="Gets the GFA paths",
 )
@@ -100,9 +100,9 @@ async def get_paths():
     """
     Gets the paths from the GFA object.
     """
-    if GfaManager.gfa is not None:
+    if GfaManager.path_map is not None:
         print("Getting paths")
-        s = GfaManager.gfa.paths
+        s = GfaManager.path_map
         print("Got paths")
         return Response(JsonSerializer.serialize(s))
     else:
@@ -111,18 +111,18 @@ async def get_paths():
         )
 
 
-@router.get(
+@router.put(
     "/paths",
-    response_model=Dict[int, GfaPath],
+    response_model=Dict[str, GfaPath],
     responses=responses,
-    summary="Gets the GFA paths by their indices",
+    summary="Gets the GFA paths by their name",
 )
-async def get_paths_by_index(indices: List[int]):
+async def get_paths_by_name(names: List[str]):
     """
-    Gets the paths from the GFA object by index.
+    Gets the paths from the GFA object by name.
     """
-    if GfaManager.gfa is not None:
-        return Response(JsonSerializer.serialize(GfaManager.get_paths_by_index(indices)))
+    if GfaManager.path_map is not None:
+        return Response(JsonSerializer.serialize(GfaManager.get_paths_by_name(names)))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"

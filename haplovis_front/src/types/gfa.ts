@@ -19,7 +19,7 @@ interface GfaHeader {}
 interface GfaSegment extends GfaElement {
   type: 'segment';
   readonly sequence: string;
-  readonly paths: number[];
+  readonly paths: string[];
 }
 
 interface GfaLink extends GfaElement {
@@ -28,7 +28,7 @@ interface GfaLink extends GfaElement {
   readonly from_orient: string;
   readonly to_segment: string;
   readonly to_orient: string;
-  readonly paths: number[];
+  readonly paths: string[];
   // TODO: overlap
 }
 

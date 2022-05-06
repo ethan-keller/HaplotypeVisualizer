@@ -31,7 +31,7 @@ const gfaApi = createApi({
     getLink: builder.query<GfaLink, { link_id: string }>({
       query: (params) => ({ url: getLink, params: params }),
     }),
-    getPaths: builder.query<GfaPath[], void>({
+    getPaths: builder.query<Record<string, GfaPath>, void>({
       query: () => ({ url: getPaths }),
     }),
     getGraphInfo: builder.query<GfaInfo, void>({

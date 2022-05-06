@@ -14,7 +14,7 @@ class GfaManager:
     gfa: Optional[Gfa] = None
     segment_map: Optional[Dict[str, GfaSegment]] = None
     link_map: Optional[Dict[str, List[GfaLink]]] = None
-    path_map: Optional[Dict[int, GfaPath]] = None
+    path_map: Optional[Dict[str, GfaPath]] = None
 
     def to_data_class(self) -> GfaDataclass:
         if self.gfa is None:
@@ -22,14 +22,14 @@ class GfaManager:
         return GfaDataclass(segments=self.gfa.segments, links=self.gfa.links, paths=self.gfa.paths)
 
     @classmethod
-    def get_paths_by_index(cls, indices: List[int]) -> Dict[int, GfaPath]:
+    def get_paths_by_name(cls, names: List[str]) -> Dict[str, GfaPath]:
         if cls.path_map is None:
             raise Exception("Cannot get paths from empty GFA")
-        result: Dict[int, GfaPath] = {}
-        for i in indices:
-            if i not in cls.path_map:
-                raise Exception(f"Inexistent path with index {i}")
-            result[i] = cls.path_map[i]
+        result: Dict[str, GfaPath] = {}
+        for name in names:
+            if name not in cls.path_map:
+                raise Exception(f"Inexistent path with name: {name}")
+            result[name] = cls.path_map[name]
         return result
 
     @classmethod
@@ -101,10 +101,10 @@ class GfaManager:
         cls.path_map = cls.create_path_map(cls.gfa.paths)
 
     @classmethod
-    def create_path_map(cls, paths: List[GfaPath]) -> Dict[int, GfaPath]:
-        result: Dict[int, GfaPath] = {}
+    def create_path_map(cls, paths: List[GfaPath]) -> Dict[str, GfaPath]:
+        result: Dict[str, GfaPath] = {}
         for path in paths:
-            result[path.index] = path
+            result[path.name] = path
         return result
 
     @classmethod

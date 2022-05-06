@@ -31,7 +31,7 @@ class PhenoManager:
             samples = cls.pheno_table.index.values
             phenotypes = cls.pheno_table.to_dict("records")
 
-            result = {}
+            result: Dict[str, Dict[str, Any]] = {}
             for sample, phenotype in zip(samples, phenotypes):
                 result[sample] = phenotype
 

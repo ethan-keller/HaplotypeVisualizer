@@ -20,9 +20,7 @@ const PhenoGraphInfoCard: React.FC<PhenoGraphInfoCardProps> = (props) => {
       <Card.Subtitle className='mb-2 text-muted'>Phenotypes</Card.Subtitle>
       <PhenoGraphInfoCardSection feature={feature} />
     </InfoCard>
-  ) : (
-    <SpinnerAnnotated message='Loading element info' />
-  );
+  ) : null;
 };
 
 export default PhenoGraphInfoCard;

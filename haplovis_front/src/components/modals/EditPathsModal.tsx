@@ -18,7 +18,7 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
 
   useEffect(() => {
-    if (paths) dispatch(setActivePaths(paths.map((_) => true)));
+    if (paths) dispatch(setActivePaths(Object.keys(paths).map((_) => true)));
   }, [dispatch, paths]);
 
   return (
@@ -35,13 +35,15 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
                 <td className='text-center'>Color</td>
                 <td className='text-end'>Active</td>
               </tr>
-              {paths.map((path, i) => (
+              {Object.values(paths).map((path, i) => (
                 <tr key={'path_' + i} style={{ fontWeight: 100 }}>
                   <td className='text-start'>{path.name}</td>
                   <td className='text-center'>
                     <ColorPicker
                       defaultColor={pathColors[path.index]}
-                      onPick={(color) => dispatch(updatePathColor({ path: path.index, color: color }))}
+                      onPick={(color) =>
+                        dispatch(updatePathColor({ path: path.index, color: color }))
+                      }
                     />
                   </td>
                   <td className='text-end'>

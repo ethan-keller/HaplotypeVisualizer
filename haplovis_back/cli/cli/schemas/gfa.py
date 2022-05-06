@@ -33,7 +33,7 @@ class GfaPath(GfaElement):
 @dataclass
 class GfaSegment(GfaElement):
     sequence: str
-    paths: List[int]
+    paths: List[str]
     type = "segment"
     optionals = None
 
@@ -44,7 +44,7 @@ class GfaLink(GfaElement):
     from_orient: str
     to_segment: str
     to_orient: str
-    paths: List[int]
+    paths: List[str]
     type = "link"
     optionals = None
     # TODO: overlap

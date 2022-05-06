@@ -63,9 +63,9 @@ class Gfa:
         for path in paths:
             s_names = path.segment_names
             for i in range(len(s_names) - 1):
-                segmentMap[s_names[i]].paths.append(path.index)
-                linkMap[cls.get_link_name(s_names[i], s_names[i + 1])].paths.append(path.index)
-            segmentMap[s_names[-1]].paths.append(path.index)
+                segmentMap[s_names[i]].paths.append(path.name)
+                linkMap[cls.get_link_name(s_names[i], s_names[i + 1])].paths.append(path.name)
+            segmentMap[s_names[-1]].paths.append(path.name)
 
         return Gfa(segments=segments, links=links, paths=paths)
 
@@ -136,8 +136,8 @@ class Gfa:
         return GfaPath(
             type="path",
             name=path.path_name,
-            segment_names=list(map(lambda segment: segment.name, path.segment_names)),
             index=i,
+            segment_names=list(map(lambda segment: segment.name, path.segment_names)),
             optionals=cls._convert_optional_fields_to_pydantic(path, GFA_ELEMENT.PATH),
         )
 

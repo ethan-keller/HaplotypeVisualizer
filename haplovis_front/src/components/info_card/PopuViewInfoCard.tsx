@@ -1,7 +1,6 @@
 import { Card } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { FeatureSelection } from '../../types/graph';
-import SpinnerAnnotated from '../SpinnerAnnotated';
 import InfoCard from './InfoCard';
 import PopuViewInfoCardSection from './info_card_section/PopuViewInfoCardSection';
 
@@ -23,9 +22,7 @@ const PopuViewInfoCard: React.FC<PopuViewInfoCardProps> = (props) => {
       </Card.Text>
       <PopuViewInfoCardSection feature={feature} />
     </InfoCard>
-  ) : (
-    <SpinnerAnnotated message='Loading element info' />
-  );
+  ) : null;
 };
 
 export default PopuViewInfoCard;
