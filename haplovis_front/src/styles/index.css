@@ -57,11 +57,3 @@ input[type='color']::-webkit-color-swatch {
   border: none;
   padding: 0;
 }
-
-.bookmarked {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  color: green;
-  font-weight: 400;
-}
