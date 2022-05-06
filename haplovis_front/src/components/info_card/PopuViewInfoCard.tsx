@@ -6,6 +6,7 @@ import PopuViewInfoCardSection from './info_card_section/PopuViewInfoCardSection
 
 interface PopuViewInfoCardProps {
   feature: FeatureSelection;
+  onClose: () => void;
 }
 
 const PopuViewInfoCard: React.FC<PopuViewInfoCardProps> = (props) => {
@@ -15,7 +16,7 @@ const PopuViewInfoCard: React.FC<PopuViewInfoCardProps> = (props) => {
       : gfaApi.useGetLinkQuery({ link_id: props.feature.name });
 
   return feature ? (
-    <InfoCard feature={feature}>
+    <InfoCard feature={feature} onClose={props.onClose}>
       <Card.Subtitle className='mb-2 text-muted'>Paths</Card.Subtitle>
       <Card.Text>
         <b>{feature.paths.length}</b> paths through this {props.feature.type}

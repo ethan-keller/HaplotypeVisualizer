@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Table } from 'react-bootstrap';
+import { Button, Card, CloseButton, Table } from 'react-bootstrap';
 import bookmarksApi from '../../api/bookmarks';
 import { getSegmentLength, GfaFeature } from '../../types/gfa';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../../utils/strings';
@@ -8,9 +8,10 @@ import VerticalSpacer from '../VerticalSpacer';
 
 interface InfoCardProps {
   feature: GfaFeature;
+  onClose: () => void;
 }
 
-const InfoCard: React.FC<InfoCardProps> = ({ feature, children }) => {
+const InfoCard: React.FC<InfoCardProps> = ({ feature, onClose, children }) => {
   const { data: bookmark } = bookmarksApi.useGetBookmarkQuery({ elem_id: feature.name });
   const [showBookmarkModal, setShowBookmarkModal] = useState<boolean>(false);
 
@@ -70,6 +71,9 @@ const InfoCard: React.FC<InfoCardProps> = ({ feature, children }) => {
           />
 
           {bookmark ? <div className='bookmarked'>Bookmarked ✓</div> : null}
+          <div style={{ position: 'absolute', right: 0, top: 0, padding: 15}}>
+            <CloseButton onClick={onClose} />
+          </div>
         </Card.Body>
       </Card>
     </div>

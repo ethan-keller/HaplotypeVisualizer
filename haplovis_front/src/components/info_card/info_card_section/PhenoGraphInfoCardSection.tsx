@@ -3,6 +3,7 @@ import gfaApi from '../../../api/gfa';
 import phenoApi from '../../../api/pheno';
 import { useAppSelector } from '../../../store';
 import { GfaFeature } from '../../../types/gfa';
+import ErrorCard from '../../ErrorCard';
 import SpinnerAnnotated from '../../SpinnerAnnotated';
 
 interface PhenoGraphInfoCardSectionProps {
@@ -10,11 +11,13 @@ interface PhenoGraphInfoCardSectionProps {
 }
 
 const PhenoGraphInfoCardSection: React.FC<PhenoGraphInfoCardSectionProps> = ({ feature }) => {
-  const { data: phenotypes } = phenoApi.useGetPhenosPerSampleQuery();
+  const { data: phenotypes, isError: noPheno } = phenoApi.useGetPhenosPerSampleQuery();
   const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
   const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
   const { data: paths } = gfaApi.useGetPathsQuery();
-  return phenotypes && paths ? (
+  return noPheno ? (
+    <ErrorCard message='No phenotype info' />
+  ) : phenotypes && paths ? (
     <ListGroup>
       {feature.paths.map((pathName, i) => {
         const pheno = phenotypes[pathName];

@@ -6,6 +6,7 @@ import PhenoGraphInfoCardSection from './info_card_section/PhenoGraphInfoCardSec
 
 interface PhenoGraphInfoCardProps {
   feature: FeatureSelection;
+  onClose: () => void;
 }
 
 const PhenoGraphInfoCard: React.FC<PhenoGraphInfoCardProps> = (props) => {
@@ -15,7 +16,7 @@ const PhenoGraphInfoCard: React.FC<PhenoGraphInfoCardProps> = (props) => {
       : gfaApi.useGetLinkQuery({ link_id: props.feature.name });
 
   return feature ? (
-    <InfoCard feature={feature}>
+    <InfoCard feature={feature} onClose={props.onClose}>
       <Card.Subtitle className='mb-2 text-muted'>Phenotypes</Card.Subtitle>
       <PhenoGraphInfoCardSection feature={feature} />
     </InfoCard>
