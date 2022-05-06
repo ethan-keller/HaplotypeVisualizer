@@ -8,6 +8,7 @@ import {
   preprocess,
   ready,
   updateFile,
+  uploadBookmarks,
   uploadLayout,
 } from '../endpoints_config/FileEndpoints';
 import { File, GetFileParams, UpdateFileParams, ClearFileParams } from '../types/files';
@@ -46,6 +47,10 @@ const filesApi = createApi({
     }),
     uploadLayout: builder.mutation<void, FormData>({
       query: (formData) => ({ url: uploadLayout, method: 'POST', body: formData }),
+      invalidatesTags: (result, error, args) => ['File'],
+    }),
+    uploadBookmarks: builder.mutation<void, FormData>({
+      query: (formData) => ({ url: uploadBookmarks, body: formData, method: 'POST' }),
       invalidatesTags: (result, error, args) => ['File'],
     }),
   }),

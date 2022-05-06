@@ -9,3 +9,4 @@ export const removeAllBookmarks = '/remove_all';
 export const addBookmark = '/add';
 export const getBookmark = '/bookmark';
 export const isBookmarked = '/is_bookmarked';
+export const exportBookmarks = '/export';

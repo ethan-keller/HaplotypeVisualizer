@@ -1,6 +1,6 @@
-from pydantic import BaseModel
+from pydantic.dataclasses import dataclass
 
-
-class Bookmark(BaseModel):
+@dataclass
+class Bookmark:
     elem_id: str
     comment: str

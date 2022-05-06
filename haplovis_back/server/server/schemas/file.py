@@ -15,6 +15,7 @@ class FileIndex(IntEnum):
     GFA = 0
     PHENO = 1
     GFF = 2
+    BOOKMARKS = 3
 
 
 class File(BaseModel):

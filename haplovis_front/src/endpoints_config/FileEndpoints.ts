@@ -10,4 +10,5 @@ export const updateFile = '/update';
 export const clearFile = '/clear';
 export const prepareFiles = '/prepare';
 export const preprocess = '/preprocess';
-export const uploadLayout = '/layout';
+export const uploadLayout = '/upload_layout';
+export const uploadBookmarks = '/upload_bookmarks';

@@ -7,6 +7,7 @@ import {
   removeAllBookmarks,
   getBookmark,
   isBookmarked,
+  exportBookmarks,
 } from '../endpoints_config/BookmarkEndpoints';
 import { Bookmark } from '../types/bookmark';
 
@@ -46,6 +47,9 @@ const bookmarksApi = createApi({
     }),
     isBookmarked: builder.query<boolean, { elem_id: string }>({
       query: (params) => ({ url: isBookmarked, params: params, method: 'GET' }),
+    }),
+    exportBookmarks: builder.mutation<string, void>({
+      query: () => ({ url: exportBookmarks, method: 'POST' }),
     }),
   }),
 });

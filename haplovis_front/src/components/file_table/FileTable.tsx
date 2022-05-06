@@ -4,7 +4,7 @@ import { File, FileStatus } from '../../types/files';
 import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import filesApi from '../../api/files';
-import { persistor, useAppDispatch } from '../../store';
+import { useAppDispatch } from '../../store';
 import { reset as resetPheno } from '../../slices/pheno';
 import { reset as resetLayout } from '../../slices/graphLayout';
 import { reset as resetSelection } from '../../slices/graphSelection';
@@ -17,6 +17,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   const [updateFile] = filesApi.useUpdateFileMutation();
   const [preprocess, { isLoading: isPreprocessing }] = filesApi.usePreprocessMutation();
   const [uploadLayout] = filesApi.useUploadLayoutMutation();
+  const [uploadBookmarks] = filesApi.useUploadBookmarksMutation();
   const dispatch = useAppDispatch();
 
   // create refs for inputs
@@ -46,15 +47,19 @@ const FileTable: React.FC<FileTableProps> = (props) => {
     e.target.value = '';
   };
 
-  const handleLayoutImport = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleUpload = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fmdName: string,
+    upload: (fmd: FormData) => void,
+  ) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
     if (!file) return;
 
-    const fm = new FormData();
-    fm.append('layout_file', file);
+    const fmd = new FormData();
+    fmd.append(fmdName, file);
 
-    uploadLayout(fm);
+    upload(fmd);
 
     // to allow for same file input
     e.target.value = '';
@@ -87,7 +92,9 @@ const FileTable: React.FC<FileTableProps> = (props) => {
         <td>
           <input
             ref={inputRef}
-            onChange={(e) => handleImport(i, e)}
+            onChange={(e) =>
+              i === 3 ? handleUpload(e, 'bookmarks_file', uploadBookmarks) : handleImport(i, e)
+            }
             className='d-none'
             type='file'
             accept={file.file_extensions.join(',')}
@@ -101,7 +108,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                 <>
                   <input
                     ref={layoutInputRef}
-                    onChange={(e) => handleLayoutImport(e)}
+                    onChange={(e) => handleUpload(e, 'layout_file', uploadLayout)}
                     className='d-none'
                     type='file'
                     accept={'.pickle'}
@@ -123,7 +130,6 @@ const FileTable: React.FC<FileTableProps> = (props) => {
                 dispatch(resetPheno());
                 dispatch(resetSelection());
                 dispatch(resetLayout());
-                persistor.purge();
                 clearFile({ id: i });
               }}
               variant='outline-danger'

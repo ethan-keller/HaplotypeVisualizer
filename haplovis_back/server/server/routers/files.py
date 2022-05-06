@@ -2,6 +2,7 @@ from typing import List
 
 from fastapi import APIRouter, Query, status, UploadFile, File as FastApiFile
 from fastapi.exceptions import HTTPException
+from server.managers.bookmarks import BookmarkManager
 from server.schemas.file import File, FileStatus, FileIndex
 from server.managers import FileManager, GfaManager, LayoutManager
 
@@ -135,8 +136,8 @@ def preprocess_gfa():
         )
 
 
-@router.post("/layout", summary="Upload layout file")
-def layout(layout_file: UploadFile = FastApiFile(...)):
+@router.post("/upload_layout", summary="Upload layout file")
+def upload_layout(layout_file: UploadFile = FastApiFile(...)):
     """
     Upload a layout file.
     """
@@ -158,6 +159,33 @@ def layout(layout_file: UploadFile = FastApiFile(...)):
                 detail=f"Cannot store layout file",
             )
     else:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Cannot generate hash for gfa file",
+        )
+
+
+@router.post("/upload_bookmarks", summary="Upload bookmarks file")
+async def upload_bookmarks(bookmarks_file: UploadFile = FastApiFile(...)):
+    """
+    Upload a bookmarks file.
+    """
+    FileManager.get_file(FileIndex.BOOKMARKS).name = bookmarks_file.filename
+    gfa_hash = GfaManager.get_hash()
+    if gfa_hash:
+        try:
+            bookmarks_file_path = BookmarkManager.store_bookmarks_in_default_out_dir(bookmarks_file, gfa_hash)
+            BookmarkManager.bookmarks_file_path = bookmarks_file_path
+
+            FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.READY)
+        except:
+            FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.INVALID)
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Cannot store bookmarks file",
+            )
+    else:
+        FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.INVALID)
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Cannot generate hash for gfa file",
