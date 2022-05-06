@@ -40,14 +40,14 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
       </thead>
       <tbody>
         {Object.entries(phenosPerSample).map(([key, value], i) => {
-          if (sampleFilters.length !== 0 && !sampleFilters.includes(key)) return null;
+          if (sampleFilters.size !== 0 && !sampleFilters.has(key)) return null;
 
           let filteredOut = true;
           const row = (
             <tr key={'row' + i}>
               <td key={'row' + i}>{key}</td>
               {Object.entries(value).map(([k, v], i) => {
-                if (k in phenoFilters && phenoFilters[k].includes(v)) {
+                if (k in phenoFilters && phenoFilters[k].has(v)) {
                   filteredOut = false;
                 }
                 return <td key={'pheno_value' + i}>{v}</td>;

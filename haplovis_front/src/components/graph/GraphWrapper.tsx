@@ -1,5 +1,7 @@
+import { useEffect } from 'react';
 import layoutApi from '../../api/layout';
-import { useAppSelector } from '../../store';
+import { updateFeature } from '../../slices/graphSelection';
+import { useAppDispatch, useAppSelector } from '../../store';
 import '../../styles/graph.css';
 import PhenoGraphInfoCard from '../info_card/PhenoGraphInfoCard';
 import PopuViewInfoCard from '../info_card/PopuViewInfoCard';
@@ -14,17 +16,32 @@ const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
   const viewport = useAppSelector((state) => state.graphLayout.viewport);
   const { data: layout } = layoutApi.useGetRangeLayoutNodesQuery(viewport);
   const f = useAppSelector((state) => state.graphSelection.feature);
+  const dispatch = useAppDispatch();
+  const phenoFilteredSegments = useAppSelector((state) => state.pheno.phenoFilteredSegments);
+  const sampleFilteredSegments = useAppSelector((state) => state.pheno.sampleFilteredSegments);
+
+  const onClose = () => {
+    dispatch(updateFeature(undefined));
+  };
 
   return layout ? (
     <>
       {f ? (
         props.pheno ? (
-          <PhenoGraphInfoCard feature={f} />
+          <PhenoGraphInfoCard feature={f} onClose={onClose} />
         ) : (
-          <PopuViewInfoCard feature={f} />
+          <PopuViewInfoCard feature={f} onClose={onClose} />
         )
       ) : null}
-      <GraphComponent layout={layout} />
+      {props.pheno ? (
+        <GraphComponent
+          layout={layout}
+          sampleFilteredSegments={sampleFilteredSegments}
+          phenoFilteredSegments={phenoFilteredSegments}
+        />
+      ) : (
+        <GraphComponent layout={layout} />
+      )}
     </>
   ) : (
     <SpinnerAnnotated message='Loading layout' />
