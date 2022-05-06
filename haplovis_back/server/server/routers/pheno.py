@@ -10,13 +10,30 @@ router = APIRouter(prefix="/pheno", tags=["pheno"])
 @router.get(
     "/",
     response_model=Dict[str, Dict[str, Any]],
-    summary="Get a list of phenotypes for every sample",
+    summary="Get a dict of phenotypes for every sample",
 )
 def get_phenotypes_per_sample():
     if PhenoManager.pheno_per_sample is not None:
         return PhenoManager.pheno_per_sample
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a pheno information")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find pheno information")
+
+
+@router.put(
+    "/phenos_per_segment",
+    response_model=Dict[str, Dict[str, List[Any]]],
+    summary="Get a dict of phenotypes for every segment",
+)
+def get_phenotypes_per_segment(segments: List[str]):
+    if PhenoManager.pheno_per_segment is not None:
+        result: Dict[str, Dict[str, List[Any]]] = {}
+        for segment in segments:
+            if segment not in PhenoManager.pheno_per_segment:
+                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not find segment {segment} in phenotype map")
+            result[segment] = PhenoManager.pheno_per_segment[segment]
+        return result
+    else:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find pheno information")
 
 
 @router.get(
@@ -32,35 +49,6 @@ def get_phenotypes():
         return PhenoManager.phenotypes
     else:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find phenotypes")
-
-
-# @router.put("/phenotype", response_model=Dict[str, Dict[int, Any]], summary="Get a phenotypes for specific samples")
-# def get_phenotype_for_samples(sample_indices: List[int]):
-#     if GfaManager.path_map is None:
-#         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"No path map is present")
-#     if PhenoManager.pheno_per_sample_index is None:
-#         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not find phenotypes")
-
-#     result: Dict[str, Dict[int, Any]] = {}
-#     for sample_index in sample_indices:
-#         if sample_index in GfaManager.path_map:
-#             sample = GfaManager.path_map[sample_index]
-#             if sample.name in PhenoManager.pheno_per_sample_index:
-#                 sample_phenotypes = PhenoManager.pheno_per_sample_index[sample.name]
-#                 for k, v in sample_phenotypes.items():
-#                     if k not in result:
-#                         result[k] = {}
-#                     result[k][sample_index] = v
-#             else:
-#                 raise HTTPException(
-#                     status_code=status.HTTP_400_BAD_REQUEST,
-#                     detail=f"Could not find sample name {sample.name} in pheno table",
-#                 )
-#         else:
-#             raise HTTPException(
-#                 status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not find index {sample_index} in path map"
-#             )
-#     return result
 
 
 @router.get("/samples", response_model=List[str], summary="Get a list of all sample names found in the phenotable")

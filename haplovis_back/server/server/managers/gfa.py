@@ -136,4 +136,5 @@ class GfaManager:
     def clear(cls) -> None:
         cls.gfa = None
         cls.segment_map = None
-        managers.LayoutManager.clear()
+        cls.link_map = None
+        cls.path_map = None

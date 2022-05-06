@@ -8,6 +8,7 @@ class PhenoManager:
     pheno_table: Optional[pd.DataFrame] = None
     phenotypes: Optional[Dict[str, List[Any]]] = None
     pheno_per_sample: Optional[Dict[str, Dict[str, Any]]] = None
+    pheno_per_segment: Optional[Dict[str, Dict[str, List[Any]]]] = None
 
     @classmethod
     def prepare_pheno(cls) -> None:
@@ -22,8 +23,29 @@ class PhenoManager:
             cls.pheno_table = phenos_dp
             cls.phenotypes = cls.get_possible_phenotypes()
             cls.pheno_per_sample = cls.create_pheno_per_sample()
+            cls.pheno_per_segment = cls.create_pheno_per_segment()
         except Exception as e:
             raise ValueError(f"Reading pandas dataframe from {file_name} failed: [{e}]")
+
+    @classmethod
+    def create_pheno_per_segment(cls) -> Optional[Dict[str, Dict[str, List[Any]]]]:
+        if cls.pheno_per_sample is None:
+            raise Exception("Cannot create pheno segment map without pheno sample map")
+
+        if managers.GfaManager.segment_map is None:
+            raise Exception("Cannot create pheno segment map without segment map")
+
+        result: Dict[str, Dict[str, List[Any]]] = {}
+        for name, segment in managers.GfaManager.segment_map.items():
+            result[name] = {}
+            for path in segment.paths:
+                pheno = cls.pheno_per_sample[path]
+                for phenotype, pheno_value in pheno.items():
+                    if phenotype not in result[name]:
+                        result[name][phenotype] = []
+                    result[name][phenotype].append(pheno_value)
+
+        return result
 
     @classmethod
     def create_pheno_per_sample(cls) -> Optional[Dict[str, Dict[str, Any]]]:
@@ -55,3 +77,5 @@ class PhenoManager:
     def clear(cls):
         cls.pheno_table = None
         cls.phenotypes = None
+        cls.pheno_per_sample = None
+        cls.pheno_per_segment = None
