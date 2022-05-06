@@ -13,7 +13,7 @@ export const graphSelectionSlice = createSlice({
       state.feature = action.payload;
     },
     reset: (state) => {
-      state = initialState;
+      state.feature = initialState.feature;
     },
   },
 });

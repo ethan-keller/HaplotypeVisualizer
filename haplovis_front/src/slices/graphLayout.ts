@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Bounds, GraphLayoutState, Position, RectangleRange } from '../types/layout';
 
 const initialState: GraphLayoutState = {
-  viewport: { lu: { x: 0, y: 0 }, rd: { x: 200, y: 1000 } },
+  viewport: { lu: { x: 0, y: 0 }, rd: { x: 1000, y: 1000 } },
   zoom: 1,
   pan: { x: 0, y: 0 },
-  bufferSize: 50,
+  bufferSize: 100,
   extent: { xl: 0, xr: 200 },
 };
 
@@ -38,7 +38,11 @@ export const graphLayoutSlice = createSlice({
       // }
     },
     reset: (state) => {
-      state = initialState;
+      state.viewport = initialState.viewport;
+      state.zoom = initialState.zoom;
+      state.pan = initialState.pan;
+      state.extent = initialState.extent;
+      state.bufferSize = initialState.bufferSize;
     },
   },
 });

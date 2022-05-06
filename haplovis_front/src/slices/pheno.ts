@@ -1,33 +1,33 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PhenoRecord, PhenoState, PhenoValue } from '../types/pheno';
+import { PhenoState, PhenoValue } from '../types/pheno';
 
 const initialState: PhenoState = {
-  sampleFilters: [],
+  sampleFilters: new Set<string>(),
+  sampleFilteredSegments: new Set<string>(),
   phenoFilters: {},
+  phenoFilteredSegments: new Set<string>(),
 };
 
 export const phenoSlice = createSlice({
   name: 'pheno',
   initialState: initialState,
   reducers: {
-    addSampleFilter: (state, action: PayloadAction<string[]>) => {
-      state.sampleFilters = action.payload;
+    addSampleFilter: (state, action: PayloadAction<{ samples: string[]; segments: string[] }>) => {
+      state.sampleFilters = new Set<string>(action.payload.samples);
+      state.sampleFilteredSegments = new Set<string>(action.payload.segments);
     },
-    addPhenoFilter: (state, action: PayloadAction<PhenoRecord[]>) => {
-      let result: Record<string, PhenoValue[]> = {};
-      action.payload.forEach((phenoR) => {
-        if (Object.keys(phenoR).length !== 1) return;
-        const record = Object.entries(phenoR)[0];
-        if (!(record[0] in result)) {
-          result[record[0]] = [];
-        }
-        result[record[0]].push(record[1]);
-      });
-      state.phenoFilters = result;
+    addPhenoFilter: (
+      state,
+      action: PayloadAction<{ phenos: Record<string, Set<PhenoValue>>; segments: string[] }>,
+    ) => {
+      state.phenoFilters = action.payload.phenos;
+      state.phenoFilteredSegments = new Set<string>(action.payload.segments);
     },
     reset: (state) => {
-      state.sampleFilters = [];
+      state.sampleFilters = new Set<string>();
+      state.sampleFilteredSegments = new Set<string>();
       state.phenoFilters = {};
+      state.phenoFilteredSegments = new Set<string>();
     },
   },
 });

@@ -5,8 +5,10 @@ export type PhenotypeValues = Record<string, PhenoValue[]>;
 export type PhenosPerSample = Record<string, PhenoRecord>;
 
 export interface PhenoState {
-  phenoFilters: Record<string, PhenoValue[]>;
-  sampleFilters: string[];
+  phenoFilters: Record<string, Set<PhenoValue>>;
+  phenoFilteredSegments: Set<string>;
+  sampleFilters: Set<string>;
+  sampleFilteredSegments: Set<string>;
 }
 
 export interface PhenoOption {

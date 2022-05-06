@@ -5,18 +5,9 @@ import gfaApi from './api/gfa';
 import phenoApi from './api/pheno';
 import layoutApi from './api/layout';
 import graphSettingsReducer from './slices/graphSettings';
-import phenoReducer from './slices/pheno';
+import phenoReducer, { phenoSlice } from './slices/pheno';
 import graphLayoutReducer from './slices/graphLayout';
-import {
-  persistStore,
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
+import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import bookmarksApi from './api/bookmarks';
 import graphSelectionReducer, { graphSelectionSlice } from './slices/graphSelection';
@@ -31,6 +22,7 @@ const persistConfig = {
     phenoApi.reducerPath,
     bookmarksApi.reducerPath,
     graphSelectionSlice.name,
+    phenoSlice.name,
   ],
 };
 
@@ -52,9 +44,7 @@ const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
+      serializableCheck: false,
     }).concat([
       filesApi.middleware,
       gfaApi.middleware,

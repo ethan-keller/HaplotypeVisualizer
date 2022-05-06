@@ -7,3 +7,4 @@ export const getPhenosPerSample = '/';
 export const getPhenotypes = '/phenotypes';
 export const getSampleNames = '/samples';
 export const getPhenotype = '/phenotype';
+export const getPhenotypePerSegment = '/phenos_per_segment';
