@@ -1,11 +1,9 @@
 from typing import Dict
-from fastapi import APIRouter, Path, Query, HTTPException, UploadFile, status, File as FastApiFile
-from server.managers.files import FileManager
-from server.managers.gfa import GfaManager
+from fastapi import APIRouter, Path, Query, HTTPException, status, File as FastApiFile
+
 
 from server.schemas.bookmark import Bookmark
 from server.managers import BookmarkManager
-from server.schemas.file import FileIndex, FileStatus
 
 
 router = APIRouter(prefix="/bookmarks", tags=["bookmarks"])
@@ -16,7 +14,10 @@ async def get_bookmarks():
     """
     Get all bookmarks.
     """
-    return BookmarkManager.bookmarks
+    if BookmarkManager.bookmarks is not None:
+        return BookmarkManager.bookmarks
+    else:
+        return {}
 
 
 @router.delete("/remove", response_model=Bookmark, summary="remove a bookmark")
