@@ -91,7 +91,7 @@ class FileManager:
 
     @classmethod
     def prepare_files(cls) -> None:
-        if managers.GfaManager.gfa is None:
+        if managers.GfaManager.segment_map is None:
             print("preparing gfa")
             managers.GfaManager.prepare_gfa()
         if managers.LayoutManager.index is None:

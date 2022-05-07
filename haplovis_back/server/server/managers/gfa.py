@@ -11,15 +11,27 @@ from server.schemas.file import FileIndex
 
 
 class GfaManager:
-    gfa: Optional[Gfa] = None
+    # gfa: Optional[Gfa] = None
     segment_map: Optional[Dict[str, GfaSegment]] = None
     link_map: Optional[Dict[str, List[GfaLink]]] = None
     path_map: Optional[Dict[str, GfaPath]] = None
 
-    def to_data_class(self) -> GfaDataclass:
-        if self.gfa is None:
-            raise Exception("Cannot convert non-existent gfa to dataclass")
-        return GfaDataclass(segments=self.gfa.segments, links=self.gfa.links, paths=self.gfa.paths)
+    @classmethod
+    def to_data_class(cls) -> GfaDataclass:
+        if cls.segment_map is not None and cls.link_map is not None and cls.path_map is not None:
+            return GfaDataclass(
+                segments=list(cls.segment_map.values()),
+                links=list(cls.get_all_links()),
+                paths=list(cls.path_map.values()),
+            )
+        raise Exception("Cannot convert non-existent gfa to dataclass")
+
+    @classmethod
+    def get_all_links(cls) -> List[GfaLink]:
+        if cls.link_map:
+            return list({link for links in cls.link_map.values() for link in links})
+        else:
+            return []
 
     @classmethod
     def get_paths_by_name(cls, names: List[str]) -> Dict[str, GfaPath]:
@@ -91,14 +103,14 @@ class GfaManager:
         gfa_hash = cls.get_hash()
         if cls.recognize(gfa_file_path):
             print("deserializing gfa")
-            cls.gfa = Gfa.deserialize(from_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
+            gfa = Gfa.deserialize(from_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
             print("Done deserializing gfa")
         else:
-            cls.gfa = Gfa.read_gfa_from_file(gfa_file_path)
-            Gfa.serialize(cls.gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
-        cls.segment_map = cls.create_segment_map(cls.gfa.segments)
-        cls.link_map = cls.create_link_map(cls.gfa.links)
-        cls.path_map = cls.create_path_map(cls.gfa.paths)
+            gfa = Gfa.read_gfa_from_file(gfa_file_path)
+            Gfa.serialize(gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
+        cls.segment_map = cls.create_segment_map(gfa.segments)
+        cls.link_map = cls.create_link_map(gfa.links)
+        cls.path_map = cls.create_path_map(gfa.paths)
 
     @classmethod
     def create_path_map(cls, paths: List[GfaPath]) -> Dict[str, GfaPath]:
@@ -134,7 +146,6 @@ class GfaManager:
 
     @classmethod
     def clear(cls) -> None:
-        cls.gfa = None
         cls.segment_map = None
         cls.link_map = None
         cls.path_map = None
