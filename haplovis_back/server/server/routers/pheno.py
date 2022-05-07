@@ -1,7 +1,6 @@
-from typing import Any, Dict, List, Set
+from typing import Any, Dict, List
 from fastapi import APIRouter, HTTPException, status
 from server.managers import PhenoManager
-from server.managers.gfa import GfaManager
 
 
 router = APIRouter(prefix="/pheno", tags=["pheno"])
@@ -29,7 +28,9 @@ def get_phenotypes_per_segment(segments: List[str]):
         result: Dict[str, Dict[str, List[Any]]] = {}
         for segment in segments:
             if segment not in PhenoManager.pheno_per_segment:
-                raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not find segment {segment} in phenotype map")
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST, detail=f"Could not find segment {segment} in phenotype map"
+                )
             result[segment] = PhenoManager.pheno_per_segment[segment]
         return result
     else:
@@ -53,7 +54,7 @@ def get_phenotypes():
 
 @router.get("/samples", response_model=List[str], summary="Get a list of all sample names found in the phenotable")
 def get_sample_names():
-    if PhenoManager.pheno_table is not None:
-        return list(PhenoManager.pheno_table.index.values)
+    if PhenoManager.pheno_per_sample is not None:
+        return list(PhenoManager.pheno_per_sample.keys())
     else:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not find phenotypes")

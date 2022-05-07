@@ -97,7 +97,7 @@ class FileManager:
         if managers.LayoutManager.index is None:
             print("preparing index")
             managers.LayoutManager.prepare_layout()
-        if managers.PhenoManager.pheno_table is None:
+        if managers.PhenoManager.phenotypes is None:
             print("preparing pheno")
             managers.PhenoManager.prepare_pheno()
         if managers.BookmarkManager.bookmarks is None:
