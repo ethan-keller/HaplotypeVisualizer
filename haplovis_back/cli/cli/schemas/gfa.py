@@ -37,6 +37,12 @@ class GfaSegment(GfaElement):
     type = "segment"
     optionals = None
 
+    def get_length(self) -> int:
+        if self.optionals is not None and "LN" in self.optionals:
+            return self.optionals["LN"]
+        else:
+            return len(self.sequence)
+
 
 @dataclass
 class GfaLink(GfaElement):

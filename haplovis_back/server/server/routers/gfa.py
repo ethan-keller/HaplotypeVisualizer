@@ -14,20 +14,6 @@ responses: Dict[Union[int, str], Dict[str, Any]] = {
 }
 
 
-@router.get("/", response_model=Gfa, responses=responses, summary="Gets the full GFA object")
-def get_gfa():
-    """
-    Gets the full GFA object.
-    """
-    if GfaManager.gfa is not None:
-        print("Getting gfa")
-        s = GfaManager.gfa.to_data_class()
-        print("Got gfa")
-        return s
-    else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Could not find a gfa object")
-
-
 @router.put(
     "/segments",
     response_model=List[GfaSegment],
@@ -134,9 +120,12 @@ async def get_graph_info():
     """
     Gets graph information.
     """
-    if not GfaManager.gfa is None:
-        g = GfaManager.gfa
-        return GfaInfo(n_segments=len(g.segments), n_links=len(g.links), n_paths=len(g.paths))
+    if GfaManager.segment_map is not None and GfaManager.link_map is not None and GfaManager.path_map is not None:
+        return GfaInfo(
+            n_segments=len(GfaManager.segment_map.values()),
+            n_links=len(GfaManager.get_all_links()),
+            n_paths=len(GfaManager.path_map.values()),
+        )
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
@@ -144,15 +133,15 @@ async def get_graph_info():
 
 
 @router.get("/segment_lengths", response_model=List[int], responses=responses, summary="Gets segment lengths")
-async def get_hist_values():
+async def get_segment_lengths():
     """
     For the visualization of segment lengths, this endpoint returns the segment lengths.
     """
-    if GfaManager.gfa is not None:
+    if GfaManager.segment_map is not None:
         segment_lengths = list(
             map(
-                lambda segment: segment.optionals["LN"] if segment.optionals else len(segment.sequence),
-                GfaManager.gfa.segments,
+                lambda segment: segment.get_length(),
+                GfaManager.segment_map.values(),
             )
         )
         return segment_lengths
