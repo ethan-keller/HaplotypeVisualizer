@@ -7,6 +7,7 @@ import gfaApi from '../../api/gfa';
 import CytoscapeWrapper from './CytoscapeWrapper';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import { GfaLink, GfaSegment } from '../../types/gfa';
+import { intersection, isSetUndefinedOrEmpty } from '../../utils/sets';
 
 interface GraphProps {
   layout: Layout;
@@ -27,17 +28,15 @@ const Graph: React.FC<GraphProps> = ({ layout, sampleFilteredSegments, phenoFilt
 
   const graph = useMemo(() => {
     if (segments && links && paths) {
+      const filter = intersection(sampleFilteredSegments, phenoFilteredSegments);
+      console.log('filter', filter);
       return {
         nodes: cytoscapeNodes(
-          filterSegments(segments, sampleFilteredSegments, phenoFilteredSegments),
+          isSetUndefinedOrEmpty(filter) ? segments : filterSegments(segments, filter!),
           paths,
           graphSettings,
         ),
-        edges: cytoscapeEdges(
-          filterLinks(links, layout, sampleFilteredSegments, phenoFilteredSegments),
-          paths,
-          graphSettings,
-        ),
+        edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, graphSettings),
       } as GraphType;
     }
   }, [
@@ -57,47 +56,27 @@ const Graph: React.FC<GraphProps> = ({ layout, sampleFilteredSegments, phenoFilt
   );
 };
 
-const filterLinks = (
-  links: GfaLink[],
-  layout: Layout,
-  sampleFilteredSegments?: Set<string>,
-  phenoFilteredSegments?: Set<string>,
-) => {
-  return links.filter(
-    (link) =>
-      // check if in layout
-      link.from_segment in layout &&
-      link.to_segment in layout &&
-      // check if in sample filter
-      (isFilterAvailable(sampleFilteredSegments)
-        ? sampleFilteredSegments!.has(link.from_segment) &&
-          sampleFilteredSegments!.has(link.to_segment)
-        : // check if in pheno filter
-          true) &&
-      (isFilterAvailable(phenoFilteredSegments)
-        ? phenoFilteredSegments!.has(link.from_segment) &&
-          phenoFilteredSegments!.has(link.to_segment)
-        : true),
-  );
+const filterLinks = (links: GfaLink[], layout: Layout, filteredSegments?: Set<string>) => {
+  if (isSetUndefinedOrEmpty(filteredSegments)) {
+    return links.filter(
+      (link) =>
+        // check if in layout
+        link.from_segment in layout && link.to_segment in layout,
+    );
+  } else {
+    return links.filter(
+      (link) =>
+        // check if in layout
+        link.from_segment in layout &&
+        link.to_segment in layout &&
+        // check if in filter
+        filteredSegments!.has(link.from_segment) &&
+        filteredSegments!.has(link.to_segment),
+    );
+  }
 };
-const filterSegments = (
-  segments: GfaSegment[],
-  sampleFilteredSegments?: Set<string>,
-  phenoFilteredSegments?: Set<string>,
-) => {
-  return segments.filter((segment) =>
-    // check if in sample filter
-    isFilterAvailable(sampleFilteredSegments)
-      ? sampleFilteredSegments!.has(segment.name)
-      : // check if in pheno filter
-      true && isFilterAvailable(phenoFilteredSegments)
-      ? phenoFilteredSegments!.has(segment.name)
-      : true,
-  );
-};
-
-const isFilterAvailable = (filter?: Set<string>) => {
-  return filter !== undefined && filter.size !== 0;
+const filterSegments = (segments: GfaSegment[], filteredSegments: Set<string>) => {
+  return segments.filter((segment) => filteredSegments.has(segment.name));
 };
 
 export default Graph;

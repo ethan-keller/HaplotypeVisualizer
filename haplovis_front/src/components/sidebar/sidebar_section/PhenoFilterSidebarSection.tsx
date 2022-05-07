@@ -101,13 +101,14 @@ const getFilteredSegments = (
   phenos: Record<string, Set<PhenoValue>>,
 ) => {
   let result: string[] = [];
-  Object.entries(phenosPerSample).forEach(([sample, phenotypes]) => {
-    Object.entries(phenotypes).forEach(([phenotype, phenoValue]) => {
+  for (const [sample, phenotypes] of Object.entries(phenosPerSample)) {
+    for (const [phenotype, phenoValue] of Object.entries(phenotypes)) {
       if (phenotype in phenos && phenos[phenotype].has(phenoValue)) {
         result = result.concat(paths[sample].segment_names);
+        break;
       }
-    });
-  });
+    }
+  }
   return result;
 };
 
