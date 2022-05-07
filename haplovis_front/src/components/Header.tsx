@@ -7,11 +7,13 @@ import { url as urlPhenoTableView } from '../views/PhenoTableView';
 import { url as urlPopulationView } from '../views/PopulationView';
 import AboutModal from './modals/AboutModal';
 import BookmarksOffcanvas from './bookmarks/BookmarksOffcanvas';
+import SettingsModal from './modals/SettingsModal';
 
 interface HeaderProps {}
 
 const Header: React.FC<HeaderProps> = (props) => {
   const [showAbout, setShowAbout] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [showBookmarks, setShowBookmarks] = useState(false);
   const { pathname } = useLocation();
 
@@ -32,6 +34,8 @@ const Header: React.FC<HeaderProps> = (props) => {
           </Nav.Link>
           <Nav.Link onClick={() => setShowBookmarks(true)}>Bookmarks</Nav.Link>
           <BookmarksOffcanvas show={showBookmarks} onHide={() => setShowBookmarks(false)} />
+          <Nav.Link onClick={() => setShowSettings(true)}>Settings</Nav.Link>
+          <SettingsModal show={showSettings} onHide={() => setShowSettings(false)} />
           <Nav.Link onClick={() => setShowAbout(true)}>About</Nav.Link>
           <AboutModal show={showAbout} onHide={() => setShowAbout(false)} />
         </Nav>

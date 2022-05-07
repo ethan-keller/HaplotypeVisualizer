@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import RangeWithLabels from './RangeWithLabels';
 
 const RangeSegmentThickness: React.FC = () => {
-  const graphSettings = useAppSelector((state) => state.graphSettings);
+  const segmentThickness = useAppSelector((state) => state.graphSettings.segmentThickness);
   const dispatch = useAppDispatch();
 
-  const [value, setValue] = useState<number>(graphSettings.segmentThickness);
+  const [value, setValue] = useState<number>(segmentThickness);
 
   return (
     <RangeWithLabels

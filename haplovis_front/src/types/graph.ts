@@ -9,6 +9,8 @@ export interface GraphSettings {
   drawPaths: boolean;
   drawLabels: boolean;
   linkThickness: number;
+  zoomScale: number;
+  panSensitivity: number;
   segmentThickness: number;
   pathColors: string[];
   activePaths: boolean[];

@@ -2,6 +2,7 @@ import { Button } from 'react-bootstrap';
 import { BsZoomIn, BsZoomOut } from 'react-icons/bs';
 import { MdFitScreen } from 'react-icons/md';
 import { FaBullseye } from 'react-icons/fa';
+import { useAppSelector } from '../../store';
 
 interface ZoomWidgetProps {
   zoom: number;
@@ -11,7 +12,7 @@ interface ZoomWidgetProps {
 }
 
 const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
-  const zoomScale = 0.15;
+  const zoomScale = useAppSelector((state) => state.graphSettings.zoomScale);
   return (
     <div>
       <Button

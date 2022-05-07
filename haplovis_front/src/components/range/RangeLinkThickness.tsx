@@ -4,10 +4,10 @@ import { useAppDispatch, useAppSelector } from '../../store';
 import RangeWithLabels from './RangeWithLabels';
 
 const RangeLinkThickness: React.FC = () => {
-  const graphSettings = useAppSelector((state) => state.graphSettings);
+  const linkThickness = useAppSelector((state) => state.graphSettings.linkThickness);
   const dispatch = useAppDispatch();
 
-  const [value, setValue] = useState<number>(graphSettings.linkThickness);
+  const [value, setValue] = useState<number>(linkThickness);
 
   return (
     <RangeWithLabels

@@ -7,6 +7,7 @@ import {
   FaAngleDown,
   FaAngleUp,
 } from 'react-icons/fa';
+import { useAppSelector } from '../../store';
 import { Position } from '../../types/layout';
 
 interface PanWidgetProps {
@@ -14,8 +15,8 @@ interface PanWidgetProps {
 }
 
 const PanWidget: React.FC<PanWidgetProps> = (props) => {
-  const singlePan = 50;
-  const doublePan = 200;
+  const singlePan = useAppSelector((state) => state.graphSettings.panSensitivity);
+  const doublePan = 2 * singlePan;
 
   const pan = (left: boolean, double: boolean, up?: boolean) => {
     props.onPan({
