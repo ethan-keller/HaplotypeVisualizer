@@ -11,7 +11,6 @@ from server.schemas.file import FileIndex
 
 
 class GfaManager:
-    # gfa: Optional[Gfa] = None
     segment_map: Optional[Dict[str, GfaSegment]] = None
     link_map: Optional[Dict[str, List[GfaLink]]] = None
     path_map: Optional[Dict[str, GfaPath]] = None

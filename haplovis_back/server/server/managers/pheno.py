@@ -7,7 +7,6 @@ from server.schemas.file import FileIndex
 class PhenoManager:
     phenotypes: Optional[Dict[str, List[Any]]] = None
     pheno_per_sample: Optional[Dict[str, Dict[str, Any]]] = None
-    pheno_per_segment: Optional[Dict[str, Dict[str, List[Any]]]] = None
 
     @classmethod
     def prepare_pheno(cls) -> None:
@@ -21,7 +20,6 @@ class PhenoManager:
             phenos_dp.set_index(phenos_dp.columns.values[0], inplace=True)
             cls.phenotypes = cls.get_possible_phenotypes(pheno_table=phenos_dp)
             cls.pheno_per_sample = cls.create_pheno_per_sample(pheno_table=phenos_dp)
-            cls.pheno_per_segment = cls.create_pheno_per_segment()
         except Exception as e:
             raise ValueError(f"Reading pandas dataframe from {file_name} failed: [{e}]")
 
@@ -75,4 +73,3 @@ class PhenoManager:
     def clear(cls):
         cls.phenotypes = None
         cls.pheno_per_sample = None
-        cls.pheno_per_segment = None
