@@ -152,7 +152,7 @@ export function createCytoscape(
     selectionType: 'single',
     hideEdgesOnViewport: true,
     hideLabelsOnViewport: true,
-    wheelSensitivity: 0.3,
+    minZoom: 0.3,
   });
   return cy;
 }

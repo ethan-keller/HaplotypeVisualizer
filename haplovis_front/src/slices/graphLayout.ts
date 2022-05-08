@@ -5,23 +5,27 @@ const initialState: GraphLayoutState = {
   viewport: { lu: { x: 0, y: 0 }, rd: { x: 1000, y: 1000 } },
   zoom: 1,
   pan: { x: 0, y: 0 },
-  bufferSize: 100,
+  bufferSize: 0,
   extent: { xl: 0, xr: 1000 },
+  firstGraphRender: true,
 };
 
 export const graphLayoutSlice = createSlice({
   name: 'graphLayout',
   initialState: initialState,
   reducers: {
-    // updateViewport: (state, action: PayloadAction<RectangleRange>) => {
-    //   state.extent.xl = action.payload.lu.x;
-    //   state.extent.xr = action.payload.rd.x;
-    //   if (viewportNeedsUpdate(state.viewport, action.payload, state.bufferSize)) {
-    //     state.viewport = addViewportBuffer(action.payload, state.bufferSize);
-    //   }
-    // },
+    updateViewport: (state, action: PayloadAction<RectangleRange>) => {
+      state.extent.xl = action.payload.lu.x;
+      state.extent.xr = action.payload.rd.x;
+      if (viewportNeedsUpdate(state.viewport, action.payload, state.bufferSize)) {
+        if (state.bufferSize === 0) {
+          state.bufferSize = 500;
+        }
+        state.viewport = addViewportBuffer(action.payload, 2 * state.bufferSize);
+      }
+    },
     updateZoom: (state, action: PayloadAction<number>) => {
-      state.zoom = action.payload;
+      state.zoom = Math.max(0.3, action.payload);
     },
     updatePan: (state, action: PayloadAction<Position>) => {
       state.pan.x = action.payload.x;
@@ -33,9 +37,9 @@ export const graphLayoutSlice = createSlice({
     updateExtent: (state, action: PayloadAction<Bounds>) => {
       state.extent.xl = action.payload.xl;
       state.extent.xr = action.payload.xr;
-      // if (viewportNeedsUpdate(state.viewport, action.payload, state.bufferSize)) {
-      //   state.viewport = addViewportBuffer(state.viewport, action.payload, state.bufferSize);
-      // }
+    },
+    updateFirstGraphRender: (state) => {
+      state.firstGraphRender = false;
     },
     reset: () => initialState,
   },
@@ -43,31 +47,33 @@ export const graphLayoutSlice = createSlice({
 
 const viewportNeedsUpdate = (
   currentViewport: RectangleRange,
-  newExtent: Bounds,
-  bufferSize: number,
+  newViewport: RectangleRange,
+  buffer: number,
 ) => {
-  // left, top, right, bottom limits
-  const ll = currentViewport.lu.x - bufferSize;
-  // const tl = currentViewport.lu.y - bufferSize;
-  const rl = currentViewport.rd.x + bufferSize;
-  // const bl = currentViewport.rd.y + bufferSize;
-
+  // current viewport contains buffer
   // if new viewport passes at least one limit => update
   return (
-    newExtent.xl <= ll ||
-    // newViewport.lu.y <= tl ||
-    newExtent.xr >= rl
-    // newViewport.rd.y >= bl
+    newViewport.lu.x <= currentViewport.lu.x + buffer ||
+    newViewport.lu.y <= currentViewport.lu.y + buffer ||
+    newViewport.rd.x >= currentViewport.rd.x - buffer ||
+    newViewport.rd.y >= currentViewport.rd.y - buffer
   );
 };
 
-const addViewportBuffer = (viewport: RectangleRange, extent: Bounds, bufferSize: number) => {
-  const newLu = { x: extent.xl - bufferSize, y: viewport.lu.y - bufferSize };
-  const newRd = { x: extent.xr + bufferSize, y: viewport.rd.y + bufferSize };
+const addViewportBuffer = (viewport: RectangleRange, bufferSize: number) => {
+  const newLu = { x: viewport.lu.x - bufferSize, y: viewport.lu.y - bufferSize };
+  const newRd = { x: viewport.rd.x + bufferSize, y: viewport.rd.y + bufferSize };
 
   return { lu: newLu, rd: newRd } as RectangleRange;
 };
 
-export const { updateZoom, updatePan, updateExtent, reset } = graphLayoutSlice.actions;
+export const {
+  updateZoom,
+  updatePan,
+  updateExtent,
+  updateViewport,
+  updateFirstGraphRender,
+  reset,
+} = graphLayoutSlice.actions;
 
 export default graphLayoutSlice.reducer;

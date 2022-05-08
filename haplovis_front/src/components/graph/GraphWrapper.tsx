@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import layoutApi from '../../api/layout';
 import { updateFeature } from '../../slices/graphSelection';
 import { useAppDispatch, useAppSelector } from '../../store';

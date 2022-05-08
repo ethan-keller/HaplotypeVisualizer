@@ -31,4 +31,5 @@ export interface GraphLayoutState {
   pan: Position;
   bufferSize: number;
   extent: Bounds;
+  firstGraphRender: boolean;
 }

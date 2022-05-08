@@ -16,7 +16,7 @@ const PanRange: React.FC<PanRangeProps> = (props) => {
   return (
     <Form.Range
       min={10}
-      max={800}
+      max={500}
       step={10}
       value={value}
       onChange={(e) => {
