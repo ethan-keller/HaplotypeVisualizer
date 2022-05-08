@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { VictoryAxis, VictoryChart, VictoryHistogram } from 'victory';
 import RangeHistogramBins from './range/RangeHistogramBins';
 
@@ -13,6 +13,11 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
       stroke: 'transparent',
     },
   };
+  const data = useMemo(() => {
+    return props.values.map((e) => ({
+      x: e,
+    }));
+  }, [props.values]);
   return (
     <div style={{ backgroundColor: 'aliceblue' }}>
       <VictoryChart>
@@ -31,7 +36,7 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
           label='Segment length'
           tickFormat={(v) => {
             if (+v < 1000) return v;
-            else return v / 100 / 10.0 + 'k';
+            else return +v / 100 / 10.0 + 'k';
           }}
           style={{
             ...sharedAxisStyles,
@@ -40,9 +45,7 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
         <VictoryHistogram
           style={{ data: { fill: '#0d6efd', strokeWidth: 0 } }}
           binSpacing={15}
-          data={props.values.map((e) => ({
-            x: e,
-          }))}
+          data={data}
           bins={bins}
         />
       </VictoryChart>
