@@ -43,6 +43,11 @@ interface GfaInfo {
   readonly n_segments: number;
   readonly n_links: number;
   readonly n_paths: number;
+  readonly shortest_segment: number;
+  readonly longest_segment: number;
+  readonly median_segment: number;
+  readonly mean_segment: number;
+  readonly std_dev: number;
 }
 
 interface GfaHist {

@@ -1,3 +1,4 @@
+from statistics import mean, median, stdev
 from typing import Any, Dict, List, Union
 from cli.serialization import JsonSerializer
 
@@ -121,10 +122,16 @@ async def get_graph_info():
     Gets graph information.
     """
     if GfaManager.segment_map is not None and GfaManager.link_map is not None and GfaManager.path_map is not None:
+        segment_lengths = list(map(lambda segment: segment.get_length(), GfaManager.segment_map.values()))
         return GfaInfo(
-            n_segments=len(GfaManager.segment_map.values()),
+            n_segments=len(segment_lengths),
             n_links=len(GfaManager.get_all_links()),
             n_paths=len(GfaManager.path_map.values()),
+            shortest_segment=min(segment_lengths),
+            longest_segment=max(segment_lengths),
+            median_segment=median(segment_lengths),
+            mean_segment=mean(segment_lengths),
+            std_dev=stdev(segment_lengths)
         )
     else:
         raise HTTPException(
