@@ -3,6 +3,7 @@ import { BsZoomIn, BsZoomOut } from 'react-icons/bs';
 import { MdFitScreen } from 'react-icons/md';
 import { FaBullseye } from 'react-icons/fa';
 import { useAppSelector } from '../../store';
+import ZoomIndicator from './ZoomIndicator';
 
 interface ZoomWidgetProps {
   onZoom: (newZoom: number) => void;
@@ -33,6 +34,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
       >
         <FaBullseye size={24} />
       </Button>
+      <div className='separator'/>
       <Button
         style={{ padding: 5 }}
         className='widget-button'
@@ -42,6 +44,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
       >
         <BsZoomIn size={20} />
       </Button>
+      <ZoomIndicator />
       <Button
         style={{ padding: 5 }}
         className='widget-button'
