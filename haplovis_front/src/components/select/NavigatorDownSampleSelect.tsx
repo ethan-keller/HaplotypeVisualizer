@@ -1,6 +1,6 @@
 import Select from 'react-select';
 import { updateNavigatorDownSampleFactor } from '../../slices/globalSettings';
-import { useAppDispatch } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
 interface NavigatorDownSampleSelectProps {}
 
 const options = [
@@ -17,11 +17,12 @@ const options = [
 
 const NavigatorDownSampleSelect: React.FC<NavigatorDownSampleSelectProps> = (props) => {
   const dispatch = useAppDispatch();
+  const factor = useAppSelector((state) => state.globalSettings.navigatorDownSampleFactor);
   return (
     <Select
       options={options}
       isSearchable
-      defaultValue={options[0]}
+      defaultValue={{ value: factor, label: factor ? factor : 'auto' }}
       onChange={(value) => {
         dispatch(updateNavigatorDownSampleFactor(value?.value));
       }}
