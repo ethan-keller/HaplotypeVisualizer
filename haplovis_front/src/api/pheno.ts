@@ -20,9 +20,6 @@ const phenoApi = createApi({
     getSampleNames: builder.query<string[], void>({
       query: () => ({ url: getSampleNames }),
     }),
-    getPhenosPerSegment: builder.query<Record<string, Record<string, any[]>>, string[]>({
-      query: (body) => ({ url: getSampleNames, body, method: 'PUT' }),
-    }),
   }),
 });
 
