@@ -15,7 +15,6 @@ class GFA_ELEMENT(IntEnum):
 
 @dataclass
 class GfaElement:
-    # TODO: change any to union of more specific types
     type: str
     name: str
     optionals: Optional[Dict[str, Any]]
@@ -68,7 +67,12 @@ class Gfa:
 
 @dataclass
 class GfaInfo:
-    # TODO:  add more
     n_segments: int
     n_links: int
     n_paths: int
+    shortest_segment: int
+    longest_segment: int
+    median_segment: int
+    mean_segment: float
+    std_dev: float
+

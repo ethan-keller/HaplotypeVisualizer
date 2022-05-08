@@ -48,7 +48,7 @@ export const cytoscapeNodes = (
   return segments.map((segment: GfaSegment) => {
     const gradient = getGradient(segment, paths, settings);
     return {
-      // TODO: create types for custom node data (and edge data) to be used on other files
+      // TODO: create type for data object
       data: {
         id: segment.name,
         width:

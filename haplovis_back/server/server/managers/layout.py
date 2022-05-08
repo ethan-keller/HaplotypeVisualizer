@@ -27,6 +27,10 @@ class LayoutManager:
             return []
 
     @classmethod
+    def is_range_valid(cls, range: RectangleRange) -> bool:
+        return range.lu.x < range.rd.x and range.lu.y > range.rd.y
+
+    @classmethod
     def get_all_layout_nodes_in_range(cls, range: RectangleRange) -> LayoutType:
         if cls.index is not None:
             kdtree_nodes = cls.index.range_query(range.lu, range.rd)
@@ -39,9 +43,7 @@ class LayoutManager:
     @classmethod
     def prepare_layout(cls) -> None:
         if cls.index_file_path:
-            print("deserializing index")
             cls.index = KDTree.deserialize(from_file=cls.index_file_path)
-            print("Done deserializing index")
         else:
             raise Exception("Could not retrieve layout file because layout file location is unknown")
 

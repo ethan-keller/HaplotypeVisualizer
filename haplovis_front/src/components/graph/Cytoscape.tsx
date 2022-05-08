@@ -27,7 +27,7 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
       onSuccess(cyto);
       setCy(cyto);
     } catch (e) {
-      // onError(e);
+      onError(e);
     }
   }, [zoom, pan, settings]);
 

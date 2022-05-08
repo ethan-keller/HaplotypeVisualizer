@@ -5,7 +5,6 @@ import process from "process";
 
 cytoscape.use(dagre);
 
-// TODO: sync to redux store values
 const drawPaths = true;
 const linkThickness = 1.5;
 const segmentThickness = 10;

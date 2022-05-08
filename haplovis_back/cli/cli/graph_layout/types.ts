@@ -9,7 +9,6 @@ interface Gfa {
 
 interface GfaElement {
   readonly name: string;
-  // TODO: make sure that value string | number fits all scenarios
   readonly optionals?: Record<GfaOptional, any>;
 }
 

@@ -3,7 +3,6 @@ import { Form, Button } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../store';
 import SidebarSection from './sidebar_section/SidebarSection';
 import { updateDrawLabels, updateDrawPaths } from '../../slices/graphSettings';
-import EditLayoutModal from '../modals/EditLayoutModal';
 import EditPathsModal from '../modals/EditPathsModal';
 import GraphInfoSidebarSection from './sidebar_section/GraphInfoSidebarSection';
 import Sidebar from './Sidebar';
@@ -13,7 +12,6 @@ import RangeLinkThicknessWithLabel from '../range/with_label/RangeLinkThicknessW
 interface PopulationViewSidebarProps {}
 
 const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
-  const [showEditLayout, setShowEditLayout] = useState<boolean>(false);
   const [showEditColors, setShowEditColors] = useState<boolean>(false);
 
   const graphSettings = useAppSelector((state) => state.graphSettings);

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import bookmarksApi from '../../api/bookmarks';
+import { useAppSelector } from '../../store';
 import { GfaFeature } from '../../types/gfa';
 import VerticalSpacer from '../VerticalSpacer';
 
@@ -14,6 +15,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
   const [addBookmark] = bookmarksApi.useAddBookmarkMutation();
   const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const [comment, setComment] = useState<string>('');
+  const viewport = useAppSelector((state) => state.graphLayout.viewport);
 
   useEffect(() => {
     if (bookmarks && props.elem.name in bookmarks) {
@@ -46,7 +48,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
         <VerticalSpacer space={15} />
         <Button
           onClick={() => {
-            addBookmark({ elem_id: props.elem.name, comment: comment });
+            addBookmark({ elem_id: props.elem.name, comment: comment, viewport: viewport });
             props.onHide();
           }}
           size='sm'

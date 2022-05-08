@@ -10,12 +10,12 @@ const initialState: GraphSettings = {
   pathColors: [
     '#9e0142',
     '#f46d43',
-    '#ffd355',
     '#abdda4',
     '#3288bd',
     '#5e4fa2',
     '#000000',
     '#c8bcff',
+    '#ffd355',
     '#ffbcd7',
     '#04c55e',
   ],

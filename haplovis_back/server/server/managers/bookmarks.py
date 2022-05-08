@@ -13,9 +13,9 @@ class BookmarkManager:
     bookmarks: Optional[Dict[str, Bookmark]] = None
 
     @classmethod
-    def add_bookmark(cls, elem_id: str, comment: str) -> None:
+    def add_bookmark(cls, bookmark: Bookmark) -> None:
         if cls.bookmarks is not None:
-            cls.bookmarks[elem_id] = Bookmark(elem_id=elem_id, comment=comment)
+            cls.bookmarks[bookmark.elem_id] = bookmark
 
     @classmethod
     def remove_bookmark(cls, elem_id) -> Optional[Bookmark]:

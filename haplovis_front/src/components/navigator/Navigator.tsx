@@ -1,5 +1,15 @@
-import { useCallback, useState } from 'react';
-import { VictoryChart, VictoryArea, VictoryAxis, VictoryLabel } from 'victory';
+import { useCallback, useEffect, useState } from 'react';
+import {
+  VictoryChart,
+  VictoryArea,
+  VictoryAxis,
+  VictoryLabel,
+  VictoryCursorContainer,
+  createContainer,
+  VictoryBrushContainerProps,
+  VictoryCursorContainerProps,
+} from 'victory';
+import { useAppSelector } from '../../store';
 import { Position } from '../../types/layout';
 import NavigatorOverlay from './NavigatorOverlay';
 
@@ -14,6 +24,12 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
       setBoundingRect(node.getBoundingClientRect());
     }
   }, []);
+  const extent = useAppSelector((state) => state.graphLayout.extent);
+  const f = useAppSelector((state) => state.globalSettings.navigatorDownSampleFactor);
+  const BrushCursorContainer = createContainer<
+    VictoryBrushContainerProps,
+    VictoryCursorContainerProps
+  >('brush', 'cursor');
 
   return (
     <div style={{ width: '100%', height: '100%' }} ref={graphRef}>
@@ -22,7 +38,21 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
         height={boundingRect.height}
         width={boundingRect.width}
         // have to call navigatorOverlay as function because of Victory bug
-        containerComponent={NavigatorOverlay({}) ?? undefined}
+        // containerComponent={
+        //   <BrushCursorContainer
+        //     brushDimension='x'
+        //     brushDomain={{ x: [extent.xl, extent.xr] }}
+        //     allowDrag={false}
+        //     allowDraw={false}
+        //     allowResize={false}
+        //     brushStyle={{ fill: 'lightgreen', opacity: 0.2 }}
+        //     handleWidth={2}
+        //     handleStyle={{ fill: 'green' }}
+        //     defaultBrushArea='disable'
+        //     cursorDimension='x'
+        //     cursorLabel={(p) => `${Math.round(p.x)}`}
+        //   />
+        // }
       >
         <VictoryArea style={{ data: { fill: '#0d6efd' } }} data={props.densities} />
         <VictoryAxis

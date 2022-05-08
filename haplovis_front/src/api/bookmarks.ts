@@ -30,7 +30,7 @@ const bookmarksApi = createApi({
           : ['Bookmark'],
     }),
     addBookmark: builder.mutation<void, Bookmark>({
-      query: (params) => ({ url: addBookmark, params: params, method: 'POST' }),
+      query: (body) => ({ url: addBookmark, body, method: 'POST' }),
       invalidatesTags: (result, error, args) => ['Bookmark'],
     }),
     removeBookmark: builder.mutation<Bookmark, { elem_id: string }>({

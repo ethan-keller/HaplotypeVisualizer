@@ -30,7 +30,6 @@ async def are_all_files_ready():
     """
     Check if the server has all the necessary information to start visualizing
     """
-    # TODO: Could potentially add other checks
     return FileManager.are_required_files_ready_for_visualization()
 
 

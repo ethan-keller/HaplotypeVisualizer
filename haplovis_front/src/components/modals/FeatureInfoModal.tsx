@@ -1,6 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Card, Modal, Table } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
-import { getSegmentLength } from '../../types/gfa';
+import { getSegmentLength, GfaFeature } from '../../types/gfa';
 import { capitalizeFirstLetter, truncateIfLongerThan } from '../../utils/strings';
 import PhenoGraphInfoCardSection from '../info_card/info_card_section/PhenoGraphInfoCardSection';
 import PopuViewInfoCardSection from '../info_card/info_card_section/PopuViewInfoCardSection';
@@ -13,7 +14,20 @@ interface FeatureInfoModalProps {
 }
 
 const FeatureInfoModal: React.FC<FeatureInfoModalProps> = (props) => {
-  const { data: feature } = gfaApi.useGetSegmentQuery({ segment_id: props.elementId });
+  const { data: segment } = gfaApi.useGetSegmentQuery({ segment_id: props.elementId });
+  const { data: link } = gfaApi.useGetLinkQuery({ link_id: props.elementId });
+  const [feature, setFeature] = useState<GfaFeature | undefined>(undefined);
+
+  useEffect(() => {
+    if (segment) {
+      setFeature(segment);
+    } else if (link) {
+      setFeature(link);
+    } else {
+      setFeature(undefined);
+    }
+  }, [segment, link]);
+
   return (
     <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>

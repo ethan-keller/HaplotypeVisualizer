@@ -42,8 +42,6 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
             <tr>
               <LinkThicknessSetting />
             </tr>
-
-            {/* TODO: add default colors? */}
           </tbody>
         </Table>
       </Modal.Body>

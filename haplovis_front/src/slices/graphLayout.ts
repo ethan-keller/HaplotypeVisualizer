@@ -38,8 +38,8 @@ export const graphLayoutSlice = createSlice({
       state.extent.xl = action.payload.xl;
       state.extent.xr = action.payload.xr;
     },
-    updateFirstGraphRender: (state) => {
-      state.firstGraphRender = false;
+    updateFirstGraphRender: (state, action: PayloadAction<boolean>) => {
+      state.firstGraphRender = action.payload;
     },
     reset: () => initialState,
   },

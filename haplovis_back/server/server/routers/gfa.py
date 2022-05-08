@@ -26,10 +26,7 @@ async def get_segments(segment_ids: List[str]):
     Gets the segments from the GFA object.
     """
     if GfaManager.segment_map is not None:
-        print("getting segments")
-        s = GfaManager.get_segments_from_ids(segment_ids)
-        print("Got segments")
-        return Response(JsonSerializer.serialize(s))
+        return Response(JsonSerializer.serialize(GfaManager.get_segments_from_ids(segment_ids)))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve segments from a non-existent gfa object"
@@ -57,10 +54,7 @@ async def get_links(segment_ids: List[str]):
     Gets the links from the GFA object.
     """
     if GfaManager.link_map is not None:
-        print("getting links")
-        s = GfaManager.get_links_from_segments(segment_ids)
-        print("Got links")
-        return Response(JsonSerializer.serialize(s))
+        return Response(JsonSerializer.serialize(GfaManager.get_links_from_segments(segment_ids)))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve links from a non-existent gfa object"
@@ -88,10 +82,7 @@ async def get_paths():
     Gets the paths from the GFA object.
     """
     if GfaManager.path_map is not None:
-        print("Getting paths")
-        s = GfaManager.path_map
-        print("Got paths")
-        return Response(JsonSerializer.serialize(s))
+        return Response(JsonSerializer.serialize(GfaManager.path_map))
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="Could not retrieve paths from a non-existent gfa object"
@@ -131,7 +122,7 @@ async def get_graph_info():
             longest_segment=max(segment_lengths),
             median_segment=median(segment_lengths),
             mean_segment=mean(segment_lengths),
-            std_dev=stdev(segment_lengths)
+            std_dev=stdev(segment_lengths),
         )
     else:
         raise HTTPException(

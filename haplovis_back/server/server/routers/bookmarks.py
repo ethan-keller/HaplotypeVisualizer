@@ -1,5 +1,5 @@
 from typing import Dict
-from fastapi import APIRouter, Query, HTTPException, status
+from fastapi import APIRouter, Body, Query, HTTPException, status
 
 
 from server.schemas.bookmark import Bookmark
@@ -45,14 +45,11 @@ async def remove_bookmarks():
 
 
 @router.post("/add", summary="Add a bookmark")
-async def add_bookmark(elem_id: str, comment: str = Query(..., max_length=100)):
+async def add_bookmark(bookmark: Bookmark = Body(...)):
     """
     Add a bookmark.
-
-    **elem_id**: Id of bookmarked element
-    **comment**: Comment written by the user
     """
-    BookmarkManager.add_bookmark(elem_id, comment)
+    BookmarkManager.add_bookmark(bookmark)
 
 
 @router.get("/is_bookmarked", response_model=bool)

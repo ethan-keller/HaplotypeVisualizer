@@ -9,7 +9,6 @@ from cli.schemas.layout import Position, Bounds
 
 
 class KDTreeNode:
-    # TODO: add parent as field?
     def __init__(self, segment_id: str, bounds: Bounds, position: Position, split_x=True):
         self.segment_id = segment_id
         self.bounds = bounds
@@ -149,7 +148,6 @@ class KDTree:
         return True
 
     def print(self) -> None:
-        # TODO: better visualization
         traversal = self.in_order_traversal()
         for node in set(traversal):
             print(node)
@@ -228,8 +226,6 @@ class KDTree:
 
     @classmethod
     def create_tree_from_layout(cls, layout: Layout) -> "KDTree":
-        # TODO: need bound information in tree?
-        # TODO: is y needed?
         X = np.zeros((len(layout.nodes), 4), dtype=object)
         for i, (segment, (position, bounds)) in enumerate(layout.nodes.items()):
             X[i] = (segment, bounds, position.x, position.y)

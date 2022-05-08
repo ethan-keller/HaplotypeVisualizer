@@ -3,7 +3,8 @@ from cli.schemas.layout import Position
 from pydantic import BaseModel, dataclasses
 
 
-class RectangleRange(BaseModel):
+@dataclasses.dataclass
+class RectangleRange:
     lu: Position
     rd: Position
 

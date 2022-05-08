@@ -151,7 +151,7 @@ class Gfa:
         elif element_type == GFA_ELEMENT.LINK:
             return cls._fields_to_dict(line, link_optional_fields)
         else:
-            # TODO: add more elif's
+            # TODO: add elif's for other types
             return None
 
     @classmethod

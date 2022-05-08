@@ -52,7 +52,6 @@ class FileManager:
 
     @classmethod
     def validate(cls, file_path: Path, id: int) -> bool:
-        # TODO: Maybe some other validation? File size etc?
         if not cls.is_valid_id(id):
             raise Exception(f"Invalid file id: {id}")
         if not cls.is_valid_file_extension(file_path, id):
@@ -92,16 +91,12 @@ class FileManager:
     @classmethod
     def prepare_files(cls) -> None:
         if managers.GfaManager.segment_map is None:
-            print("preparing gfa")
             managers.GfaManager.prepare_gfa()
         if managers.LayoutManager.index is None:
-            print("preparing index")
             managers.LayoutManager.prepare_layout()
         if managers.PhenoManager.phenotypes is None:
-            print("preparing pheno")
             managers.PhenoManager.prepare_pheno()
         if managers.BookmarkManager.bookmarks is None:
-            print("Preparing bookmarks")
             managers.BookmarkManager.prepare()
 
     @classmethod

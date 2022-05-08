@@ -27,7 +27,6 @@ class Layout:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
                 cwd = "./graph_layout"
-                # TODO: folder should be what user specifies (e.g., temp)
                 if Path(os.getcwd()).name == "server":
                     cwd = "../cli/cli/graph_layout"
 

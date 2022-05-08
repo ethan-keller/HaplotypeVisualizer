@@ -101,9 +101,7 @@ class GfaManager:
         gfa_file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
         gfa_hash = cls.get_hash()
         if cls.recognize(gfa_file_path):
-            print("deserializing gfa")
             gfa = Gfa.deserialize(from_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
-            print("Done deserializing gfa")
         else:
             gfa = Gfa.read_gfa_from_file(gfa_file_path)
             Gfa.serialize(gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
