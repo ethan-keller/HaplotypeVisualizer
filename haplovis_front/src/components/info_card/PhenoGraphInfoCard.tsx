@@ -1,4 +1,3 @@
-import { Card } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { FeatureSelection } from '../../types/graph';
 import InfoCard from './InfoCard';
@@ -17,7 +16,6 @@ const PhenoGraphInfoCard: React.FC<PhenoGraphInfoCardProps> = (props) => {
 
   return feature ? (
     <InfoCard feature={feature} onClose={props.onClose}>
-      <Card.Subtitle className='mb-2 text-muted'>Phenotypes</Card.Subtitle>
       <PhenoGraphInfoCardSection feature={feature} />
     </InfoCard>
   ) : null;

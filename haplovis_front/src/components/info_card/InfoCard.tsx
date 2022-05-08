@@ -71,9 +71,11 @@ const InfoCard: React.FC<InfoCardProps> = ({ feature, onClose, children }) => {
           />
 
           {bookmark ? <div className='bookmarked'>Bookmarked ✓</div> : null}
-          <div style={{ position: 'absolute', right: 0, top: 0, padding: 15}}>
-            <CloseButton onClick={onClose} />
-          </div>
+
+          <CloseButton
+            style={{ position: 'absolute', right: 0, top: 0, padding: 15 }}
+            onClick={onClose}
+          />
         </Card.Body>
       </Card>
     </div>

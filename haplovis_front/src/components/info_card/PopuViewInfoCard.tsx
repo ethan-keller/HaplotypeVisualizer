@@ -1,4 +1,3 @@
-import { Card } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import { FeatureSelection } from '../../types/graph';
 import InfoCard from './InfoCard';
@@ -17,10 +16,6 @@ const PopuViewInfoCard: React.FC<PopuViewInfoCardProps> = (props) => {
 
   return feature ? (
     <InfoCard feature={feature} onClose={props.onClose}>
-      <Card.Subtitle className='mb-2 text-muted'>Paths</Card.Subtitle>
-      <Card.Text>
-        <b>{feature.paths.length}</b> paths through this {props.feature.type}
-      </Card.Text>
       <PopuViewInfoCardSection feature={feature} />
     </InfoCard>
   ) : null;

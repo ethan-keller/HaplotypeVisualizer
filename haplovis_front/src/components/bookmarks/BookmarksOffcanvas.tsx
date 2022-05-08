@@ -32,7 +32,7 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
           disabled={
             bookmarks === undefined || bookmarks === null || Object.keys(bookmarks).length === 0
           }
-          variant='secondary'
+          variant='warning'
         >
           Export bookmarks
           <BsDownload style={{ marginLeft: 10 }} />
