@@ -27,7 +27,6 @@ def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
         if path.suffix not in valid_extensions:
             styled_err_explanation = typer.style(f"Invalid file extension {path.suffix}", fg=typer.colors.RED)
             raise typer.BadParameter(styled_err_explanation)
-        # TODO: add other validation? e.g., file size, ...
 
     return paths
 
@@ -49,22 +48,29 @@ def layout(
         callback=path_validation_callback,
     ),
     output_folder: Path = typer.Option(DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True),
-    verbose: bool = typer.Option(False, "--verbose", "-v"),
+    verbose: bool = typer.Option(True, "--verbose", "-v"),
 ):
-    # TODO: add verbose texts
-    # TODO: add progress bars
 
     for gfa in gfas:
-        # TODO: add try except with red text for when layout fails
-        layout = Layout.get_layout_from_gfa_file(gfa)
-        kdtree = KDTree.create_tree_from_layout(layout)
-        gfa_hash = Gfa.get_gfa_hash(gfa)
-        if gfa_hash:
-            index_file_path = Path(f".{output_folder}/{gfa_hash}.pickle").resolve()
-            out_path = PickleSerializer.serialize(kdtree, index_file_path)
-            typer.secho(f"Successfully computed layout for {gfa} --> Stored at {str(out_path)}", fg="green")
-        else:
-            typer.secho(f"Could not compute layout for {gfa}", fg="red")
+        try:
+            if verbose:
+                typer.echo(f"Creating layout for {str(gfa)}")
+                typer.echo("Computing layout...")
+            layout = Layout.get_layout_from_gfa_file(gfa)
+            if verbose:
+                typer.echo(f"Creating index tree for layout...")
+            kdtree = KDTree.create_tree_from_layout(layout)
+            gfa_hash = Gfa.get_gfa_hash(gfa)
+            if gfa_hash:
+                if verbose:
+                    typer.echo("Serializing index tree...")
+                index_file_path = Path(f".{output_folder}/{gfa_hash}.pickle").resolve()
+                out_path = PickleSerializer.serialize(kdtree, index_file_path)
+                typer.secho(f"Successfully computed layout for {gfa} --> Stored at {str(out_path)}", fg="green")
+            else:
+                typer.secho(f"Could not compute layout for {gfa}", fg="red")
+        except Exception as e:
+            typer.secho(f"Unexpected error occured: [{e}]", fg="red")
 
 
 @APP.command()
@@ -89,7 +95,7 @@ def see_layout(
 @APP.callback()
 def main(version: Optional[bool] = typer.Option(None, "--version", is_eager=True, callback=version_callback)):
     """
-    TODO: Explain CLI workings
+    This CLI functions as a stand-alone application to create layout files that can be used in HaplotypVisualizer.
     """
     pass
 
