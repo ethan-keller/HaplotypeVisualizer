@@ -50,7 +50,6 @@ const viewportNeedsUpdate = (
   newViewport: RectangleRange,
   buffer: number,
 ) => {
-  // current viewport contains buffer
   // if new viewport passes at least one limit => update
   return (
     newViewport.lu.x <= currentViewport.lu.x + buffer ||
