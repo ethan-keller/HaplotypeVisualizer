@@ -43,13 +43,6 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
         </Button>
         <EditPathsModal show={showEditColors} onHide={() => setShowEditColors(false)} />
       </SidebarSection>
-
-      <SidebarSection title='Layout options'>
-        <Button onClick={() => setShowEditLayout(true)} size='sm'>
-          Edit layout
-        </Button>
-        <EditLayoutModal show={showEditLayout} onHide={() => setShowEditLayout(false)} />
-      </SidebarSection>
     </Sidebar>
   );
 };
