@@ -4,7 +4,7 @@ from cli.serialization import JsonSerializer
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
 from server.managers import GfaManager
-from cli.schemas.gfa import Gfa, GfaSegment, GfaLink, GfaPath, GfaInfo
+from cli.schemas.gfa import GfaSegment, GfaLink, GfaPath, GfaInfo
 
 
 router = APIRouter(prefix="/gfa", tags=["gfa"])

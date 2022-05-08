@@ -1,5 +1,6 @@
 import { Form } from 'react-bootstrap';
 import PhenoFilterSelect from '../../select/PhenoFilterSelect';
+import SampleFilterSelect from '../../select/SampleFilterSelect';
 import VerticalSpacer from '../../VerticalSpacer';
 import SidebarSection from './SidebarSection';
 
@@ -12,6 +13,7 @@ const PhenoFilterSidebarSection: React.FC<PhenoFilterSidebarSectionProps> = (pro
       <PhenoFilterSelect />
       <VerticalSpacer space={10} />
       <Form.Label style={{ fontSize: 14 }}>Samples</Form.Label>
+      <SampleFilterSelect />
     </SidebarSection>
   );
 };

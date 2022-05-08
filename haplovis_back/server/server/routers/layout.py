@@ -1,33 +1,15 @@
-from typing import Any, List, Optional
+from typing import List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import Json
 from server.schemas.layout import Layout, Position, RectangleRange
-from server.logic.density import get_density_values, get_down_sample_factor
+from server.logic.density import get_down_sample_factor
 
 from server.managers import LayoutManager
 
 router = APIRouter(prefix="/layout", tags=["layout"])
 
 
-# @router.get(
-#     "/",
-#     response_model=Layout,
-#     summary="Gets all nodes",
-# )
-# async def get_all_layout_nodes():
-#     """
-#     Gets all layout nodes from the index. # TODO: Containing bounds
-#     """
-#     if LayoutManager.is_index_empty():
-#         raise HTTPException(
-#             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-#             detail="Could not get nodes because there is no index available",
-#         )
-#     else:
-#         return LayoutManager.get_all_layout_nodes()
-
-
-def get_range(range: Json = Query(...)) -> RectangleRange:
+async def get_range(range: Json = Query(...)) -> RectangleRange:
     try:
         viewport = RectangleRange.parse_obj(range)
         # swap y axis (js coordinate system)

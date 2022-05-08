@@ -1,5 +1,5 @@
 from typing import Dict
-from fastapi import APIRouter, Path, Query, HTTPException, status, File as FastApiFile
+from fastapi import APIRouter, Query, HTTPException, status
 
 
 from server.schemas.bookmark import Bookmark

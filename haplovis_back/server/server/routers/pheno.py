@@ -12,7 +12,7 @@ router = APIRouter(prefix="/pheno", tags=["pheno"])
     response_model=Dict[str, Dict[str, Any]],
     summary="Get a dict of phenotypes for every sample",
 )
-def get_phenotypes_per_sample():
+async def get_phenotypes_per_sample():
     if PhenoManager.pheno_per_sample is not None:
         return PhenoManager.pheno_per_sample
     else:
@@ -24,7 +24,7 @@ def get_phenotypes_per_sample():
     response_model=Dict[str, Dict[str, List[Any]]],
     summary="Get a dict of phenotypes for every segment",
 )
-def get_phenotypes_per_segment(segments: List[str]):
+async def get_phenotypes_per_segment(segments: List[str]):
     if PhenoManager.pheno_per_sample is not None and GfaManager.segment_map is not None:
         gfa_segments = GfaManager.get_segments_from_ids(segments)
         result: Dict[str, Dict[str, List[Any]]] = {}
@@ -46,7 +46,7 @@ def get_phenotypes_per_segment(segments: List[str]):
     response_model=Dict[str, List[Any]],
     summary="Get all the possible phenotypes and their respective possible phenotypes",
 )
-def get_phenotypes():
+async def get_phenotypes():
     """
     Get all phenotypes and a list of possible values per phenotype.
     """
@@ -57,7 +57,7 @@ def get_phenotypes():
 
 
 @router.get("/samples", response_model=List[str], summary="Get a list of all sample names found in the phenotable")
-def get_sample_names():
+async def get_sample_names():
     if PhenoManager.pheno_per_sample is not None:
         return list(PhenoManager.pheno_per_sample.keys())
     else:

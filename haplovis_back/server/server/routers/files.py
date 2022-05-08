@@ -10,7 +10,7 @@ router = APIRouter(prefix="/files", tags=["files"])
 
 
 @router.get("/", response_model=File, summary="Get a specific needed file")
-def get_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
+async def get_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Get a specific needed files by id.
 
@@ -26,7 +26,7 @@ def get_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
 
 
 @router.get("/ready", response_model=bool, summary="Check if all files are ready")
-def are_all_files_ready():
+async def are_all_files_ready():
     """
     Check if the server has all the necessary information to start visualizing
     """
@@ -35,7 +35,7 @@ def are_all_files_ready():
 
 
 @router.get("/all", response_model=List[File], summary="Get all files")
-def get_files():
+async def get_files():
     """
     Get the list of all needed files.
     """
@@ -48,7 +48,7 @@ def get_files():
     responses={status.HTTP_400_BAD_REQUEST: {"description": "Invalid file extension", "model": str}},
     summary="Update the file name for a specific needed file",
 )
-def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))):
+async def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Update the file information for one of the needed files.
 
@@ -80,7 +80,7 @@ def update_file(name: str, id: int = Query(..., ge=0, lt=len(FileManager.files))
 
 
 @router.put("/clear", summary="Clear file information for a specific needed file")
-def clear_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
+async def clear_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     """
     Clear the file information for one of the needed files.
 
@@ -94,7 +94,7 @@ def clear_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     responses={status.HTTP_424_FAILED_DEPENDENCY: {"description": "Files not ready for preparation", "model": str}},
     summary="Prepare the files for visualization",
 )
-def prepare():
+async def prepare():
     """
     Prepare the files for visualization (pre-processing, transformation, validation, data-structures etc).
     """
@@ -108,7 +108,7 @@ def prepare():
 
 
 @router.put("/preprocess", summary="Preprocess the GFA file")
-def preprocess_gfa():
+async def preprocess_gfa():
     """
     Preprocess the GFA file.
     """
@@ -137,7 +137,7 @@ def preprocess_gfa():
 
 
 @router.post("/upload_layout", summary="Upload layout file")
-def upload_layout(layout_file: UploadFile = FastApiFile(...)):
+async def upload_layout(layout_file: UploadFile = FastApiFile(...)):
     """
     Upload a layout file.
     """
