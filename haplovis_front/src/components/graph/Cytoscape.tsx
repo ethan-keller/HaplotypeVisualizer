@@ -29,7 +29,7 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
     } catch (e) {
       onError(e);
     }
-  }, [zoom, pan, settings]);
+  }, [zoom, pan, settings, graph, layout]);
 
   useEffect(() => {
     const dispatchExtent = (extent: {

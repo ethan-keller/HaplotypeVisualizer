@@ -1,4 +1,4 @@
-export function intersection<T>(set1?: Set<T>, set2?: Set<T>) {
+export function intersection<T>(set1?: Set<T>, set2?: Set<T>): Set<T> | undefined {
   if (isSetUndefinedOrEmpty(set1)) {
     return set2;
   } else if (isSetUndefinedOrEmpty(set2)) {
