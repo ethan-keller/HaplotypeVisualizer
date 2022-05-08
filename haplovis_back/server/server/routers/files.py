@@ -174,9 +174,7 @@ async def upload_bookmarks(bookmarks_file: UploadFile = FastApiFile(...)):
     gfa_hash = GfaManager.get_hash()
     if gfa_hash:
         try:
-            bookmarks_file_path = BookmarkManager.store_bookmarks_in_default_out_dir(bookmarks_file, gfa_hash)
-            BookmarkManager.bookmarks_file_path = bookmarks_file_path
-
+            BookmarkManager.store_bookmarks_in_default_out_dir(bookmarks_file, gfa_hash)
             FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.READY)
         except:
             FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.INVALID)

@@ -113,6 +113,7 @@ class FileManager:
             if id == FileIndex.GFA:
                 managers.GfaManager.clear()
                 managers.LayoutManager.clear()
+                managers.BookmarkManager.clear()
             elif id == FileIndex.PHENO:
                 managers.PhenoManager.clear()
             elif id == FileIndex.BOOKMARKS:

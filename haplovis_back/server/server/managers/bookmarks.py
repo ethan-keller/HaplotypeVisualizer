@@ -11,7 +11,6 @@ from server.schemas.file import FileIndex, FileStatus
 
 class BookmarkManager:
     bookmarks: Optional[Dict[str, Bookmark]] = None
-    bookmarks_file_path: Optional[Path] = None
 
     @classmethod
     def add_bookmark(cls, elem_id: str, comment: str) -> None:
@@ -57,16 +56,19 @@ class BookmarkManager:
                 cls.bookmarks, out_file=Path(f"../cli/cli/out/{gfa_hash}.bookmarks.json")
             )
             if isinstance(file_path, Path):
-                cls.bookmarks_file_path = file_path
+                FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.READY)
+                FileManager.get_file(FileIndex.BOOKMARKS).name = file_path.name
                 return file_path
         return None
 
     @classmethod
-    def load(cls) -> None:
-        if cls.bookmarks_file_path:
-            cls.bookmarks = JsonSerializer.deserialize(from_file=cls.bookmarks_file_path)
+    def load(cls, file_path: Optional[Path] = None) -> None:
+        if file_path is not None:
+            cls.bookmarks = JsonSerializer.deserialize(from_file=file_path)
             FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.READY)
-            FileManager.get_file(FileIndex.BOOKMARKS).name = cls.bookmarks_file_path.name
+            FileManager.get_file(FileIndex.BOOKMARKS).name = file_path.name
+        else:
+            cls.bookmarks = {}
 
     @classmethod
     def prepare(cls) -> None:
@@ -74,10 +76,10 @@ class BookmarkManager:
         if gfa_hash:
             file_path = cls.bookmarks_for_gfa_exists(gfa_hash)
             if file_path:
-                cls.bookmarks_file_path = file_path
+                cls.load(file_path)
+            else:
                 cls.load()
 
     @classmethod
     def clear(cls) -> None:
         cls.bookmarks = None
-        cls.bookmarks_file_path = None
