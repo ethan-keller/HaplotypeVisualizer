@@ -5,13 +5,13 @@ import { FaBullseye } from 'react-icons/fa';
 import { useAppSelector } from '../../store';
 
 interface ZoomWidgetProps {
-  zoom: number;
   onZoom: (newZoom: number) => void;
   onFit: () => void;
   onCenter: () => void;
 }
 
 const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
+  const zoom = useAppSelector((state) => state.graphLayout.zoom);
   const zoomScale = useAppSelector((state) => state.globalSettings.zoomScale);
   return (
     <div>
@@ -38,7 +38,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
         className='widget-button'
         size='sm'
         variant='secondary'
-        onClick={() => props.onZoom(props.zoom + zoomScale)}
+        onClick={() => props.onZoom(zoom + zoomScale)}
       >
         <BsZoomIn size={20} />
       </Button>
@@ -47,7 +47,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
         className='widget-button'
         size='sm'
         variant='secondary'
-        onClick={() => props.onZoom(props.zoom - zoomScale)}
+        onClick={() => props.onZoom(zoom - zoomScale)}
       >
         <BsZoomOut size={20} />
       </Button>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { cytoscapeEdges, cytoscapeNodes } from './cytoscape';
+import { cytoscapeEdges, cytoscapeNodes } from './cytoscape_core';
 import { Layout } from '../../types/layout';
 import { Graph as GraphType } from '../../types/graph';
 import { useAppSelector } from '../../store';
@@ -26,27 +26,19 @@ const Graph: React.FC<GraphProps> = ({ layout, sampleFilteredSegments, phenoFilt
   const { data: links } = gfaApi.useGetLinksQuery(segmentIds);
   const { data: paths } = gfaApi.useGetPathsQuery();
 
+  const filter = useMemo(
+    () => intersection(sampleFilteredSegments, phenoFilteredSegments),
+    [sampleFilteredSegments, phenoFilteredSegments],
+  );
+
   const graph = useMemo(() => {
     if (segments && links && paths) {
-      const filter = intersection(sampleFilteredSegments, phenoFilteredSegments);
       return {
-        nodes: cytoscapeNodes(
-          isSetUndefinedOrEmpty(filter) ? segments : filterSegments(segments, filter!),
-          paths,
-          graphSettings,
-        ),
+        nodes: cytoscapeNodes(filterSegments(segments, filter), paths, graphSettings),
         edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, graphSettings),
       } as GraphType;
     }
-  }, [
-    segments,
-    paths,
-    links,
-    layout,
-    graphSettings,
-    sampleFilteredSegments,
-    phenoFilteredSegments,
-  ]);
+  }, [segments, paths, links, layout, graphSettings, filter]);
 
   return graph ? (
     <CytoscapeWrapper graph={graph} layout={layout} />
@@ -74,8 +66,10 @@ const filterLinks = (links: GfaLink[], layout: Layout, filteredSegments?: Set<st
     );
   }
 };
-const filterSegments = (segments: GfaSegment[], filteredSegments: Set<string>) => {
-  return segments.filter((segment) => filteredSegments.has(segment.name));
+const filterSegments = (segments: GfaSegment[], filteredSegments?: Set<string>) => {
+  return isSetUndefinedOrEmpty(filteredSegments)
+    ? segments
+    : segments.filter((segment) => filteredSegments!.has(segment.name));
 };
 
 export default Graph;
