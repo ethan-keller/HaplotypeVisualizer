@@ -3,7 +3,9 @@ import { Form } from 'react-bootstrap';
 import { updateZoomScale } from '../../slices/globalSettings';
 import { useAppSelector, useAppDispatch } from '../../store';
 
-interface ZoomRangeProps {}
+interface ZoomRangeProps {
+  onChange: (newZoomScale: number) => void;
+}
 
 const ZoomRange: React.FC<ZoomRangeProps> = (props) => {
   const zoomScale = useAppSelector((state) => state.globalSettings.zoomScale);
@@ -12,21 +14,18 @@ const ZoomRange: React.FC<ZoomRangeProps> = (props) => {
   const [value, setValue] = useState<number>(zoomScale);
 
   return (
-    <>
-      <td>
-        Zoom sensitivity: <b>{value}</b>
-      </td>
-      <td className='col-5'>
-        <Form.Range
-          min={0.01}
-          max={0.5}
-          step={0.01}
-          value={value}
-          onChange={(e) => setValue(e.target.valueAsNumber)}
-          onMouseUp={(_) => dispatch(updateZoomScale(value))}
-        />
-      </td>
-    </>
+    <Form.Range
+      min={0.01}
+      max={0.5}
+      step={0.01}
+      value={value}
+      onChange={(e) => {
+        const n = e.target.valueAsNumber;
+        setValue(n);
+        props.onChange(n);
+      }}
+      onMouseUp={(_) => dispatch(updateZoomScale(value))}
+    />
   );
 };
 

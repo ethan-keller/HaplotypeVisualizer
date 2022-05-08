@@ -1,16 +1,15 @@
+import { Form } from 'react-bootstrap';
 import { updateHistogramBins } from '../../slices/globalSettings';
 import { useAppDispatch, useAppSelector } from '../../store';
-import RangeWithLabels from './RangeWithLabels';
 
 interface RangeHistogramBinsProps {}
 
 const RangeHistogramBins: React.FC<RangeHistogramBinsProps> = (props) => {
   const dispatch = useAppDispatch();
-  const histogramBins = useAppSelector((state) => state.globalSettings.histogramBins);
+  const histogramBins = useAppSelector((state) => state.globalSettings.defaultHistogramBins);
 
   return (
-    <RangeWithLabels
-      title={'# Bins'}
+    <Form.Range
       min={2}
       max={40}
       step={1}

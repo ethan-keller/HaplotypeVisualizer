@@ -37,13 +37,7 @@ export const graphLayoutSlice = createSlice({
       //   state.viewport = addViewportBuffer(state.viewport, action.payload, state.bufferSize);
       // }
     },
-    reset: (state) => {
-      state.viewport = initialState.viewport;
-      state.zoom = initialState.zoom;
-      state.pan = initialState.pan;
-      state.extent = initialState.extent;
-      state.bufferSize = initialState.bufferSize;
-    },
+    reset: () => initialState,
   },
 });
 

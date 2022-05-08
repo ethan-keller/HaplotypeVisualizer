@@ -3,12 +3,12 @@ import { Form, Button } from 'react-bootstrap';
 import { useAppDispatch, useAppSelector } from '../../store';
 import SidebarSection from './sidebar_section/SidebarSection';
 import { updateDrawLabels, updateDrawPaths } from '../../slices/graphSettings';
-import RangeSegmentThickness from '../range/RangeSegmentThickness';
-import RangeLinkThickness from '../range/RangeLinkThickness';
 import EditLayoutModal from '../modals/EditLayoutModal';
 import EditPathsModal from '../modals/EditPathsModal';
 import GraphInfoSidebarSection from './sidebar_section/GraphInfoSidebarSection';
 import Sidebar from './Sidebar';
+import RangeSegmentThicknessWithLabel from '../range/with_label/RangeSegmentThicknessWithLabel';
+import RangeLinkThicknessWithLabel from '../range/with_label/RangeLinkThicknessWithLabel';
 
 interface PopulationViewSidebarProps {}
 
@@ -36,8 +36,8 @@ const PopulationViewSidebar: React.FC<PopulationViewSidebarProps> = (props) => {
           checked={graphSettings.drawLabels}
           onChange={(e) => dispatch(updateDrawLabels(e.target.checked))}
         />
-        <RangeSegmentThickness />
-        <RangeLinkThickness />
+        <RangeSegmentThicknessWithLabel title='Segment thickness' />
+        <RangeLinkThicknessWithLabel title='Link thickness' />
         <Button onClick={() => setShowEditColors(true)} size='sm'>
           Edit paths
         </Button>

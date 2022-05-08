@@ -1,11 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GlobalSettings } from '../types/settings';
 
-const initialState: GlobalSettings = {
+export const initialState: GlobalSettings = {
   zoomScale: 0.15,
   navigatorDownSampleFactor: undefined,
   panSensitivity: 100,
-  histogramBins: 6,
+  defaultHistogramBins: 6,
+  defaultDrawPaths: true,
+  defaultDrawLabels: false,
+  defaultSegmentThickness: 10,
+  defaultLinkThickness: 1.5,
 };
 
 export const globalSettingsSlice = createSlice({
@@ -22,15 +26,33 @@ export const globalSettingsSlice = createSlice({
       state.navigatorDownSampleFactor = action.payload;
     },
     updateHistogramBins: (state, action: PayloadAction<number>) => {
-        state.histogramBins = action.payload;
-      },
-    reset: (state) => {
-      state = initialState;
+      state.defaultHistogramBins = action.payload;
     },
+    updateDefaultDrawPaths: (state, action: PayloadAction<boolean>) => {
+      state.defaultDrawPaths = action.payload;
+    },
+    updateDefaultDrawLabels: (state, action: PayloadAction<boolean>) => {
+      state.defaultDrawLabels = action.payload;
+    },
+    updateDefaultSegmentThickness: (state, action: PayloadAction<number>) => {
+      state.defaultSegmentThickness = action.payload;
+    },
+    updateDefaultLinkThickness: (state, action: PayloadAction<number>) => {
+      state.defaultLinkThickness = action.payload;
+    },
+    reset: () => initialState,
   },
 });
 
-export const { updateZoomScale, updatePanSensitivity, updateNavigatorDownSampleFactor, updateHistogramBins } =
-  globalSettingsSlice.actions;
+export const {
+  updateZoomScale,
+  updatePanSensitivity,
+  updateNavigatorDownSampleFactor,
+  updateHistogramBins,
+  updateDefaultDrawLabels,
+  updateDefaultDrawPaths,
+  updateDefaultSegmentThickness,
+  updateDefaultLinkThickness,
+} = globalSettingsSlice.actions;
 
 export default globalSettingsSlice.reducer;

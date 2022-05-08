@@ -1,6 +1,6 @@
 import Select from 'react-select';
 import { updateNavigatorDownSampleFactor } from '../../slices/globalSettings';
-import { useAppDispatch, useAppSelector } from '../../store';
+import { useAppDispatch } from '../../store';
 interface NavigatorDownSampleSelectProps {}
 
 const options = [
@@ -17,23 +17,15 @@ const options = [
 
 const NavigatorDownSampleSelect: React.FC<NavigatorDownSampleSelectProps> = (props) => {
   const dispatch = useAppDispatch();
-  const downSampleFactor = useAppSelector((state) => state.globalSettings.navigatorDownSampleFactor);
   return (
-    <>
-      <td>
-        Navigator compression factor: <b>{downSampleFactor ?? 'auto'}</b>
-      </td>
-      <td className='col-5'>
-        <Select
-          options={options}
-          isSearchable
-          defaultValue={options[0]}
-          onChange={(value) => {
-            dispatch(updateNavigatorDownSampleFactor(value?.value));
-          }}
-        />
-      </td>
-    </>
+    <Select
+      options={options}
+      isSearchable
+      defaultValue={options[0]}
+      onChange={(value) => {
+        dispatch(updateNavigatorDownSampleFactor(value?.value));
+      }}
+    />
   );
 };
 

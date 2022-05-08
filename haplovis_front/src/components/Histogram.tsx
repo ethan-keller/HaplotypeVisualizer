@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { VictoryAxis, VictoryChart, VictoryHistogram } from 'victory';
 import { useAppSelector } from '../store';
-import RangeHistogramBins from './range/RangeHistogramBins';
+import RangeHistogramBinsWithLabel from './range/with_label/RangeHistogramBinsWithLabel';
 
 interface BarPlotProps {
   values: number[];
 }
 
 const Histogram: React.FC<BarPlotProps> = (props) => {
-  const bins = useAppSelector((state) => state.globalSettings.histogramBins);
+  const bins = useAppSelector((state) => state.globalSettings.defaultHistogramBins);
   const sharedAxisStyles = {
     axis: {
       stroke: 'transparent',
@@ -51,7 +51,7 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
         />
       </VictoryChart>
       <div style={{ width: '85%', margin: 'auto' }}>
-        <RangeHistogramBins />
+        <RangeHistogramBinsWithLabel title='# bins' />
       </div>
     </div>
   );

@@ -1,7 +1,11 @@
 import { Modal, Table } from 'react-bootstrap';
-import PanRange from '../range/PanRange';
-import ZoomRange from '../range/ZoomRange';
-import NavigatorDownSampleSelect from '../select/NavigatorDownSampleSelect';
+import DrawLabelsSetting from '../settings/DrawLabelsSetting';
+import DrawPathsSetting from '../settings/DrawPathsSetting';
+import LinkThicknessSetting from '../settings/LinkThicknessSetting';
+import NavigatorCompressionSetting from '../settings/NavigatorCompressionSetting';
+import PanSetting from '../settings/PanSetting';
+import SegmentThicknessSetting from '../settings/SegmentThicknessSetting';
+import ZoomSetting from '../settings/ZoomSetting';
 
 interface SettingsModalProps {
   show: boolean;
@@ -18,14 +22,28 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
         <Table style={{ fontWeight: 100 }} size='sm'>
           <tbody className='align-middle'>
             <tr>
-              <ZoomRange />
+              <ZoomSetting />
             </tr>
             <tr>
-              <PanRange />
+              <PanSetting />
             </tr>
             <tr>
-              <NavigatorDownSampleSelect />
+              <NavigatorCompressionSetting />
             </tr>
+            <tr>
+              <DrawPathsSetting />
+            </tr>
+            <tr>
+              <DrawLabelsSetting />
+            </tr>
+            <tr>
+              <SegmentThicknessSetting />
+            </tr>
+            <tr>
+              <LinkThicknessSetting />
+            </tr>
+
+            {/* TODO: add default colors? */}
           </tbody>
         </Table>
       </Modal.Body>

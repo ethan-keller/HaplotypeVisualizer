@@ -3,7 +3,9 @@ import { Form } from 'react-bootstrap';
 import { updatePanSensitivity } from '../../slices/globalSettings';
 import { useAppSelector, useAppDispatch } from '../../store';
 
-interface PanRangeProps {}
+interface PanRangeProps {
+  onChange: (newPanSensitivity: number) => void;
+}
 
 const PanRange: React.FC<PanRangeProps> = (props) => {
   const panSensitivity = useAppSelector((state) => state.globalSettings.panSensitivity);
@@ -12,21 +14,18 @@ const PanRange: React.FC<PanRangeProps> = (props) => {
   const [value, setValue] = useState<number>(panSensitivity);
 
   return (
-    <>
-      <td>
-        Pan sensitivity: <b>{value}</b>
-      </td>
-      <td className='col-5'>
-        <Form.Range
-          min={10}
-          max={800}
-          step={10}
-          value={value}
-          onChange={(e) => setValue(e.target.valueAsNumber)}
-          onMouseUp={(_) => dispatch(updatePanSensitivity(value))}
-        />
-      </td>
-    </>
+    <Form.Range
+      min={10}
+      max={800}
+      step={10}
+      value={value}
+      onChange={(e) => {
+        const n = e.target.valueAsNumber;
+        setValue(n);
+        props.onChange(n);
+      }}
+      onMouseUp={(_) => dispatch(updatePanSensitivity(value))}
+    />
   );
 };
 

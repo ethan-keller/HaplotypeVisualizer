@@ -1,11 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GraphSettings } from '../types/graph';
+import { initialState as globalSettings } from './globalSettings';
 
 const initialState: GraphSettings = {
-  drawPaths: true,
-  drawLabels: false,
-  linkThickness: 1.5,
-  segmentThickness: 10,
+  drawPaths: globalSettings.defaultDrawPaths,
+  drawLabels: globalSettings.defaultDrawLabels,
+  linkThickness: globalSettings.defaultLinkThickness,
+  segmentThickness: globalSettings.defaultSegmentThickness,
   pathColors: [
     '#EF4394',
     '#BB2224',
@@ -51,9 +52,7 @@ export const graphSettingsSlice = createSlice({
     toggleActivePath: (state, action: PayloadAction<number>) => {
       state.activePaths[action.payload] = !state.activePaths[action.payload];
     },
-    reset: (state) => {
-      state = initialState;
-    },
+    reset: () => initialState,
   },
 });
 
@@ -66,6 +65,7 @@ export const {
   updateSegmentThickness,
   setActivePaths,
   toggleActivePath,
+  reset,
 } = graphSettingsSlice.actions;
 
 export default graphSettingsSlice.reducer;

@@ -12,9 +12,7 @@ export const graphSelectionSlice = createSlice({
     updateFeature: (state, action: PayloadAction<FeatureSelection | undefined>) => {
       state.feature = action.payload;
     },
-    reset: (state) => {
-      state.feature = initialState.feature;
-    },
+    reset: () => initialState,
   },
 });
 
