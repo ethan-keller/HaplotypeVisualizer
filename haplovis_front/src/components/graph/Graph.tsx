@@ -29,7 +29,6 @@ const Graph: React.FC<GraphProps> = ({ layout, sampleFilteredSegments, phenoFilt
   const graph = useMemo(() => {
     if (segments && links && paths) {
       const filter = intersection(sampleFilteredSegments, phenoFilteredSegments);
-      console.log('filter', filter);
       return {
         nodes: cytoscapeNodes(
           isSetUndefinedOrEmpty(filter) ? segments : filterSegments(segments, filter!),

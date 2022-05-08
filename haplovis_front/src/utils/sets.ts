@@ -1,5 +1,4 @@
 export function intersection<T>(set1?: Set<T>, set2?: Set<T>) {
-    console.log("intersect", set1, set2)
   if (isSetUndefinedOrEmpty(set1)) {
     return set2;
   } else if (isSetUndefinedOrEmpty(set2)) {
