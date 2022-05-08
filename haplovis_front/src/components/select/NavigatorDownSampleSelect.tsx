@@ -1,5 +1,5 @@
 import Select from 'react-select';
-import { updateNavigatorDownSampleFactor } from '../../slices/graphSettings';
+import { updateNavigatorDownSampleFactor } from '../../slices/globalSettings';
 import { useAppDispatch, useAppSelector } from '../../store';
 interface NavigatorDownSampleSelectProps {}
 
@@ -17,7 +17,7 @@ const options = [
 
 const NavigatorDownSampleSelect: React.FC<NavigatorDownSampleSelectProps> = (props) => {
   const dispatch = useAppDispatch();
-  const downSampleFactor = useAppSelector((state) => state.graphSettings.navigatorDownSampleFactor);
+  const downSampleFactor = useAppSelector((state) => state.globalSettings.navigatorDownSampleFactor);
   return (
     <>
       <td>

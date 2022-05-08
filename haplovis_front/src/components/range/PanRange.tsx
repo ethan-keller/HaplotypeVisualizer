@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { updatePanSensitivity } from '../../slices/graphSettings';
+import { updatePanSensitivity } from '../../slices/globalSettings';
 import { useAppSelector, useAppDispatch } from '../../store';
 
 interface PanRangeProps {}
 
 const PanRange: React.FC<PanRangeProps> = (props) => {
-  const panSensitivity = useAppSelector((state) => state.graphSettings.panSensitivity);
+  const panSensitivity = useAppSelector((state) => state.globalSettings.panSensitivity);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState<number>(panSensitivity);

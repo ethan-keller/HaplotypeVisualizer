@@ -15,7 +15,7 @@ interface PanWidgetProps {
 }
 
 const PanWidget: React.FC<PanWidgetProps> = (props) => {
-  const singlePan = useAppSelector((state) => state.graphSettings.panSensitivity);
+  const singlePan = useAppSelector((state) => state.globalSettings.panSensitivity);
   const doublePan = 2 * singlePan;
 
   const pan = (left: boolean, double: boolean, up?: boolean) => {

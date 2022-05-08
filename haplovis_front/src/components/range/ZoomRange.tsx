@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Form } from 'react-bootstrap';
-import { updateZoomScale } from '../../slices/graphSettings';
+import { updateZoomScale } from '../../slices/globalSettings';
 import { useAppSelector, useAppDispatch } from '../../store';
 
 interface ZoomRangeProps {}
 
 const ZoomRange: React.FC<ZoomRangeProps> = (props) => {
-  const zoomScale = useAppSelector((state) => state.graphSettings.zoomScale);
+  const zoomScale = useAppSelector((state) => state.globalSettings.zoomScale);
   const dispatch = useAppDispatch();
 
   const [value, setValue] = useState<number>(zoomScale);

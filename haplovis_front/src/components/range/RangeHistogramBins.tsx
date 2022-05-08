@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { updateHistogramBins } from '../../slices/globalSettings';
+import { useAppDispatch, useAppSelector } from '../../store';
 import RangeWithLabels from './RangeWithLabels';
 
-interface RangeHistogramBinsProps {
-  onChange: (newBins: number) => void;
-}
+interface RangeHistogramBinsProps {}
 
 const RangeHistogramBins: React.FC<RangeHistogramBinsProps> = (props) => {
-  const [value, setValue] = useState<number>(6);
+  const dispatch = useAppDispatch();
+  const histogramBins = useAppSelector((state) => state.globalSettings.histogramBins);
 
   return (
     <RangeWithLabels
@@ -14,11 +14,8 @@ const RangeHistogramBins: React.FC<RangeHistogramBinsProps> = (props) => {
       min={2}
       max={40}
       step={1}
-      value={value}
-      onChange={(e) => {
-        setValue(e.target.valueAsNumber);
-        props.onChange(e.target.valueAsNumber);
-      }}
+      value={histogramBins}
+      onChange={(e) => dispatch(updateHistogramBins(e.target.valueAsNumber))}
     />
   );
 };

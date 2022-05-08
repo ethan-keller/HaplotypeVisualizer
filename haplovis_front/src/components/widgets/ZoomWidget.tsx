@@ -12,7 +12,7 @@ interface ZoomWidgetProps {
 }
 
 const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
-  const zoomScale = useAppSelector((state) => state.graphSettings.zoomScale);
+  const zoomScale = useAppSelector((state) => state.globalSettings.zoomScale);
   return (
     <div>
       <Button
