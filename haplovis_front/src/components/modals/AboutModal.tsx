@@ -13,8 +13,7 @@ const AboutModal: React.FC<AboutModalProps> = (props) => {
       </Modal.Header>
       <Modal.Body>
         <p>
-          This is a program to browse polyploid haplotype graphs. The app can read GFA format URLs
-          and local files, all processing is done client side currently.
+          This is a program to browse polyploid haplotype graphs. The app reads GFA files.
         </p>
         <p>
           Contact <a href={'mailto:e.keller@student.tudelft.nl'}>Ethan Keller</a>
