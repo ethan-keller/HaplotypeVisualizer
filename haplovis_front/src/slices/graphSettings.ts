@@ -7,6 +7,7 @@ const initialState: GraphSettings = {
   linkThickness: 1.5,
   segmentThickness: 10,
   zoomScale: 0.15,
+  navigatorDownSampleFactor: undefined,
   panSensitivity: 100,
   pathColors: [
     '#EF4394',
@@ -42,6 +43,9 @@ export const graphSettingsSlice = createSlice({
     updatePanSensitivity: (state, action: PayloadAction<number>) => {
       state.panSensitivity = action.payload;
     },
+    updateNavigatorDownSampleFactor: (state, action: PayloadAction<number | undefined>) => {
+      state.navigatorDownSampleFactor = action.payload;
+    },
     updateSegmentThickness: (state, action: PayloadAction<number>) => {
       state.segmentThickness = action.payload;
     },
@@ -73,6 +77,7 @@ export const {
   updateLinkThickness,
   updateZoomScale,
   updatePanSensitivity,
+  updateNavigatorDownSampleFactor,
   updateSegmentThickness,
   setActivePaths,
   toggleActivePath,

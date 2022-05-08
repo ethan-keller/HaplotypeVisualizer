@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import Json
 from server.schemas.layout import Layout, Position, RectangleRange
@@ -71,7 +71,7 @@ async def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_rang
     response_model=List[int],
     summary="Get variation densities along with their x coordinates",
 )
-async def get_densities():
+async def get_densities(down_sample_factor: Optional[int] = None):
     """
     Gets density values along with their respective x coordinates.
     """
@@ -82,7 +82,7 @@ async def get_densities():
             detail="Could not compute densities because there is no bound information",
         )
 
-    bounds = LayoutManager.get_all_bounds()
-    densities = get_density_values(bounds, get_down_sample_factor(len(bounds)))
+    densities = LayoutManager.get_densities()
+    f = down_sample_factor if down_sample_factor is not None else get_down_sample_factor(len(densities))
     print("Got density")
-    return densities
+    return densities[::f]

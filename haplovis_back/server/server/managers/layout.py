@@ -2,26 +2,27 @@ import os
 from pathlib import Path
 from typing import List, Optional
 from cli.layout import Layout
-from cli.schemas.layout import Bounds
 from fastapi import UploadFile
 from cli.gfa import Gfa
 from cli.kdtree import KDTree
+from server.logic.density import get_density_values
 from server.schemas.layout import Layout as LayoutType, LayoutNode, RectangleRange
 
 
 class LayoutManager:
     index: Optional[KDTree] = None
-    bounds: Optional[List[Bounds]] = None
+    densities: Optional[List[int]] = None
     index_file_path: Optional[Path] = None
 
     @classmethod
-    def get_all_bounds(cls) -> List[Bounds]:
-        if cls.bounds is not None:
-            return cls.bounds
+    def get_densities(cls) -> List[int]:
+        if cls.densities is not None:
+            return cls.densities
         elif cls.index is not None:
             kdtree_nodes = cls.index.in_order_traversal()
-            cls.bounds = [node.bounds for node in set(kdtree_nodes)]
-            return cls.bounds
+            bounds = [node.bounds for node in set(kdtree_nodes)]
+            cls.densities = get_density_values(bounds)
+            return cls.densities
         else:
             return []
 
@@ -72,5 +73,5 @@ class LayoutManager:
     @classmethod
     def clear(cls) -> None:
         cls.index = None
-        cls.bounds = None
+        cls.densities = None
         cls.index_file_path = None

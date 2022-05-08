@@ -14,6 +14,7 @@ export interface GraphSettings {
   segmentThickness: number;
   pathColors: string[];
   activePaths: boolean[];
+  navigatorDownSampleFactor?: number;
 }
 
 export interface FeatureSelection {

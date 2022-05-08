@@ -21,8 +21,8 @@ const layoutApi = createApi({
         params: { range: JSON.stringify(range) },
       }),
     }),
-    getDensities: builder.query<number[], void>({
-      query: () => ({ url: getDensities, method: 'GET' }),
+    getDensities: builder.query<number[], { down_sample_factor?: number }>({
+      query: (params) => ({ url: getDensities, params: params, method: 'GET' }),
     }),
   }),
 });

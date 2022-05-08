@@ -75,10 +75,7 @@ class BookmarkManager:
         gfa_hash = GfaManager.get_hash()
         if gfa_hash:
             file_path = cls.bookmarks_for_gfa_exists(gfa_hash)
-            if file_path:
-                cls.load(file_path)
-            else:
-                cls.load()
+            cls.load(file_path)
 
     @classmethod
     def clear(cls) -> None:

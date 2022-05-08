@@ -16,7 +16,7 @@ const PanRange: React.FC<PanRangeProps> = (props) => {
       <td>
         Pan sensitivity: <b>{value}</b>
       </td>
-      <td>
+      <td className='col-5'>
         <Form.Range
           min={10}
           max={800}
