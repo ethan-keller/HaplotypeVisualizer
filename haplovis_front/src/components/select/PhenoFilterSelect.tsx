@@ -64,7 +64,7 @@ const transformPhenoFilters = (phenotypes: PhenoRecord[]) => {
   return result;
 };
 
-const getFilteredSegments = (
+export const getFilteredSegments = (
   phenosPerSample: PhenosPerSample,
   paths: Record<string, GfaPath>,
   phenos: Record<string, Set<PhenoValue>>,

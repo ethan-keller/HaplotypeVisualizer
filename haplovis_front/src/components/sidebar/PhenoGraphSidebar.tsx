@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from 'react-bootstrap';
-import EditPhenotypesModal from '../modals/EditPhenotypesModal';
+import IsolatePhenotypeModal from '../modals/IsolatePhenotypeModal';
 import Sidebar from './Sidebar';
 import GraphInfoSidebarSection from './sidebar_section/GraphInfoSidebarSection';
 import PhenoFilterSidebarSection from './sidebar_section/PhenoFilterSidebarSection';
@@ -19,9 +19,9 @@ const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
       <PhenoFilterSidebarSection />
       <SidebarSection title=''>
         <Button size='sm' onClick={() => setShowEditPhenotypes(true)}>
-          Edit phenotypes
+          Isolate a phenotype
         </Button>
-        <EditPhenotypesModal
+        <IsolatePhenotypeModal
           show={showEditPhenotypes}
           onHide={() => setShowEditPhenotypes(false)}
         />

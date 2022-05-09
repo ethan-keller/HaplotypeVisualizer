@@ -4,6 +4,7 @@ import { Form } from 'react-bootstrap';
 interface ColorPickerProps {
   defaultColor: string;
   onPick: (color: string) => void;
+  style?: React.CSSProperties;
 }
 
 const ColorPicker: React.FC<ColorPickerProps> = (props) => {
@@ -11,6 +12,7 @@ const ColorPicker: React.FC<ColorPickerProps> = (props) => {
 
   return (
     <Form.Control
+      style={props.style}
       className='color-picker'
       type='color'
       size='sm'

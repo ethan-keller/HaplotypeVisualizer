@@ -8,7 +8,7 @@ const PhenoStatsSidebarSection: React.FC<PhenoStatsSidebarSectionProps> = (props
   const { data: phenotypes } = phenoApi.useGetPhenotypesQuery();
   const { data: samples } = phenoApi.useGetSampleNamesQuery();
   return (
-    <SidebarSection title='Pheno stats'>
+    <SidebarSection title='Phenotype information'>
       <StatTable
         tableEntries={{
           samples: samples ? samples.length.toString() : '-',

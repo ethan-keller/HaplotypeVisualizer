@@ -45,8 +45,6 @@ code {
   border: none;
   width: 32px;
   height: 32px;
-  /* padding: 0; */
-  margin: auto;
 }
 
 input[type='color']::-webkit-color-swatch-wrapper {

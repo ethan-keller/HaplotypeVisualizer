@@ -40,6 +40,7 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
                   <td className='text-start'>{path.name}</td>
                   <td className='text-center'>
                     <ColorPicker
+                      style={{ margin: 'auto' }}
                       defaultColor={pathColors[path.index]}
                       onPick={(color) =>
                         dispatch(updatePathColor({ path: path.index, color: color }))

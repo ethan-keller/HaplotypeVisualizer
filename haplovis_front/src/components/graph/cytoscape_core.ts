@@ -3,6 +3,7 @@ import dagre from 'cytoscape-dagre';
 import { Layout, Position } from '../../types/layout';
 import { Graph, GraphSettings } from '../../types/graph';
 import { GfaFeature, GfaLink, GfaPath, GfaSegment } from '../../types/gfa';
+import { PhenoIsolate } from '../../types/pheno';
 
 cytoscape.use(dagre);
 
@@ -44,9 +45,16 @@ export const cytoscapeNodes = (
   segments: GfaSegment[],
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
+  isolate: PhenoIsolate,
 ) => {
   return segments.map((segment: GfaSegment) => {
-    const gradient = getGradient(segment, paths, settings);
+    const isolatedColor =
+      isolate.isolateSegments.size !== 0
+        ? isolate.isolateSegments.has(segment.name)
+          ? isolate.color
+          : '#999999'
+        : undefined;
+    const gradient = getGradient(segment, paths, settings, isolatedColor);
     return {
       // TODO: create type for data object
       data: {
@@ -72,9 +80,17 @@ export const cytoscapeEdges = (
   links: GfaLink[],
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
+  isolate: PhenoIsolate,
 ) => {
   return links.map((link: GfaLink) => {
-    const gradient = getGradient(link, paths, settings);
+    const isolatedColor =
+      isolate.isolateSegments.size !== 0
+        ? isolate.isolateSegments.has(link.from_segment) &&
+          isolate.isolateSegments.has(link.to_segment)
+          ? isolate.color
+          : '#999999'
+        : undefined;
+    const gradient = getGradient(link, paths, settings, isolatedColor);
     return {
       data: {
         source: link.from_segment,
@@ -92,6 +108,7 @@ const getGradient = (
   feature: GfaFeature,
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
+  isolateColor?: string,
 ) => {
   const gradient: { stopColors: string[]; stopPositions: number[] } = {
     stopColors: [],
@@ -99,11 +116,16 @@ const getGradient = (
   };
   feature.paths.forEach((path, i, array) => {
     const index = paths[path].index;
-    const c = settings.activePaths[index] ? settings.pathColors[index] : '#999999';
+    const c = isolateColor
+      ? isolateColor
+      : settings.activePaths[index]
+      ? settings.pathColors[index]
+      : '#999999';
     gradient.stopColors.push(c, c);
 
     gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
   });
+
   return gradient;
 };
 

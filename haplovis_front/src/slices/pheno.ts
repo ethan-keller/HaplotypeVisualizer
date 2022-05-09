@@ -1,11 +1,16 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PhenoState, PhenoValue } from '../types/pheno';
+import { PhenoIsolate, PhenoState, PhenoValue } from '../types/pheno';
 
 const initialState: PhenoState = {
   sampleFilters: new Set<string>(),
   sampleFilteredSegments: new Set<string>(),
   phenoFilters: {},
   phenoFilteredSegments: new Set<string>(),
+  isolate: {
+    isolateSegments: new Set<string>(),
+    color: '#1B998B',
+    pheno: { phenotype: '', value: '', label: '' },
+  },
 };
 
 export const phenoSlice = createSlice({
@@ -23,15 +28,21 @@ export const phenoSlice = createSlice({
       state.phenoFilters = action.payload.phenos;
       state.phenoFilteredSegments = new Set<string>(action.payload.segments);
     },
-    reset: (state) => {
-      state.sampleFilters = new Set<string>();
-      state.sampleFilteredSegments = new Set<string>();
-      state.phenoFilters = {};
-      state.phenoFilteredSegments = new Set<string>();
+    updateIsolate: (state, action: PayloadAction<PhenoIsolate>) => {
+      state.isolate.isolateSegments = action.payload.isolateSegments;
+      state.isolate.color = action.payload.color;
+      state.isolate.pheno = action.payload.pheno;
     },
+    clearIsolate: (state) => {
+      state.isolate.isolateSegments = initialState.isolate.isolateSegments;
+      state.isolate.color = initialState.isolate.color;
+      state.isolate.pheno = initialState.isolate.pheno;
+    },
+    reset: () => initialState,
   },
 });
 
-export const { addPhenoFilter, addSampleFilter, reset } = phenoSlice.actions;
+export const { addPhenoFilter, addSampleFilter, updateIsolate, clearIsolate, reset } =
+  phenoSlice.actions;
 
 export default phenoSlice.reducer;

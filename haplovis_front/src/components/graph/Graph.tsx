@@ -22,6 +22,7 @@ const Graph: React.FC<GraphProps> = ({ layout, sampleFilteredSegments, phenoFilt
   );
 
   const graphSettings = useAppSelector((state) => state.graphSettings);
+  const isolate = useAppSelector((state) => state.pheno.isolate);
   const { data: segments } = gfaApi.useGetSegmentsQuery(segmentIds);
   const { data: links } = gfaApi.useGetLinksQuery(segmentIds);
   const { data: paths } = gfaApi.useGetPathsQuery();
@@ -34,11 +35,11 @@ const Graph: React.FC<GraphProps> = ({ layout, sampleFilteredSegments, phenoFilt
   const graph = useMemo(() => {
     if (segments && links && paths) {
       return {
-        nodes: cytoscapeNodes(filterSegments(segments, filter), paths, graphSettings),
-        edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, graphSettings),
+        nodes: cytoscapeNodes(filterSegments(segments, filter), paths, graphSettings, isolate),
+        edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, graphSettings, isolate),
       } as GraphType;
     }
-  }, [segments, paths, links, layout, graphSettings, filter]);
+  }, [segments, paths, links, layout, graphSettings, filter, isolate]);
 
   return graph ? (
     <CytoscapeWrapper graph={graph} layout={layout} />
