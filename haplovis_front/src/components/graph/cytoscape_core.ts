@@ -136,11 +136,16 @@ export function createCytoscape(
   zoom?: number,
   pan?: Position,
 ): cytoscape.Core {
+  const s = new Set(graph.nodes.map((node) => node.data.id));
+  const g = {
+    nodes: graph.nodes,
+    edges: graph.edges.filter((edge) => s.has(edge.data.source) && s.has(edge.data.target)),
+  };
   const cy = cytoscape({
     container: document.getElementById('graph'),
     elements: {
-      nodes: graph.nodes,
-      edges: graph.edges,
+      nodes: g.nodes,
+      edges: g.edges,
     },
     layout: {
       name: 'preset',
