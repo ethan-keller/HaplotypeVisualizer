@@ -1,17 +1,15 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import {
   VictoryChart,
   VictoryArea,
   VictoryAxis,
   VictoryLabel,
-  VictoryCursorContainer,
   createContainer,
   VictoryBrushContainerProps,
   VictoryCursorContainerProps,
 } from 'victory';
 import { useAppSelector } from '../../store';
 import { Position } from '../../types/layout';
-import NavigatorOverlay from './NavigatorOverlay';
 
 interface NavigatorProps {
   densities: Position[];
@@ -25,7 +23,7 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
     }
   }, []);
   const extent = useAppSelector((state) => state.graphLayout.extent);
-  const f = useAppSelector((state) => state.globalSettings.navigatorDownSampleFactor);
+  const showBrush = useAppSelector((state) => state.globalSettings.navigatorBrush);
   const BrushCursorContainer = createContainer<
     VictoryBrushContainerProps,
     VictoryCursorContainerProps
@@ -38,21 +36,23 @@ const Navigator: React.FC<NavigatorProps> = (props) => {
         height={boundingRect.height}
         width={boundingRect.width}
         // have to call navigatorOverlay as function because of Victory bug
-        // containerComponent={
-        //   <BrushCursorContainer
-        //     brushDimension='x'
-        //     brushDomain={{ x: [extent.xl, extent.xr] }}
-        //     allowDrag={false}
-        //     allowDraw={false}
-        //     allowResize={false}
-        //     brushStyle={{ fill: 'lightgreen', opacity: 0.2 }}
-        //     handleWidth={2}
-        //     handleStyle={{ fill: 'green' }}
-        //     defaultBrushArea='disable'
-        //     cursorDimension='x'
-        //     cursorLabel={(p) => `${Math.round(p.x)}`}
-        //   />
-        // }
+        containerComponent={
+          showBrush ? (
+            <BrushCursorContainer
+              brushDimension='x'
+              brushDomain={{ x: [extent.xl, extent.xr] }}
+              allowDrag={false}
+              allowDraw={false}
+              allowResize={false}
+              brushStyle={{ fill: 'lightgreen', opacity: 0.2 }}
+              handleWidth={2}
+              handleStyle={{ fill: 'green' }}
+              defaultBrushArea='disable'
+              cursorDimension='x'
+              cursorLabel={(p) => `${Math.round(p.x)}`}
+            />
+          ) : undefined
+        }
       >
         <VictoryArea style={{ data: { fill: '#0d6efd' } }} data={props.densities} />
         <VictoryAxis

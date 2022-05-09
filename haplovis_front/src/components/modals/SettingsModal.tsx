@@ -2,6 +2,7 @@ import { Modal, Table } from 'react-bootstrap';
 import DrawLabelsSetting from '../settings/DrawLabelsSetting';
 import DrawPathsSetting from '../settings/DrawPathsSetting';
 import LinkThicknessSetting from '../settings/LinkThicknessSetting';
+import NavigatorBrushSetting from '../settings/NavigatorBrushSetting';
 import NavigatorCompressionSetting from '../settings/NavigatorCompressionSetting';
 import PanSetting from '../settings/PanSetting';
 import SegmentThicknessSetting from '../settings/SegmentThicknessSetting';
@@ -41,6 +42,9 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
             </tr>
             <tr>
               <LinkThicknessSetting />
+            </tr>
+            <tr>
+              <NavigatorBrushSetting />
             </tr>
           </tbody>
         </Table>

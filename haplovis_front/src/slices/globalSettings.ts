@@ -10,6 +10,7 @@ export const initialState: GlobalSettings = {
   defaultDrawLabels: false,
   defaultSegmentThickness: 10,
   defaultLinkThickness: 1.5,
+  navigatorBrush: false,
 };
 
 export const globalSettingsSlice = createSlice({
@@ -40,6 +41,9 @@ export const globalSettingsSlice = createSlice({
     updateDefaultLinkThickness: (state, action: PayloadAction<number>) => {
       state.defaultLinkThickness = action.payload;
     },
+    updateNavigatorBrush: (state, action: PayloadAction<boolean>) => {
+      state.navigatorBrush = action.payload;
+    },
     reset: () => initialState,
   },
 });
@@ -53,6 +57,7 @@ export const {
   updateDefaultDrawPaths,
   updateDefaultSegmentThickness,
   updateDefaultLinkThickness,
+  updateNavigatorBrush,
 } = globalSettingsSlice.actions;
 
 export default globalSettingsSlice.reducer;

@@ -3,8 +3,9 @@ export interface GlobalSettings {
   panSensitivity: number;
   navigatorDownSampleFactor?: number;
   defaultHistogramBins: number;
-  defaultDrawPaths: boolean,
-  defaultDrawLabels: boolean,
+  defaultDrawPaths: boolean;
+  defaultDrawLabels: boolean;
   defaultSegmentThickness: number;
   defaultLinkThickness: number;
+  navigatorBrush: boolean;
 }
