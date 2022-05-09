@@ -128,7 +128,7 @@ async def preprocess_gfa():
         GfaManager.preprocess()
         gfa_file.status = FileStatus.READY
     except Exception as e:
-        gfa_file.status = FileStatus.NEEDS_PRE_PROCESSING
+        gfa_file.status = FileStatus.INVALID
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Could not preprocess {gfa_file.name}: [{e}]",
