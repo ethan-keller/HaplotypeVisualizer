@@ -34,7 +34,16 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) =>
         <>
           <div className='zoom-widget'>
             <ZoomWidget
-              onZoom={(newZoom) => cy.zoom(newZoom)}
+              onZoom={(newZoom) => {
+                const extent = cy.extent();
+                cy.zoom({
+                  level: newZoom,
+                  position: {
+                    x: extent.x1 + (extent.x2 - extent.x1) / 2,
+                    y: extent.y1 + (extent.y2 - extent.y1) / 2,
+                  },
+                });
+              }}
               onFit={() => cy.fit()}
               onCenter={() => cy.center()}
             />
