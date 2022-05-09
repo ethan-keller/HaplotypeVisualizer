@@ -21,9 +21,8 @@ const nodeStyle = (settings: GraphSettings) => {
 
 const edgeStyle = (settings: GraphSettings) => {
   return {
-    'target-arrow-shape': 'triangle',
-    'arrow-scale': 0.8,
-    'curve-style': 'bezier',
+    // 'target-arrow-shape': 'triangle',
+    // 'arrow-scale': 0.8,
     width: 'data(width)',
     // 'line-gradient-direction': 'to-bottom',
     'line-fill': 'linear-gradient',
