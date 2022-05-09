@@ -14,8 +14,7 @@ class Layout:
 
     @classmethod
     def get_layout_from_gfa_file(cls, gfa_path: Path) -> "Layout":
-        layout = cls.compute_layout(gfa_path)
-        return layout
+        return cls.compute_layout(gfa_path)
 
     @classmethod
     def get_layout_from_layout_file(cls, layout_path: Path) -> "Layout":
@@ -26,16 +25,17 @@ class Layout:
         try:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
+                gfa = Gfa.read_gfa_from_file(gfa_path)
+                Gfa.serialize(gfa, out_file=Path(f"out/{gfa_hash}.gfa.json"))
                 cwd = "./graph_layout"
                 if Path(os.getcwd()).name == "server":
                     cwd = "../cli/cli/graph_layout"
-
                 out = check_output(
                     ["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True
                 )
                 return cls.deserialize(out)
             else:
-                raise Exception("Could not compute gfa hash")
+                raise Exception("COuld not compute gfa hash")
         except Exception as e:
             raise Exception(f"Could not compute layout: [{e}]")
 

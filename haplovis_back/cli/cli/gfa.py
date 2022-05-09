@@ -48,7 +48,7 @@ class Gfa:
 
     @classmethod
     def read_gfa_from_file(cls, path: Path) -> "Gfa":
-        read_gfa = GfaPy.from_file(path)
+        read_gfa = GfaPy.from_file(path, vlevel=0)
         return cls._gfapy_to_gfa(read_gfa)
 
     @classmethod
