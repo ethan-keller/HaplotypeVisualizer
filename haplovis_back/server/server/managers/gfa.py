@@ -96,18 +96,21 @@ class GfaManager:
 
     @classmethod
     def prepare_gfa(cls) -> None:
-        if managers.FileManager.is_file_empty(FileIndex.GFA):
-            raise ValueError("No GFA found. Cannot prepare for visualization.")
-        gfa_file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
-        gfa_hash = cls.get_hash()
-        if cls.recognize(gfa_file_path):
-            gfa = Gfa.deserialize(from_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
-        else:
-            gfa = Gfa.read_gfa_from_file(gfa_file_path)
-            Gfa.serialize(gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
-        cls.segment_map = cls.create_segment_map(gfa.segments)
-        cls.link_map = cls.create_link_map(gfa.links)
-        cls.path_map = cls.create_path_map(gfa.paths)
+        try:
+            if managers.FileManager.is_file_empty(FileIndex.GFA):
+                raise ValueError("No GFA found. Cannot prepare for visualization.")
+            gfa_file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
+            gfa_hash = cls.get_hash()
+            if cls.recognize(gfa_file_path):
+                gfa = Gfa.deserialize(from_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
+            else:
+                gfa = Gfa.read_gfa_from_file(gfa_file_path)
+                Gfa.serialize(gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
+            cls.segment_map = cls.create_segment_map(gfa.segments)
+            cls.link_map = cls.create_link_map(gfa.links)
+            cls.path_map = cls.create_path_map(gfa.paths)
+        except Exception as e:
+            raise Exception(f"Could not prepare GFA: [{e}]")
 
     @classmethod
     def create_path_map(cls, paths: List[GfaPath]) -> Dict[str, GfaPath]:
@@ -129,9 +132,12 @@ class GfaManager:
 
     @classmethod
     def preprocess(cls) -> None:
+        print("Prepare")
         cls.prepare_gfa()
         file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
+        print("Compute layout")
         layout = Layout.compute_layout(file_path)
+        print("Get index")
         LayoutManager.index = LayoutManager.get_index_from_layout(layout)
         gfa_hash = Gfa.get_gfa_hash(file_path)
         if gfa_hash:

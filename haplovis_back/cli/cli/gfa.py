@@ -48,7 +48,7 @@ class Gfa:
 
     @classmethod
     def read_gfa_from_file(cls, path: Path) -> "Gfa":
-        read_gfa = GfaPy.from_file(path, vlevel=0)
+        read_gfa = GfaPy.from_file(path)
         return cls._gfapy_to_gfa(read_gfa)
 
     @classmethod
@@ -121,7 +121,7 @@ class Gfa:
     @classmethod
     def _create_paths(cls, paths: List[Line]) -> List[GfaPath]:
         if not paths:
-            raise PydanticConversionError(str(Line), str(List[GfaPath]), "'paths' is None")
+            return []
 
         if len(paths) == 0:
             return []
