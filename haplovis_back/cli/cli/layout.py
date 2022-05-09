@@ -35,7 +35,7 @@ class Layout:
                 )
                 return cls.deserialize(out)
             else:
-                raise Exception("COuld not compute gfa hash")
+                raise Exception("Could not compute gfa hash")
         except Exception as e:
             raise Exception(f"Could not compute layout: [{e}]")
 
