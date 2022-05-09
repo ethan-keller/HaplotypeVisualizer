@@ -26,10 +26,12 @@ class Layout:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
                 gfa = Gfa.read_gfa_from_file(gfa_path)
-                Gfa.serialize(gfa, out_file=Path(f"out/{gfa_hash}.gfa.json"))
                 cwd = "./graph_layout"
                 if Path(os.getcwd()).name == "server":
+                    Gfa.serialize(gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
                     cwd = "../cli/cli/graph_layout"
+                else:
+                    Gfa.serialize(gfa, out_file=Path(f"out/{gfa_hash}.gfa.json"))
                 out = check_output(
                     ["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True
                 )
