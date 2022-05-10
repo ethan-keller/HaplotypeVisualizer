@@ -21,6 +21,7 @@ const SampleFilterSelect: React.FC<SampleFilterSelectProps> = (props) => {
       isMulti
       closeMenuOnSelect={false}
       closeMenuOnScroll
+      isDisabled={Object.keys(paths).length === 0}
       onChange={(values) =>
         dispatch(
           addSampleFilter({
