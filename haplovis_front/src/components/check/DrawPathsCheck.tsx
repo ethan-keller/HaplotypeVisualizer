@@ -26,7 +26,7 @@ const DrawPathsCheck: React.FC<DrawPathsCheckProps> = (props) => {
         checked={noPaths ? false : graphSettings.drawPaths}
         onChange={(e) => dispatch(updateDrawPaths(e.target.checked))}
       />
-      <span style={{ color: 'orange' }}>No paths detected</span>
+      {noPaths ? <span style={{ color: 'orange' }}>No paths detected</span> : null}
     </>
   );
 };
