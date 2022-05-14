@@ -1,3 +1,4 @@
+import time
 from typing import List
 
 from fastapi import APIRouter, Query, status, UploadFile, File as FastApiFile
@@ -125,7 +126,11 @@ async def preprocess_gfa():
 
     try:
         gfa_file.status = FileStatus.PRE_PROCESSING
+        start_time = time.time()
         GfaManager.preprocess()
+        end_time = time.time()
+        processing_time = time.strftime("%H hours %M minutes %S seconds", time.gmtime(end_time - start_time))
+        print(f"Preprocessing took [{processing_time}]")
         gfa_file.status = FileStatus.READY
     except Exception as e:
         gfa_file.status = FileStatus.INVALID

@@ -1,8 +1,9 @@
+from asyncio.subprocess import STDOUT
 from pydantic import parse_obj_as
 import os
 from pathlib import Path
 from typing import Union
-from subprocess import check_output
+from subprocess import check_output, CalledProcessError
 from cli.gfa import Gfa
 from cli.schemas.layout import Layout as LayoutType
 from cli.serialization import JsonSerializer
@@ -32,10 +33,27 @@ class Layout:
                     cwd = "../cli/cli/graph_layout"
                 else:
                     Gfa.serialize(gfa, out_file=Path(f"out/{gfa_hash}.gfa.json"))
-                out = check_output(
-                    ["npx", "ts-node", "./cytoscape.ts", f"out/{gfa_hash}.gfa.json"], cwd=cwd, shell=True
-                )
-                return cls.deserialize(out)
+
+                try:
+                    out = check_output(
+                        [
+                            "node",
+                            # "--stack_size=10",
+                            "-r",
+                            "ts-node/register",
+                            "./cytoscape.ts",
+                            f"out/{gfa_hash}.gfa.json",
+                        ],
+                        cwd=cwd,
+                        shell=True,
+                        stderr=STDOUT,
+                    )
+                    return cls.deserialize(out)
+                except CalledProcessError as e:
+                    raise RuntimeError(
+                        "command '{}' returned with error (code {}): {}".format(e.cmd, e.returncode, e.output)
+                    )
+
             else:
                 raise Exception("Could not compute gfa hash")
         except Exception as e:

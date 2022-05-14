@@ -50,12 +50,7 @@ const cytoscapeEdges = (links: GfaLink[]) => {
 };
 
 function createCytoscape(gfa: Gfa): cytoscape.Core {
-  return cytoscape({
-    layout: layoutSettings,
-    elements: {
-      nodes: cytoscapeNodes(gfa.segments),
-      edges: cytoscapeEdges(gfa.links),
-    },
+  const cy = cytoscape({
     style: [
       {
         selector: "node",
@@ -70,13 +65,17 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
         style: {
           "target-arrow-shape": "triangle",
           "arrow-scale": 0.8,
-          "curve-style": "bezier",
           width: "data(width)",
         },
       },
     ],
     styleEnabled: true,
   });
+  cy.add(cytoscapeNodes(gfa.segments));
+  cy.add(cytoscapeEdges(gfa.links));
+  cy.layout(layoutSettings).run();
+
+  return cy;
 }
 
 const gfa_file_path: string = "../" + process.argv[2];
