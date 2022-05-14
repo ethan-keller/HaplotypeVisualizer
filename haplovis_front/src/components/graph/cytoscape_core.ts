@@ -44,16 +44,15 @@ export const cytoscapeNodes = (
   segments: GfaSegment[],
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
-  isolate: PhenoIsolate,
+  isolate?: PhenoIsolate,
 ) => {
   return segments.map((segment: GfaSegment) => {
-    const isolatedColor =
-      isolate.isolateSegments.size !== 0
-        ? isolate.isolateSegments.has(segment.name)
-          ? isolate.color
-          : '#999999'
-        : undefined;
-    const gradient = getGradient(segment, paths, settings, isolatedColor);
+    const isolatedColors = isolate
+      ? Object.keys(isolate.isolateColors).length !== 0 && segment.name in isolate.isolateColors
+        ? isolate.isolateColors[segment.name]
+        : ['#000000']
+      : undefined;
+    const gradient = getGradient(segment, paths, settings, isolatedColors);
     return {
       // TODO: create type for data object
       data: {
@@ -79,17 +78,17 @@ export const cytoscapeEdges = (
   links: GfaLink[],
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
-  isolate: PhenoIsolate,
+  isolate?: PhenoIsolate,
 ) => {
   return links.map((link: GfaLink) => {
-    const isolatedColor =
-      isolate.isolateSegments.size !== 0
-        ? isolate.isolateSegments.has(link.from_segment) &&
-          isolate.isolateSegments.has(link.to_segment)
-          ? isolate.color
-          : '#999999'
-        : undefined;
-    const gradient = getGradient(link, paths, settings, isolatedColor);
+    const isolatedColors = isolate
+      ? Object.keys(isolate.isolateColors).length !== 0 &&
+        link.from_segment in isolate.isolateColors &&
+        link.to_segment in isolate.isolateColors
+        ? isolate.isolateColors[link.from_segment]
+        : ['#000000']
+      : undefined;
+    const gradient = getGradient(link, paths, settings, isolatedColors);
     return {
       data: {
         source: link.from_segment,
@@ -107,23 +106,26 @@ const getGradient = (
   feature: GfaFeature,
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
-  isolateColor?: string,
+  isolateColors?: string[],
 ) => {
   const gradient: { stopColors: string[]; stopPositions: number[] } = {
     stopColors: [],
     stopPositions: [],
   };
-  feature.paths.forEach((path, i, array) => {
-    const index = paths[path].index;
-    const c = isolateColor
-      ? isolateColor
-      : settings.activePaths[index]
-      ? settings.pathColors[index]
-      : '#999999';
-    gradient.stopColors.push(c, c);
 
-    gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
-  });
+  if (isolateColors) {
+    isolateColors.forEach((color, i, array) => {
+      gradient.stopColors.push(color, color);
+      gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
+    });
+  } else {
+    feature.paths.forEach((path, i, array) => {
+      const index = paths[path].index;
+      const c = settings.activePaths[index] ? settings.pathColors[index] : '#999999';
+      gradient.stopColors.push(c, c);
+      gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
+    });
+  }
 
   return gradient;
 };

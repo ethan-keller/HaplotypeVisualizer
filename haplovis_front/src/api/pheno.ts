@@ -5,7 +5,7 @@ import {
   phenoBaseUrl,
   getSampleNames,
 } from '../endpoints_config/PhenoEndpoints';
-import { PhenosPerSample, PhenotypeValues } from '../types/pheno';
+import { PhenosPerSample, Phenotypes } from '../types/pheno';
 
 const phenoApi = createApi({
   reducerPath: 'phenoApi',
@@ -14,7 +14,7 @@ const phenoApi = createApi({
     getPhenosPerSample: builder.query<PhenosPerSample, void>({
       query: () => ({ url: getPhenosPerSample }),
     }),
-    getPhenotypes: builder.query<PhenotypeValues, void>({
+    getPhenotypes: builder.query<Phenotypes, void>({
       query: () => ({ url: getPhenotypes }),
     }),
     getSampleNames: builder.query<string[], void>({

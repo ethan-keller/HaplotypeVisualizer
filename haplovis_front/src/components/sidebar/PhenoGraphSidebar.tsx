@@ -1,31 +1,18 @@
-import { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import IsolatePhenotypeModal from '../modals/IsolatePhenotypeModal';
 import Sidebar from './Sidebar';
 import GraphInfoSidebarSection from './sidebar_section/GraphInfoSidebarSection';
 import PhenoFilterSidebarSection from './sidebar_section/PhenoFilterSidebarSection';
+import PhenoIsolationSidebarSection from './sidebar_section/PhenoIsolationSidebarSection';
 import PhenoStatsSidebarSection from './sidebar_section/PhenoStatsSidebarSection';
-import SidebarSection from './sidebar_section/SidebarSection';
 
 interface PhenoGraphSidebarProps {}
 
 const PhenoGraphSidebar: React.FC<PhenoGraphSidebarProps> = (props) => {
-  const [showEditPhenotypes, setShowEditPhenotypes] = useState<boolean>(false);
-
   return (
     <Sidebar title='Phenotype Graph'>
       <GraphInfoSidebarSection />
       <PhenoStatsSidebarSection />
       <PhenoFilterSidebarSection />
-      <SidebarSection title=''>
-        <Button size='sm' onClick={() => setShowEditPhenotypes(true)}>
-          Isolate a phenotype
-        </Button>
-        <IsolatePhenotypeModal
-          show={showEditPhenotypes}
-          onHide={() => setShowEditPhenotypes(false)}
-        />
-      </SidebarSection>
+      <PhenoIsolationSidebarSection />
     </Sidebar>
   );
 };

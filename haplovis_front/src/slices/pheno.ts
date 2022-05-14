@@ -1,16 +1,12 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { PhenoIsolate, PhenoState, PhenoValue } from '../types/pheno';
+import { PhenoIsolate, PhenoState, Phenotype } from '../types/pheno';
 
 const initialState: PhenoState = {
   sampleFilters: new Set<string>(),
   sampleFilteredSegments: new Set<string>(),
   phenoFilters: {},
   phenoFilteredSegments: new Set<string>(),
-  isolate: {
-    isolateSegments: new Set<string>(),
-    color: '#1B998B',
-    pheno: { phenotype: '', value: '', label: '' },
-  },
+  isolate: undefined,
 };
 
 export const phenoSlice = createSlice({
@@ -23,20 +19,20 @@ export const phenoSlice = createSlice({
     },
     addPhenoFilter: (
       state,
-      action: PayloadAction<{ phenos: Record<string, Set<PhenoValue>>; segments: string[] }>,
+      action: PayloadAction<{ phenos: Record<string, Set<Phenotype>>; segments: string[] }>,
     ) => {
       state.phenoFilters = action.payload.phenos;
       state.phenoFilteredSegments = new Set<string>(action.payload.segments);
     },
     updateIsolate: (state, action: PayloadAction<PhenoIsolate>) => {
-      state.isolate.isolateSegments = action.payload.isolateSegments;
-      state.isolate.color = action.payload.color;
-      state.isolate.pheno = action.payload.pheno;
+      if (!state.isolate) {
+        state.isolate = { phenoFeature: '', isolateColors: {} };
+      }
+      state.isolate.isolateColors = action.payload.isolateColors;
+      state.isolate.phenoFeature = action.payload.phenoFeature;
     },
     clearIsolate: (state) => {
-      state.isolate.isolateSegments = initialState.isolate.isolateSegments;
-      state.isolate.color = initialState.isolate.color;
-      state.isolate.pheno = initialState.isolate.pheno;
+      state.isolate = undefined;
     },
     reset: () => initialState,
   },

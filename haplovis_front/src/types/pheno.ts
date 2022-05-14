@@ -1,21 +1,26 @@
-export type PhenoValue = any;
-export type PhenoRecord = Record<string, PhenoValue>;
-export type PhenotypeValues = Record<string, PhenoValue[]>;
+export type Phenotype = string | number;
+export type PhenoFeature = string;
+export type PhenoRecord = Record<PhenoFeature, Phenotype>;
+export type Phenotypes = Record<string, Phenotype[]>;
 export type PhenosPerSample = Record<string, PhenoRecord>;
-export type PhenoIsolate = { isolateSegments: Set<string>; color: string; pheno: PhenoOption };
+
+export interface PhenoIsolate {
+  isolateColors: Record<string, string[]>;
+  phenoFeature: PhenoFeature;
+}
 
 export interface PhenoState {
-  phenoFilters: Record<string, Set<PhenoValue>>;
+  phenoFilters: Record<string, Set<Phenotype>>;
   phenoFilteredSegments: Set<string>;
   sampleFilters: Set<string>;
   sampleFilteredSegments: Set<string>;
-  isolate: PhenoIsolate;
+  isolate?: PhenoIsolate;
 }
 
 export interface PhenoOption {
-  readonly value: string;
+  readonly value: Phenotype;
   readonly label: string;
-  readonly phenotype: string;
+  readonly phenoFeature: PhenoFeature;
 }
 
 export interface PhenoGroupOption {

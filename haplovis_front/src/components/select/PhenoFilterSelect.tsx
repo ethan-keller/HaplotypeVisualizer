@@ -1,5 +1,5 @@
 import { addPhenoFilter } from '../../slices/pheno';
-import { PhenoOption, PhenoRecord, PhenosPerSample, PhenoValue } from '../../types/pheno';
+import { PhenoOption, PhenoRecord, PhenosPerSample, Phenotype } from '../../types/pheno';
 import Select from 'react-select';
 import { useAppDispatch } from '../../store';
 import phenoApi from '../../api/pheno';
@@ -17,9 +17,13 @@ const PhenoFilterSelect: React.FC<PhenoFilterSelectProps> = (props) => {
   const options = useMemo(
     () =>
       phenotypes
-        ? Object.entries(phenotypes).map((p) => ({
-            label: p[0],
-            options: p[1].map((o) => ({ value: o, label: o, phenotype: p[0] })),
+        ? Object.entries(phenotypes).map(([phenoFeature, phenotypes]) => ({
+            label: phenoFeature,
+            options: phenotypes.map((phenotype) => ({
+              value: phenotype,
+              label: phenotype.toString(),
+              phenoFeature: phenoFeature,
+            })),
           }))
         : undefined,
     [phenotypes],
@@ -33,7 +37,7 @@ const PhenoFilterSelect: React.FC<PhenoFilterSelectProps> = (props) => {
       onChange={(values) => {
         const phenoFilters = values.map((v) => {
           let r: PhenoRecord = {};
-          r[v.phenotype] = v.value;
+          r[v.phenoFeature] = v.value;
           return r;
         });
         const phenos = transformPhenoFilters(phenoFilters);
@@ -52,12 +56,12 @@ const PhenoFilterSelect: React.FC<PhenoFilterSelectProps> = (props) => {
 };
 
 const transformPhenoFilters = (phenotypes: PhenoRecord[]) => {
-  const result: Record<string, Set<PhenoValue>> = {};
+  const result: Record<string, Set<Phenotype>> = {};
   phenotypes.forEach((phenoR) => {
     if (Object.keys(phenoR).length !== 1) return;
     const record = Object.entries(phenoR)[0];
     if (!(record[0] in result)) {
-      result[record[0]] = new Set<PhenoValue>();
+      result[record[0]] = new Set<Phenotype>();
     }
     result[record[0]].add(record[1]);
   });
@@ -67,12 +71,12 @@ const transformPhenoFilters = (phenotypes: PhenoRecord[]) => {
 export const getFilteredSegments = (
   phenosPerSample: PhenosPerSample,
   paths: Record<string, GfaPath>,
-  phenos: Record<string, Set<PhenoValue>>,
+  phenos: Record<string, Set<Phenotype>>,
 ) => {
   let result: string[] = [];
-  for (const [sample, phenotypes] of Object.entries(phenosPerSample)) {
-    for (const [phenotype, phenoValue] of Object.entries(phenotypes)) {
-      if (phenotype in phenos && phenos[phenotype].has(phenoValue)) {
+  for (const [sample, phenoRecord] of Object.entries(phenosPerSample)) {
+    for (const [phenoFeature, phenotype] of Object.entries(phenoRecord)) {
+      if (phenoFeature in phenos && phenos[phenoFeature].has(phenotype)) {
         result = result.concat(paths[sample].segment_names);
         break;
       }
