@@ -7,6 +7,7 @@ const initialState: PhenoState = {
   phenoFilters: {},
   phenoFilteredSegments: new Set<string>(),
   isolate: undefined,
+  pathToIsolateColors: {},
 };
 
 export const phenoSlice = createSlice({
@@ -33,12 +34,22 @@ export const phenoSlice = createSlice({
     },
     clearIsolate: (state) => {
       state.isolate = undefined;
+      state.pathToIsolateColors = initialState.pathToIsolateColors;
+    },
+    updatePathToIsolateColors: (state, action: PayloadAction<Record<string, string>>) => {
+      state.pathToIsolateColors = action.payload;
     },
     reset: () => initialState,
   },
 });
 
-export const { addPhenoFilter, addSampleFilter, updateIsolate, clearIsolate, reset } =
-  phenoSlice.actions;
+export const {
+  addPhenoFilter,
+  addSampleFilter,
+  updateIsolate,
+  clearIsolate,
+  updatePathToIsolateColors,
+  reset,
+} = phenoSlice.actions;
 
 export default phenoSlice.reducer;

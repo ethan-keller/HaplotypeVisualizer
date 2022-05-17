@@ -14,8 +14,7 @@ interface PhenotypesInfoCardSectionProps {
 
 const PhenotypesInfoCardSection: React.FC<PhenotypesInfoCardSectionProps> = ({ feature }) => {
   const { data: phenotypes, isError: noPheno } = phenoApi.useGetPhenosPerSampleQuery();
-  const pathColors = useAppSelector((state) => state.graphSettings.pathColors);
-  const activePaths = useAppSelector((state) => state.graphSettings.activePaths);
+  const pathToIsolateColors = useAppSelector((state) => state.pheno.pathToIsolateColors);
   const { data: paths } = gfaApi.useGetPathsQuery();
   const navigate = useNavigate();
 
@@ -30,12 +29,9 @@ const PhenotypesInfoCardSection: React.FC<PhenotypesInfoCardSectionProps> = ({ f
     <ListGroup>
       {feature.paths.map((pathName, i) => {
         const pheno = phenotypes[pathName];
-        const sampleIndex = paths[pathName].index;
         const c =
-          activePaths.length === 0
-            ? pathColors[sampleIndex]
-            : activePaths[sampleIndex]
-            ? pathColors[sampleIndex]
+          pathToIsolateColors && pathName in pathToIsolateColors
+            ? pathToIsolateColors[pathName]
             : '#999999';
 
         return (

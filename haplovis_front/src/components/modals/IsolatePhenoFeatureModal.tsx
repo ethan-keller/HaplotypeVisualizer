@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Button, Modal, Table } from 'react-bootstrap';
 import gfaApi from '../../api/gfa';
 import phenoApi from '../../api/pheno';
-import { updateIsolate, clearIsolate } from '../../slices/pheno';
+import { updateIsolate, clearIsolate, updatePathToIsolateColors } from '../../slices/pheno';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { PhenoFeature, PhenosPerSample } from '../../types/pheno';
 import ColorPicker from '../ColorPicker';
@@ -90,17 +90,19 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
                 </Table>
                 <Button
                   onClick={() => {
+                    const isolateColors = getIsolateColors(
+                      phenosPerSample,
+                      paths,
+                      phenoFeature,
+                      colors ?? {},
+                    );
                     dispatch(
                       updateIsolate({
-                        isolateColors: getIsolateColors(
-                          phenosPerSample,
-                          paths,
-                          phenoFeature,
-                          colors ?? {},
-                        ),
+                        isolateColors: isolateColors.segmentColors,
                         phenoFeature: phenoFeature,
                       }),
                     );
+                    dispatch(updatePathToIsolateColors(isolateColors.pathColors));
                     props.onHide();
                   }}
                 >
@@ -133,19 +135,20 @@ const getIsolateColors = (
   phenoFeature: PhenoFeature,
   colors: Record<string, string>,
 ) => {
-  let result: Record<string, string[]> = {};
+  let segmentColors: Record<string, string[]> = {};
+  let pathColors: Record<string, string> = {};
   for (const [sample, phenoRecord] of Object.entries(phenosPerSample)) {
     if (!(phenoFeature in phenoRecord) || !(phenoRecord[phenoFeature] in colors)) continue;
     const color = colors[phenoRecord[phenoFeature]];
+    pathColors[sample] = color;
     for (const segment of paths[sample].segment_names) {
-      if (!(segment in result)) {
-        result[segment] = [];
+      if (!(segment in segmentColors)) {
+        segmentColors[segment] = [];
       }
-      result[segment].push(color);
+      segmentColors[segment].push(color);
     }
   }
-  console.log(result);
-  return result;
+  return { segmentColors: segmentColors, pathColors: pathColors };
 };
 
 export default IsolatePhenoFeatureModal;

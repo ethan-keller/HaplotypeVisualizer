@@ -34,7 +34,7 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }),
-                  'std. deviation node length': gfaInfo.std_dev.toLocaleString('en-NL', {
+                  'std node length': gfaInfo.std_dev.toLocaleString('en-NL', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   }),

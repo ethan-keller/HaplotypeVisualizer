@@ -15,6 +15,7 @@ export interface PhenoState {
   sampleFilters: Set<string>;
   sampleFilteredSegments: Set<string>;
   isolate?: PhenoIsolate;
+  pathToIsolateColors?: Record<string, string>;
 }
 
 export interface PhenoOption {
