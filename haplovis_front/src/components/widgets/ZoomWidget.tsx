@@ -34,7 +34,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
       >
         <FaBullseye size={24} />
       </Button>
-      <div className='separator'/>
+      <div className='separator' />
       <Button
         style={{ padding: 5 }}
         className='widget-button'

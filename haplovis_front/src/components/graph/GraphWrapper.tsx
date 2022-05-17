@@ -35,6 +35,7 @@ const GraphWrapper: React.FC<GraphWrapperProps> = (props) => {
       {props.pheno ? (
         <GraphComponent
           layout={layout}
+          pheno={props.pheno}
           sampleFilteredSegments={sampleFilteredSegments}
           phenoFilteredSegments={phenoFilteredSegments}
         />

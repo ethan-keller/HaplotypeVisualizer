@@ -11,9 +11,10 @@ import { updateFirstGraphRender } from '../../slices/graphLayout';
 interface CytoscapeWrapperProps {
   graph: Graph;
   layout: Layout;
+  pheno?: boolean;
 }
 
-const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) => {
+const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, pheno }) => {
   const [error, setError] = useState<any>(undefined);
   const [cy, setCy] = useState<cytoscape.Core>();
   const firstGraphRender = useAppSelector((state) => state.graphLayout.firstGraphRender);
@@ -61,6 +62,7 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout }) =>
           alert(error);
         }}
         onSuccess={(newCy) => setCy(newCy)}
+        pheno={pheno}
       />
     </>
   );

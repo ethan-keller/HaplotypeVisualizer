@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Graph } from '../../types/graph';
+import { Graph, GraphSettings } from '../../types/graph';
 import { Layout } from '../../types/layout';
 import { createCytoscape } from './cytoscape_core';
 import { useAppDispatch, useAppSelector } from '../../store';
@@ -12,24 +12,29 @@ interface CytoscapeProps {
   layout: Layout;
   onError: (error: unknown) => void;
   onSuccess: (newCy: cytoscape.Core) => void;
+  pheno?: boolean;
 }
 
-const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess }) => {
+const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess, pheno }) => {
   const zoom = useAppSelector((state) => state.graphLayout.zoom);
   const pan = useAppSelector((state) => state.graphLayout.pan);
-  const settings = useAppSelector((state) => state.graphSettings);
+  const graphSettings = useAppSelector((state) => state.graphSettings);
   const [cy, setCy] = useState<cytoscape.Core | undefined>(undefined);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     try {
+      console.log(pheno);
+      const settings: GraphSettings = pheno
+        ? { ...graphSettings, drawPaths: false }
+        : graphSettings;
       const cyto = createCytoscape(graph, settings, layout, zoom, pan);
       onSuccess(cyto);
       setCy(cyto);
     } catch (e) {
       onError(e);
     }
-  }, [settings, graph]);
+  }, [graphSettings, graph]);
 
   useEffect(() => {
     const dispatchExtent = (extent: {
