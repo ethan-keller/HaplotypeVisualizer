@@ -7,27 +7,31 @@ import { PhenoIsolate } from '../../types/pheno';
 
 cytoscape.use(dagre);
 
-const nodeStyle = (settings: GraphSettings) => {
+const nodeStyle = (settings: GraphSettings, phenoIsolationMode?: boolean) => {
   return {
     shape: 'rectangle',
     width: 'data(width)',
     height: 'data(height)',
-    'background-fill': settings.drawPaths ? 'linear-gradient' : 'solid',
-    'background-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
-    'background-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
+    'background-fill': phenoIsolationMode || settings.drawPaths ? 'linear-gradient' : 'solid',
+    'background-gradient-stop-colors':
+      phenoIsolationMode || settings.drawPaths ? 'data(stopColors)' : undefined,
+    'background-gradient-stop-positions':
+      phenoIsolationMode || settings.drawPaths ? 'data(stopPositions)' : undefined,
     label: settings.drawLabels ? 'data(id)' : undefined,
   };
 };
 
-const edgeStyle = (settings: GraphSettings) => {
+const edgeStyle = (settings: GraphSettings, phenoIsolationMode?: boolean) => {
   return {
     'curve-style': 'straight',
     'target-arrow-shape': settings.drawArrows ? 'triangle' : 'none',
     'arrow-scale': 0.8,
     width: 'data(width)',
     'line-fill': 'linear-gradient',
-    'line-gradient-stop-colors': settings.drawPaths ? 'data(stopColors)' : undefined,
-    'line-gradient-stop-positions': settings.drawPaths ? 'data(stopPositions)' : undefined,
+    'line-gradient-stop-colors':
+      phenoIsolationMode || settings.drawPaths ? 'data(stopColors)' : undefined,
+    'line-gradient-stop-positions':
+      phenoIsolationMode || settings.drawPaths ? 'data(stopPositions)' : undefined,
   };
 };
 
@@ -44,6 +48,7 @@ export const cytoscapeNodes = (
   segments: GfaSegment[],
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
+  pheno?: boolean,
   isolate?: PhenoIsolate,
 ) => {
   return segments.map((segment: GfaSegment) => {
@@ -53,6 +58,7 @@ export const cytoscapeNodes = (
         : ['#000000']
       : undefined;
     const gradient = getGradient(segment, paths, settings, isolatedColors);
+    const phenoIsolationMode = pheno && isolate !== undefined;
     return {
       // TODO: create type for data object
       data: {
@@ -65,7 +71,8 @@ export const cytoscapeNodes = (
               : segment.sequence.length,
           ),
         height:
-          settings.segmentThickness * (settings.drawPaths ? Math.max(segment.paths.length, 1) : 1),
+          settings.segmentThickness *
+          (settings.drawPaths || phenoIsolationMode ? Math.max(segment.paths.length, 1) : 1),
         stopColors: gradient.stopColors,
         stopPositions: gradient.stopPositions,
         feature: { type: segment.type, name: segment.name },
@@ -78,8 +85,10 @@ export const cytoscapeEdges = (
   links: GfaLink[],
   paths: Record<string, GfaPath>,
   settings: GraphSettings,
+  pheno?: boolean,
   isolate?: PhenoIsolate,
 ) => {
+  const phenoIsolationMode = pheno && isolate !== undefined;
   return links.map((link: GfaLink) => {
     const isolatedColors = isolate
       ? Object.keys(isolate.isolateColors).length !== 0 &&
@@ -93,7 +102,9 @@ export const cytoscapeEdges = (
       data: {
         source: link.from_segment,
         target: link.to_segment,
-        width: settings.linkThickness * (settings.drawPaths ? Math.max(link.paths.length, 1) : 1),
+        width:
+          settings.linkThickness *
+          (settings.drawPaths || phenoIsolationMode ? Math.max(link.paths.length, 1) : 1),
         stopColors: gradient.stopColors,
         stopPositions: gradient.stopPositions,
         feature: { type: link.type, name: link.name },
@@ -137,12 +148,15 @@ export function createCytoscape(
   zoom?: number,
   pan?: Position,
   selectedFeature?: FeatureSelection,
+  pheno?: boolean,
+  isolate?: PhenoIsolate,
 ): cytoscape.Core {
   const s = new Set(graph.nodes.map((node) => node.data.id));
   const g = {
     nodes: graph.nodes,
     edges: graph.edges.filter((edge) => s.has(edge.data.source) && s.has(edge.data.target)),
   };
+  const phenoIsolationMode = pheno && isolate !== undefined;
   const cy = cytoscape({
     container: document.getElementById('graph'),
     elements: {
@@ -157,11 +171,11 @@ export function createCytoscape(
     style: [
       {
         selector: 'node',
-        style: nodeStyle(settings),
+        style: nodeStyle(settings, phenoIsolationMode),
       },
       {
         selector: 'edge',
-        style: edgeStyle(settings),
+        style: edgeStyle(settings, phenoIsolationMode),
       },
       {
         selector: ':selected',

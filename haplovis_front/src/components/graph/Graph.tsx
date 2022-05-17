@@ -44,11 +44,11 @@ const Graph: React.FC<GraphProps> = ({
         ? { ...graphSettings, drawPaths: false }
         : graphSettings;
       return {
-        nodes: cytoscapeNodes(filterSegments(segments, filter), paths, settings, isolate),
-        edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, settings, isolate),
+        nodes: cytoscapeNodes(filterSegments(segments, filter), paths, settings, pheno, isolate),
+        edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, settings, pheno, isolate),
       } as GraphType;
     }
-  }, [segments, paths, links, graphSettings, filter, isolate]);
+  }, [segments, paths, links, graphSettings, filter, pheno, isolate]);
 
   return graph ? (
     <CytoscapeWrapper graph={graph} layout={layout} pheno={pheno} />
