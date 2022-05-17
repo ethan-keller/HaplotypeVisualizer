@@ -6,6 +6,7 @@ const ZoomIndicator: React.FC<ZoomIndicatorProps> = (props) => {
   const zoom = useAppSelector((state) => state.graphLayout.zoom);
   return (
     <span
+      className='unselectable'
       style={{
         display: 'inline-block',
         width: '100%',

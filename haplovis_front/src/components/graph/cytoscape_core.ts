@@ -181,6 +181,7 @@ export function createCytoscape(
     hideEdgesOnViewport: true,
     hideLabelsOnViewport: true,
     minZoom: 0.3,
+    maxZoom: 7,
   });
   return cy;
 }

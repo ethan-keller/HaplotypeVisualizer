@@ -9,6 +9,7 @@ interface ZoomWidgetProps {
   onZoom: (newZoom: number) => void;
   onFit: () => void;
   onCenter: () => void;
+  isZoomLimit: (zoomIn: boolean) => boolean;
 }
 
 const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
@@ -40,6 +41,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
         className='widget-button'
         size='sm'
         variant='secondary'
+        disabled={props.isZoomLimit(true)}
         onClick={() => props.onZoom(zoom + zoomScale)}
       >
         <BsZoomIn size={20} />
@@ -50,6 +52,7 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
         className='widget-button'
         size='sm'
         variant='secondary'
+        disabled={props.isZoomLimit(false)}
         onClick={() => props.onZoom(zoom - zoomScale)}
       >
         <BsZoomOut size={20} />

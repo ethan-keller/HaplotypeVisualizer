@@ -63,3 +63,9 @@ input[type='color']::-webkit-color-swatch {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+.unselectable {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
