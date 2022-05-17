@@ -7,5 +7,6 @@ export interface GlobalSettings {
   defaultDrawLabels: boolean;
   defaultSegmentThickness: number;
   defaultLinkThickness: number;
+  reversePan: boolean;
   navigatorBrush: boolean;
 }

@@ -5,6 +5,7 @@ import LinkThicknessSetting from '../settings/LinkThicknessSetting';
 import NavigatorBrushSetting from '../settings/NavigatorBrushSetting';
 import NavigatorCompressionSetting from '../settings/NavigatorCompressionSetting';
 import PanSetting from '../settings/PanSetting';
+import ReversePanDirectionSetting from '../settings/ReversePanDirectionSetting';
 import SegmentThicknessSetting from '../settings/SegmentThicknessSetting';
 import ZoomSetting from '../settings/ZoomSetting';
 
@@ -42,6 +43,9 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
             </tr>
             <tr>
               <LinkThicknessSetting />
+            </tr>
+            <tr>
+              <ReversePanDirectionSetting />
             </tr>
             <tr>
               <NavigatorBrushSetting />

@@ -15,12 +15,16 @@ interface PanWidgetProps {
 }
 
 const PanWidget: React.FC<PanWidgetProps> = (props) => {
+  const reversePan = useAppSelector((state) => state.globalSettings.reversePan);
   const singlePan = useAppSelector((state) => state.globalSettings.panSensitivity);
   const doublePan = 2 * singlePan;
 
   const pan = (left: boolean, double: boolean, up?: boolean) => {
     props.onPan({
-      x: up === undefined ? (left ? 1 : -1) * (double ? doublePan : singlePan) : 0,
+      x:
+        up === undefined
+          ? (reversePan ? -1 : 1) * (left ? 1 : -1) * (double ? doublePan : singlePan)
+          : 0,
       y: up === undefined ? 0 : (up ? 1 : -1) * singlePan,
     });
   };

@@ -10,6 +10,7 @@ export const initialState: GlobalSettings = {
   defaultDrawLabels: false,
   defaultSegmentThickness: 10,
   defaultLinkThickness: 1.5,
+  reversePan: false,
   navigatorBrush: false,
 };
 
@@ -41,6 +42,9 @@ export const globalSettingsSlice = createSlice({
     updateDefaultLinkThickness: (state, action: PayloadAction<number>) => {
       state.defaultLinkThickness = action.payload;
     },
+    updateReversePan: (state, action: PayloadAction<boolean>) => {
+      state.reversePan = action.payload;
+    },
     updateNavigatorBrush: (state, action: PayloadAction<boolean>) => {
       state.navigatorBrush = action.payload;
     },
@@ -57,6 +61,7 @@ export const {
   updateDefaultDrawPaths,
   updateDefaultSegmentThickness,
   updateDefaultLinkThickness,
+  updateReversePan,
   updateNavigatorBrush,
 } = globalSettingsSlice.actions;
 
