@@ -19,6 +19,7 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
   const zoom = useAppSelector((state) => state.graphLayout.zoom);
   const pan = useAppSelector((state) => state.graphLayout.pan);
   const graphSettings = useAppSelector((state) => state.graphSettings);
+  const selectedFeature = useAppSelector((state) => state.graphSelection.feature);
   const [cy, setCy] = useState<cytoscape.Core | undefined>(undefined);
   const dispatch = useAppDispatch();
 
@@ -27,7 +28,7 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
       const settings: GraphSettings = pheno
         ? { ...graphSettings, drawPaths: false }
         : graphSettings;
-      const cyto = createCytoscape(graph, settings, layout, zoom, pan);
+      const cyto = createCytoscape(graph, settings, layout, zoom, pan, selectedFeature);
       onSuccess(cyto);
       setCy(cyto);
     } catch (e) {

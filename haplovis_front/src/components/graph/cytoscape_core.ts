@@ -1,7 +1,7 @@
 import cytoscape, { EdgeDefinition, NodeDefinition } from 'cytoscape';
 import dagre from 'cytoscape-dagre';
 import { Layout, Position } from '../../types/layout';
-import { Graph, GraphSettings } from '../../types/graph';
+import { FeatureSelection, Graph, GraphSettings } from '../../types/graph';
 import { GfaFeature, GfaLink, GfaPath, GfaSegment } from '../../types/gfa';
 import { PhenoIsolate } from '../../types/pheno';
 
@@ -136,6 +136,7 @@ export function createCytoscape(
   layout: Layout,
   zoom?: number,
   pan?: Position,
+  selectedFeature?: FeatureSelection,
 ): cytoscape.Core {
   const s = new Set(graph.nodes.map((node) => node.data.id));
   const g = {
@@ -183,5 +184,8 @@ export function createCytoscape(
     minZoom: 0.3,
     maxZoom: 7,
   });
+  if (selectedFeature) {
+    cy.$id(selectedFeature.name).select().active();
+  }
   return cy;
 }
