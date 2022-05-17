@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from '../store';
 import ErrorCard from './ErrorCard';
 import SpinnerAnnotated from './SpinnerAnnotated';
 import { reset } from '../slices/pheno';
+import { useNavigate } from 'react-router';
+import { url as urlWelcomeView } from '../views/WelcomeView';
 
 interface PhenoTableProps {}
 
@@ -12,6 +14,7 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
   const { data: phenosPerSample, isLoading } = phenoApi.useGetPhenosPerSampleQuery();
   const { data: phenotypes } = phenoApi.useGetPhenotypesQuery();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const sampleFilters = useAppSelector((state) => state.pheno.sampleFilters);
   const phenoFilters = useAppSelector((state) => state.pheno.phenoFilters);
@@ -21,7 +24,12 @@ const PhenoTable: React.FC<PhenoTableProps> = (props) => {
   }, [dispatch]);
 
   return !isLoading && !phenosPerSample ? (
-    <ErrorCard message='No phenotype table imported' />
+    <ErrorCard
+      message='No phenotype table imported'
+      actionTitle='import phenotype table'
+      // action will redirect to welcome view (imports) and highlight the pheno table input row
+      action={() => navigate(urlWelcomeView, { state: { highlightPhenoTableRow: true } })}
+    />
   ) : isLoading ? (
     <SpinnerAnnotated message='Loading the phenotype table' />
   ) : phenosPerSample && phenotypes ? (

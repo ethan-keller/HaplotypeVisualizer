@@ -8,6 +8,7 @@ import { useAppDispatch } from '../../store';
 import { reset as resetPheno } from '../../slices/pheno';
 import { reset as resetLayout } from '../../slices/graphLayout';
 import { reset as resetSelection } from '../../slices/graphSelection';
+import { useLocation } from 'react-router';
 
 interface FileTableProps {}
 
@@ -19,6 +20,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   const [uploadLayout] = filesApi.useUploadLayoutMutation();
   const [uploadBookmarks] = filesApi.useUploadBookmarksMutation();
   const dispatch = useAppDispatch();
+  const locationState = useLocation().state as { highlightPhenoTableRow: boolean };
 
   // create refs for inputs
   const importInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
@@ -66,7 +68,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   };
 
   const MainTable = (files: File[]) => {
-    const getDescriptionRow = (file: File) => {
+    const getDescription = (file: File) => {
       return (
         <td>
           {file.description}
@@ -74,15 +76,15 @@ const FileTable: React.FC<FileTableProps> = (props) => {
         </td>
       );
     };
-    const getNameRow = (file: File) => {
+    const getName = (file: File) => {
       return <td>{file.name ? file.name : '-'}</td>;
     };
-    const getStatusRow = (status: number) => {
+    const getStatus = (status: number) => {
       return (
         <td className={statusToBootstrapClassMap.get(status)}>{statusToDescription.get(status)}</td>
       );
     };
-    const getActionRow = (
+    const getAction = (
       file: File,
       i: number,
       inputRef: React.RefObject<HTMLInputElement>,
@@ -167,13 +169,18 @@ const FileTable: React.FC<FileTableProps> = (props) => {
             const status = file.status;
             const inputRef = importInputRefs[i];
             return (
-              <tr key={'file-table-row-' + i}>
-                {getDescriptionRow(file)}
-                {getNameRow(file)}
-                {getStatusRow(
-                  file.id === 0 && isPreprocessing ? FileStatus.PRE_PROCESSING : status,
-                )}
-                {getActionRow(file, i, inputRef, status)}
+              <tr
+                key={'file-table-row-' + i}
+                className={
+                  i === 1 && locationState && locationState.highlightPhenoTableRow
+                    ? 'highlight-row'
+                    : ''
+                }
+              >
+                {getDescription(file)}
+                {getName(file)}
+                {getStatus(file.id === 0 && isPreprocessing ? FileStatus.PRE_PROCESSING : status)}
+                {getAction(file, i, inputRef, status)}
               </tr>
             );
           })}

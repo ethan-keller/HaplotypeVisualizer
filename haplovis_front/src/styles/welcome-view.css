@@ -6,3 +6,13 @@
   width: 1rem;
   height: 1rem;
 }
+
+@keyframes highlight {
+  from {background-color: rgb(255, 255, 138);}
+  to {background-color: white;}
+}
+
+.highlight-row {
+  animation-name: highlight;
+  animation-duration: 9s;
+}
