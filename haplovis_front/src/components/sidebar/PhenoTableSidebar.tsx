@@ -8,7 +8,7 @@ const PhenoTableSidebar: React.FC<PhenoTableSidebarProps> = (props) => {
   return (
     <Sidebar title='Phenotype table'>
       <PhenoStatsSidebarSection />
-      <PhenoFilterSidebarSection />
+      <PhenoFilterSidebarSection phenoFilter />
     </Sidebar>
   );
 };
