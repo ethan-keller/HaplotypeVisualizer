@@ -1,4 +1,5 @@
 import { Modal, Table } from 'react-bootstrap';
+import DrawArrowsSetting from '../settings/DrawArrowsSetting';
 import DrawLabelsSetting from '../settings/DrawLabelsSetting';
 import DrawPathsSetting from '../settings/DrawPathsSetting';
 import LinkThicknessSetting from '../settings/LinkThicknessSetting';
@@ -46,6 +47,9 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
             </tr>
             <tr>
               <ReversePanDirectionSetting />
+            </tr>
+            <tr>
+              <DrawArrowsSetting />
             </tr>
             <tr>
               <NavigatorBrushSetting />

@@ -20,6 +20,7 @@ const initialState: GraphSettings = {
     '#04c55e',
   ],
   activePaths: [],
+  drawArrows: false,
 };
 
 export const graphSettingsSlice = createSlice({
@@ -52,6 +53,9 @@ export const graphSettingsSlice = createSlice({
     toggleActivePath: (state, action: PayloadAction<number>) => {
       state.activePaths[action.payload] = !state.activePaths[action.payload];
     },
+    updateDrawArrows: (state, action: PayloadAction<boolean>) => {
+      state.drawArrows = action.payload;
+    },
     reset: () => initialState,
   },
 });
@@ -65,6 +69,7 @@ export const {
   updateSegmentThickness,
   setActivePaths,
   toggleActivePath,
+  updateDrawArrows,
   reset,
 } = graphSettingsSlice.actions;
 

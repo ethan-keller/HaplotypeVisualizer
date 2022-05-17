@@ -12,6 +12,7 @@ export interface GraphSettings {
   segmentThickness: number;
   pathColors: string[];
   activePaths: boolean[];
+  drawArrows: boolean;
 }
 
 export interface FeatureSelection {

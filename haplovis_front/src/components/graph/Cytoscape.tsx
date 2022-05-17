@@ -24,7 +24,6 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
 
   useEffect(() => {
     try {
-      console.log(pheno);
       const settings: GraphSettings = pheno
         ? { ...graphSettings, drawPaths: false }
         : graphSettings;
