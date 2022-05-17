@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { GraphSettings } from '../types/graph';
 import { initialState as globalSettings } from './globalSettings';
 
-const initialState: GraphSettings = {
+export const initialState: GraphSettings = {
   drawPaths: globalSettings.defaultDrawPaths,
   drawLabels: globalSettings.defaultDrawLabels,
   linkThickness: globalSettings.defaultLinkThickness,

@@ -63,6 +63,7 @@ export const {
   updateDefaultLinkThickness,
   updateReversePan,
   updateNavigatorBrush,
+  reset,
 } = globalSettingsSlice.actions;
 
 export default globalSettingsSlice.reducer;

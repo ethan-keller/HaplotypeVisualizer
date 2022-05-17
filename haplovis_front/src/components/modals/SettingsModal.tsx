@@ -1,4 +1,10 @@
-import { Modal, Table } from 'react-bootstrap';
+import { Button, Modal, Table } from 'react-bootstrap';
+import { reset } from '../../slices/globalSettings';
+import {
+  initialState as initialGraphSettingsState,
+  updateDrawArrows,
+} from '../../slices/graphSettings';
+import { useAppDispatch } from '../../store';
 import DrawArrowsSetting from '../settings/DrawArrowsSetting';
 import DrawLabelsSetting from '../settings/DrawLabelsSetting';
 import DrawPathsSetting from '../settings/DrawPathsSetting';
@@ -16,6 +22,7 @@ interface SettingsModalProps {
 }
 
 const SettingsModal: React.FC<SettingsModalProps> = (props) => {
+  const dispatch = useAppDispatch();
   return (
     <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
@@ -56,6 +63,17 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
             </tr>
           </tbody>
         </Table>
+        <Button
+          size='sm'
+          variant='warning'
+          onClick={() => {
+            dispatch(reset());
+            // add additional reset for drawArrows since it is not in the global settings state
+            dispatch(updateDrawArrows(initialGraphSettingsState.drawArrows));
+          }}
+        >
+          Reset settings
+        </Button>
       </Modal.Body>
     </Modal>
   );
