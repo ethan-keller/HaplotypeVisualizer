@@ -45,7 +45,6 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
                   },
                 });
               }}
-              onFit={() => cy.fit()}
               onCenter={() => cy.center()}
               isZoomLimit={(zoomIn) =>
                 zoomIn ? cy.zoom() >= cy.maxZoom() : cy.zoom() <= cy.minZoom()
