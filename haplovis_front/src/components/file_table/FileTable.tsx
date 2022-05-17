@@ -20,7 +20,10 @@ const FileTable: React.FC<FileTableProps> = (props) => {
   const [uploadLayout] = filesApi.useUploadLayoutMutation();
   const [uploadBookmarks] = filesApi.useUploadBookmarksMutation();
   const dispatch = useAppDispatch();
-  const locationState = useLocation().state as { highlightPhenoTableRow: boolean };
+  const locationState = useLocation().state as {
+    highlightPhenoTableRow?: boolean;
+    highlightBookmarksRow?: boolean;
+  };
 
   // create refs for inputs
   const importInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
@@ -172,7 +175,8 @@ const FileTable: React.FC<FileTableProps> = (props) => {
               <tr
                 key={'file-table-row-' + i}
                 className={
-                  i === 1 && locationState && locationState.highlightPhenoTableRow
+                  (i === 1 && locationState && locationState.highlightPhenoTableRow) ||
+                  (i === 3 && locationState && locationState.highlightBookmarksRow)
                     ? 'highlight-row'
                     : ''
                 }

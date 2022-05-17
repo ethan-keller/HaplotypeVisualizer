@@ -6,6 +6,8 @@ import BookmarkCard from './BookmarkCard';
 import { BsDownload } from 'react-icons/bs';
 import { useState } from 'react';
 import ExportBookmarksModal from '../modals/ExportBookmarksModal';
+import { useNavigate } from 'react-router';
+import { url as urlWelcomeView } from '../../views/WelcomeView';
 
 interface BookmarksOffcanvasProps {
   onHide: () => void;
@@ -17,6 +19,7 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
   const [exportBookmarks, { data: filePath, isLoading, isError }] =
     bookmarksApi.useExportBookmarksMutation();
   const [showExportBookmarks, setShowExportBookmarks] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   return (
     <Offcanvas show={props.show} onHide={props.onHide} placement='end'>
@@ -40,7 +43,19 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
         <VerticalSpacer space={15} />
         {bookmarks ? (
           Object.keys(bookmarks).length === 0 ? (
-            'No bookmarks.'
+            <>
+              <div>No bookmarks.</div>
+              <Button
+                style={{ marginTop: 10 }}
+                size='sm'
+                onClick={() => {
+                  props.onHide();
+                  navigate(urlWelcomeView, { state: { highlightBookmarksRow: true } });
+                }}
+              >
+                import bookmarks
+              </Button>
+            </>
           ) : (
             Object.values(bookmarks).map((bookmark, i) => (
               <div key={i}>

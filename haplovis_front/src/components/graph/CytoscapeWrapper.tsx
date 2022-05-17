@@ -22,7 +22,7 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
 
   // Fit when graph is rendered for the first time
   useEffect(() => {
-    if (cy && firstGraphRender) {
+    if (cy && !cy.destroyed() && firstGraphRender) {
       cy.fit();
       dispatch(updateFirstGraphRender(false));
     }
