@@ -4,6 +4,7 @@ from cli.serialization import JsonSerializer
 
 from fastapi import APIRouter, Response, status
 from fastapi.exceptions import HTTPException
+from server.logic.bio_stats import compute_N50
 from server.managers import GfaManager
 from cli.schemas.gfa import GfaSegment, GfaLink, GfaPath, GfaInfo
 
@@ -118,11 +119,13 @@ async def get_graph_info():
             n_segments=len(segment_lengths),
             n_links=len(GfaManager.get_all_links()),
             n_paths=len(GfaManager.path_map.values()),
+            total_length=sum(segment_lengths),
             shortest_segment=min(segment_lengths),
             longest_segment=max(segment_lengths),
             median_segment=median(segment_lengths),
             mean_segment=mean(segment_lengths),
             std_dev=stdev(segment_lengths),
+            n50=compute_N50(segment_lengths)
         )
     else:
         raise HTTPException(

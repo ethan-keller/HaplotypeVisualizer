@@ -23,14 +23,25 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
           tableEntries={
             gfaInfo
               ? {
-                  nodes: gfaInfo.n_segments.toString(),
-                  edges: gfaInfo.n_links.toString(),
-                  paths: gfaInfo.n_paths.toString(),
-                  'longest node': gfaInfo.longest_segment.toString(),
-                  'shortest node': gfaInfo.shortest_segment.toString(),
-                  'median node length': gfaInfo.median_segment.toString(),
-                  'mean node length': gfaInfo.mean_segment.toFixed(2).toString(),
-                  'std. deviation node length': gfaInfo.std_dev.toFixed(2).toString(),
+                  nodes: gfaInfo.n_segments.toLocaleString('en-NL'),
+                  edges: gfaInfo.n_links.toLocaleString('en-NL'),
+                  paths: gfaInfo.n_paths.toLocaleString('en-NL'),
+                  'total length': gfaInfo.total_length.toLocaleString('en-NL'),
+                  'longest node': gfaInfo.longest_segment.toLocaleString('en-NL'),
+                  'shortest node': gfaInfo.shortest_segment.toLocaleString('en-NL'),
+                  'median node length': gfaInfo.median_segment.toLocaleString('en-NL'),
+                  'mean node length': gfaInfo.mean_segment.toLocaleString('en-NL', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }),
+                  'std. deviation node length': gfaInfo.std_dev.toLocaleString('en-NL', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }),
+                  N50: gfaInfo.n50.toLocaleString('en-NL', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }),
                 }
               : {
                   nodes: '-',

@@ -70,9 +70,11 @@ class GfaInfo:
     n_segments: int
     n_links: int
     n_paths: int
+    total_length: int
     shortest_segment: int
     longest_segment: int
     median_segment: int
     mean_segment: float
     std_dev: float
+    n50: float
 
