@@ -44,7 +44,7 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
     } catch (e) {
       onError(e);
     }
-  }, [graphSettings, layout, graph, isolate, pheno]);
+  }, [graphSettings, graph, isolate, pheno]);
 
   useEffect(() => {
     const dispatchExtent = (extent: {

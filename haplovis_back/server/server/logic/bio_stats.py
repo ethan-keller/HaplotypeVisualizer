@@ -1,15 +1,16 @@
 from typing import List
 
+import numpy as np
 
+# https://gist.github.com/dinovski/2bcdcc770d5388c6fcc8a656e5dbe53c
 def compute_N50(lengths: List[int]) -> float:
-    tmp = []
-    for tmp_number in set(lengths):
-            tmp += [tmp_number] * lengths.count(tmp_number) * tmp_number
-    tmp.sort()
- 
-    if (len(tmp) % 2) == 0:
-        median = (tmp[int(len(tmp) / 2) - 1] + tmp[int(len(tmp) / 2)]) / 2
-    else:
-        median = tmp[int(len(tmp) / 2)]
- 
-    return median
+    all_len = sorted(lengths, reverse=True)
+    csum = np.cumsum(all_len)
+    n2 = int(sum(lengths)/2)
+
+    # get index for cumsum >= N/2
+    csumn2 = min(csum[csum >= n2])
+    ind = np.where(csum == csumn2)
+
+    n50 = all_len[int(ind[0])]
+    return n50
