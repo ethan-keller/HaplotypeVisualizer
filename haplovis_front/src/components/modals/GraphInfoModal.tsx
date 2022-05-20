@@ -12,6 +12,10 @@ interface GraphInfoModalProps {
 const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
   const { data: gfaInfo } = gfaApi.useGetGraphInfoQuery();
   const { data: segmentLengths } = gfaApi.useGetGfaSegmentLengthsQuery();
+  const floatOptions = {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  };
 
   return (
     <Modal onHide={props.onHide} show={props.show}>
@@ -26,22 +30,15 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
                   nodes: gfaInfo.n_segments.toLocaleString('en-NL'),
                   edges: gfaInfo.n_links.toLocaleString('en-NL'),
                   paths: gfaInfo.n_paths.toLocaleString('en-NL'),
-                  'total length': gfaInfo.total_length.toLocaleString('en-NL'),
-                  'longest node': gfaInfo.longest_segment.toLocaleString('en-NL'),
-                  'shortest node': gfaInfo.shortest_segment.toLocaleString('en-NL'),
-                  'median node length': gfaInfo.median_segment.toLocaleString('en-NL'),
-                  'mean node length': gfaInfo.mean_segment.toLocaleString('en-NL', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }),
-                  'std node length': gfaInfo.std_dev.toLocaleString('en-NL', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }),
-                  N50: gfaInfo.n50.toLocaleString('en-NL', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  }),
+                  'total length':
+                    gfaInfo.total_length.toLocaleString('en-NL', floatOptions) + ' bp',
+                  'longest node': gfaInfo.longest_segment.toLocaleString('en-NL') + ' bp',
+                  'shortest node': gfaInfo.shortest_segment.toLocaleString('en-NL') + ' bp',
+                  'median node length': gfaInfo.median_segment.toLocaleString('en-NL') + ' bp',
+                  'mean node length':
+                    gfaInfo.mean_segment.toLocaleString('en-NL', floatOptions) + ' bp',
+                  'std node length': gfaInfo.std_dev.toLocaleString('en-NL') + ' bp',
+                  N50: gfaInfo.n50.toLocaleString('en-NL', floatOptions) + ' bp',
                 }
               : {
                   nodes: '-',
@@ -52,6 +49,8 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
                   'median node length': '-',
                   'mean node length': '-',
                   'std. deviation node length': '-',
+                  'std node length': '-',
+                  N50: '-',
                 }
           }
         />

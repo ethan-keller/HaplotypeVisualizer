@@ -130,12 +130,17 @@ const getGradient = (
       gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
     });
   } else {
-    feature.paths.forEach((path, i, array) => {
-      const index = paths[path].index;
-      const c = settings.activePaths[index] ? settings.pathColors[index] : '#999999';
-      gradient.stopColors.push(c, c);
-      gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
-    });
+    if (Object.keys(paths).length === 0) {
+      gradient.stopColors.push('#999999', '#999999');
+      gradient.stopPositions.push(0, 100);
+    } else {
+      feature.paths.forEach((path, i, array) => {
+        const index = paths[path].index;
+        const c = settings.activePaths[index] ? settings.pathColors[index] : '#999999';
+        gradient.stopColors.push(c, c);
+        gradient.stopPositions.push((i / array.length) * 100, ((i + 1) / array.length) * 100);
+      });
+    }
   }
 
   return gradient;

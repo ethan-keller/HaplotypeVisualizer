@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { VictoryAxis, VictoryChart, VictoryHistogram } from 'victory';
+import { VictoryAxis, VictoryChart, VictoryHistogram, VictoryLabel } from 'victory';
 import { useAppSelector } from '../store';
 import RangeHistogramBinsWithLabel from './range/with_label/RangeHistogramBinsWithLabel';
 
@@ -21,7 +21,7 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
   }, [props.values]);
   return (
     <div style={{ backgroundColor: 'aliceblue' }}>
-      <VictoryChart>
+      <VictoryChart padding={80}>
         <VictoryAxis
           style={{
             ...sharedAxisStyles,
@@ -31,6 +31,7 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
             },
           }}
           label='Absolute abundance'
+          axisLabelComponent={<VictoryLabel dy={-30} />}
           dependentAxis
         />
         <VictoryAxis
@@ -42,6 +43,7 @@ const Histogram: React.FC<BarPlotProps> = (props) => {
           style={{
             ...sharedAxisStyles,
           }}
+          axisLabelComponent={<VictoryLabel dy={15} />}
         />
         <VictoryHistogram
           style={{ data: { fill: '#0d6efd', strokeWidth: 0 } }}
