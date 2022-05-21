@@ -8,6 +8,11 @@ export interface Bounds {
   xr: number;
 }
 
+export interface Densities {
+  densities: number[];
+  down_sample_factor: number;
+}
+
 export interface RectangleRange {
   lu: Position;
   rd: Position;

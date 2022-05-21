@@ -14,7 +14,10 @@ const NavigatorWrapper: React.FC<NavigatorWrapperProps> = (props) => {
   });
 
   return densities ? (
-    <Navigator data={densities.map((v, i) => ({ x: i, y: v }))} />
+    <Navigator
+      data={densities.densities.map((v, i) => ({ x: i, y: v }))}
+      downSampleFactor={densities.down_sample_factor}
+    />
   ) : (
     <SpinnerAnnotated message='Loading density navigator' />
   );

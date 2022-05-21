@@ -11,6 +11,7 @@ interface NavigatorBrushProps {
   data: Position[];
   onBrushUpdateData: (value: number[]) => void;
   focusHeight: number;
+  downSampleFactor: number;
 }
 
 const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
@@ -47,8 +48,8 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
 
     const lastX = scales.xScale(scales.xScale.domain()[1]);
     const defaultSelection = [
-      Math.max(1e-6, scales.xScale(extent.xl + 1e-6)),
-      Math.min(lastX, scales.xScale(extent.xr)),
+      Math.max(1e-6, scales.xScale(extent.xl + 1e-6) / props.downSampleFactor),
+      Math.min(lastX, scales.xScale(extent.xr) / props.downSampleFactor),
     ];
 
     const gBrush = d3

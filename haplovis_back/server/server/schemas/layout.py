@@ -9,8 +9,8 @@ class RectangleRange:
     rd: Position
 
 
-class Density(BaseModel):
-    xs: List[int]
+class Densities(BaseModel):
+    down_sample_factor: int
     densities: List[int]
 
 

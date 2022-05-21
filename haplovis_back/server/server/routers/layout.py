@@ -1,7 +1,7 @@
-from typing import List, Optional
+from typing import Optional
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import Json, parse_obj_as
-from server.schemas.layout import Layout, Position, RectangleRange
+from server.schemas.layout import Densities, Layout, Position, RectangleRange
 from server.logic.density import get_down_sample_factor
 
 from server.managers import LayoutManager
@@ -49,7 +49,7 @@ async def get_all_layout_nodes_in_range(range: RectangleRange = Depends(get_rang
             "model": str,
         }
     },
-    response_model=List[int],
+    response_model=Densities,
     summary="Get variation densities along with their x coordinates",
 )
 async def get_densities(down_sample_factor: Optional[int] = None):
@@ -64,4 +64,4 @@ async def get_densities(down_sample_factor: Optional[int] = None):
 
     densities = LayoutManager.get_densities()
     f = down_sample_factor if down_sample_factor is not None else get_down_sample_factor(len(densities))
-    return densities[::f]
+    return Densities(densities=densities[::f], down_sample_factor=f)

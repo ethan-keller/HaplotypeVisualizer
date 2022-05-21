@@ -8,11 +8,12 @@ import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface NavigatorProps {
   data: Position[];
+  downSampleFactor: number;
 }
 
 // https://medium.com/react-courses/area-chart-using-react-js-d3-js-typescript-with-the-help-of-d3-brush-for-interaction-c66d11af14c3
 
-const Navigator: React.FC<NavigatorProps> = ({ data }) => {
+const Navigator: React.FC<NavigatorProps> = ({ data, downSampleFactor }) => {
   const [brushedData, setBrushedData] = useState<Position[]>([{ x: 0, y: 0 }]);
   const [boundingRect, setBoundingRect] = useState<{ width: number; height: number }>({
     width: 1000,
@@ -65,6 +66,7 @@ const Navigator: React.FC<NavigatorProps> = ({ data }) => {
           <NavigatorBrush
             dimensions={brushDimensions.current}
             data={data}
+            downSampleFactor={downSampleFactor}
             onBrushUpdateData={onBrushUpdateData}
             focusHeight={brushDimensions.current.boundedHeight}
           />
