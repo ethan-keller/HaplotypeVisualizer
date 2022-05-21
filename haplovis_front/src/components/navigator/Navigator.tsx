@@ -1,71 +1,84 @@
-import { useCallback, useState } from 'react';
-import {
-  VictoryChart,
-  VictoryArea,
-  VictoryAxis,
-  VictoryLabel,
-  createContainer,
-  VictoryBrushContainerProps,
-  VictoryCursorContainerProps,
-} from 'victory';
-import { useAppSelector } from '../../store';
+import React, { useEffect, useRef, useState } from 'react';
+import NavigatorArea from './NavigatorArea';
+import NavigatorHelper from './NavigatorHelper';
+import NavigatorBrush from './NavigatorBrush';
 import { Position } from '../../types/layout';
+import { Dimensions } from '../../types/navigator';
+import SpinnerAnnotated from '../SpinnerAnnotated';
 
 interface NavigatorProps {
-  densities: Position[];
+  data: Position[];
 }
 
-const Navigator: React.FC<NavigatorProps> = (props) => {
-  const [boundingRect, setBoundingRect] = useState({ width: 0, height: 0 });
-  const graphRef = useCallback((node) => {
-    if (node !== null) {
-      setBoundingRect(node.getBoundingClientRect());
+// https://medium.com/react-courses/area-chart-using-react-js-d3-js-typescript-with-the-help-of-d3-brush-for-interaction-c66d11af14c3
+
+const Navigator: React.FC<NavigatorProps> = ({ data }) => {
+  const [brushedData, setBrushedData] = useState<Position[]>([{ x: 0, y: 0 }]);
+  const [boundingRect, setBoundingRect] = useState<{ width: number; height: number }>({
+    width: 1000,
+    height: 400,
+  });
+  const navigatorRef = useRef<HTMLDivElement>(null);
+  const brushDimensions = useRef<Dimensions>();
+  const areaDimensions = useRef<Dimensions>();
+
+  useEffect(() => {
+    if (navigatorRef.current) {
+      setBoundingRect(navigatorRef.current.getBoundingClientRect());
+      areaDimensions.current = NavigatorHelper.getDimensions(
+        boundingRect.width,
+        boundingRect.height * 0.6,
+        20,
+        5,
+        5,
+        5,
+      );
+      brushDimensions.current = NavigatorHelper.getDimensions(
+        boundingRect.width,
+        boundingRect.height * 0.4,
+        20,
+        5,
+        5,
+        5,
+      );
     }
-  }, []);
-  const extent = useAppSelector((state) => state.graphLayout.extent);
-  const showBrush = useAppSelector((state) => state.globalSettings.navigatorBrush);
-  const BrushCursorContainer = createContainer<
-    VictoryBrushContainerProps,
-    VictoryCursorContainerProps
-  >('brush', 'cursor');
+  }, [navigatorRef.current]);
+
+  const onBrushUpdateData = (values: number[]) => {
+    let newData = [];
+    for (let i = 0; i < data.length; i++) {
+      const check = data[i].x;
+      if (check >= values[0] && check <= values[1]) {
+        newData.push(data[i]);
+      }
+    }
+    if (newData.length > 1 && newData[0].x !== brushedData[0].x) {
+      setBrushedData(newData);
+    }
+  };
 
   return (
-    <div style={{ width: '100%', height: '100%' }} ref={graphRef}>
-      <VictoryChart
-        padding={{ top: 10 }}
-        height={boundingRect.height}
-        width={boundingRect.width}
-        // have to call navigatorOverlay as function because of Victory bug
-        containerComponent={
-          showBrush ? (
-            <BrushCursorContainer
-              brushDimension='x'
-              brushDomain={{ x: [extent.xl, extent.xr] }}
-              allowDrag={false}
-              allowDraw={false}
-              allowResize={false}
-              brushStyle={{ fill: 'lightgreen', opacity: 0.2 }}
-              handleWidth={2}
-              handleStyle={{ fill: 'green' }}
-              defaultBrushArea='disable'
-              cursorDimension='x'
-              cursorLabel={(p) => `${Math.round(p.x)}`}
-            />
-          ) : undefined
-        }
-      >
-        <VictoryArea style={{ data: { fill: '#0d6efd' } }} data={props.densities} />
-        <VictoryAxis
-          dependentAxis
-          tickLabelComponent={<VictoryLabel dx={30} dy={0} style={{ fill: 'black' }} />}
-          style={{
-            grid: {
-              stroke: 'lightgrey',
-              strokeDasharray: '3',
-            },
-          }}
-        />
-      </VictoryChart>
+    <div style={{ width: '100%', height: '100%' }} ref={navigatorRef}>
+      {data.length > 1 && brushDimensions.current && areaDimensions.current ? (
+        <>
+          <NavigatorArea
+            dimensions={areaDimensions.current}
+            data={brushedData}
+            fill='#0d6efd'
+            stroke='rgb(47, 74, 89)'
+          />
+          <NavigatorBrush
+            dimensions={brushDimensions.current}
+            data={data}
+            onBrushUpdateData={onBrushUpdateData}
+            fill='#999999'
+            stroke='rgb(47, 74, 89)'
+            focusHeight={brushDimensions.current.boundedHeight}
+          />
+        </>
+      ) : (
+        <SpinnerAnnotated message='Loading navigator' />
+      )}
     </div>
   );
 };

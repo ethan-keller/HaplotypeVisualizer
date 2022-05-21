@@ -57,3 +57,7 @@
   color: green;
   font-weight: 400;
 }
+
+rect.selection {
+  fill: green;
+}
