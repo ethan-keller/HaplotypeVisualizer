@@ -12,6 +12,8 @@ import SpinnerAnnotated from '../SpinnerAnnotated';
 import VerticalSpacer from '../VerticalSpacer';
 import { GfaPath } from '../../types/gfa';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { url as urlWelcomeView } from '../../views/WelcomeView';
 
 interface IsolatePhenoFeatureModalProps {
   onHide: () => void;
@@ -28,6 +30,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
   const [colors, setColors] = useState<Record<string, string> | undefined>(undefined);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isolate) {
@@ -43,7 +46,12 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
       </Modal.Header>
       <Modal.Body>
         {isError ? (
-          <ErrorCard message='No phenotype information' />
+          <ErrorCard
+            message='No phenotype table imported'
+            actionTitle='import phenotype table'
+            // action will redirect to welcome view (imports) and highlight the pheno table input row
+            action={() => navigate(urlWelcomeView, { state: { highlightPhenoTableRow: true } })}
+          />
         ) : phenotypes && phenosPerSample && paths ? (
           <>
             <p>Select a pheno feature</p>
