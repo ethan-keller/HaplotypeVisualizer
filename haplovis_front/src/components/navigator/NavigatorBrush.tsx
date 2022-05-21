@@ -1,49 +1,42 @@
-import React, { useEffect, useCallback, useState, useRef } from 'react';
+import React, { useEffect, useCallback, useState, useRef, useMemo } from 'react';
 import * as d3 from 'd3';
 import { BrushBehavior } from 'd3-brush';
 import NavigatorHelper from './NavigatorHelper';
 import { Dimensions } from '../../types/navigator';
 import { Position } from '../../types/layout';
+import { useAppSelector } from '../../store';
 
 interface NavigatorBrushProps {
   dimensions: Dimensions;
   data: Position[];
   onBrushUpdateData: (value: number[]) => void;
-  fill: string;
-  stroke: string;
   focusHeight: number;
 }
 
 const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
   const [loaded, setLoaded] = useState(false);
   const brush = useRef() as { current: BrushBehavior<unknown> };
+  const extent = useAppSelector((state) => state.graphLayout.extent);
+  const scales = useMemo(() => {
+    return NavigatorHelper.getScales(props.data, props.dimensions.boundedWidth, props.focusHeight);
+  }, [props.data, props.dimensions.boundedWidth, props.focusHeight]);
 
   const memoizedDrawCallback = useCallback(() => {
-    const scales = NavigatorHelper.getScales(
-      props.data,
-      props.dimensions.boundedWidth,
-      props.focusHeight,
-    );
-    const helper = new NavigatorHelper();
-
     // draw chart
     const linesGenerator = d3
       .area()
-      .x((d) => scales.xScale(helper.xAccessor({ x: d[0], y: d[1] })))
+      .x((d) => scales.xScale(d[0]))
       .y0(scales.yScale(0))
-      .y1((d) => {
-        return scales.yScale(d[1]);
-      });
+      .y1((d) => scales.yScale(d[1]));
 
     d3.select('#brush-path')
-      .attr('fill', props.fill)
-      .attr('stroke', props.stroke)
+      .attr('fill', '#999999')
       .attr('d', linesGenerator(props.data.map((pos) => [pos.x, pos.y])));
 
     brush.current = d3
       .brushX()
       .extent([
-        [0, 0.5],
+        [0, 0],
         [
           props.dimensions.width - props.dimensions.margin.right - props.dimensions.margin.left,
           props.focusHeight,
@@ -52,9 +45,11 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
       .on('brush', brushed)
       .on('end', brushEnded);
 
-    const lastX = scales.xScale.domain()[1];
-    const lastLocationToX = scales.xScale(lastX);
-    const defaultSelection = [lastLocationToX - 100, lastLocationToX];
+    const lastX = scales.xScale(scales.xScale.domain()[1]);
+    const defaultSelection = [
+      Math.max(1e-6, scales.xScale(extent.xl + 1e-6)),
+      Math.min(lastX, scales.xScale(extent.xr)),
+    ];
 
     const gBrush = d3
       .select('#group-brush')
@@ -73,10 +68,14 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
         props.onBrushUpdateData(value);
       }
     }
-    function brushEnded(event: { selection: [] }) {
+    function brushEnded(event: { selection: []; mode?: string }) {
       if (!event.selection) {
         // @ts-ignore
         gBrush.call(brush.current.move, defaultSelection);
+      }
+      if (event.mode && (event.mode === 'drag' || event.mode === 'handle')) {
+        // TODO: navigate to this location in the graph
+        console.log('YES');
       }
     }
 
@@ -90,7 +89,7 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
       .tickFormat(d3.format('d'));
     //@ts-ignore
     brushBounds.select('#y-axis-brush').call(yAxisGenerator);
-  }, [props]);
+  }, [extent, props, scales]);
 
   const memoizedUpdateCallback = useCallback(() => {
     d3.selectAll('#x-axis-brush').selectAll('*').remove();
@@ -107,7 +106,7 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
   useEffect(() => {
     memoizedUpdateCallback();
     memoizedDrawCallback();
-  }, [props.dimensions.height, props.dimensions.width]);
+  }, [props.dimensions.height, props.dimensions.width, extent]);
 
   return (
     <div id='div'>

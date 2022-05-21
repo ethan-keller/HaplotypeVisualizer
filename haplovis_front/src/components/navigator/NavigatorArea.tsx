@@ -7,8 +7,6 @@ import { Position } from '../../types/layout';
 interface NavigatorAreaProps {
   dimensions: Dimensions;
   data: Position[];
-  fill: string;
-  stroke: string;
 }
 
 const NavigatorArea: React.FC<NavigatorAreaProps> = (props) => {
@@ -19,21 +17,17 @@ const NavigatorArea: React.FC<NavigatorAreaProps> = (props) => {
       props.dimensions.boundedHeight,
     );
     const bounds = d3.select('#bounds');
-    const helper = new NavigatorHelper();
 
     // Chart
     // draw chart
     const linesGenerator = d3
       .area()
-      .x((d) => scales.xScale(helper.xAccessor({ x: d[0], y: d[1] })))
+      .x((d) => scales.xScale(d[0]))
       .y0(scales.yScale(0))
-      .y1((d) => {
-        return scales.yScale(d[1]);
-      });
+      .y1((d) => scales.yScale(d[1]));
 
     d3.select('#path')
-      .attr('fill', props.fill)
-      .attr('stroke', props.stroke)
+      .attr('fill', '#0d6efd')
       .attr('d', linesGenerator(props.data.map((pos) => [pos.x, pos.y])));
 
     // Peripherals
@@ -45,13 +39,7 @@ const NavigatorArea: React.FC<NavigatorAreaProps> = (props) => {
       .tickFormat(d3.format('d'));
     //@ts-ignore
     bounds.select('#y-axis').call(yAxisGenerator);
-  }, [
-    props.data,
-    props.dimensions.boundedHeight,
-    props.dimensions.boundedWidth,
-    props.fill,
-    props.stroke,
-  ]);
+  }, [props.data, props.dimensions.boundedHeight, props.dimensions.boundedWidth]);
 
   useEffect(() => {
     memoizedUpdateCallback();

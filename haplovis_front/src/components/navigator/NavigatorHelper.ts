@@ -2,9 +2,6 @@ import * as d3 from 'd3';
 import { Position } from '../../types/layout';
 
 class NavigatorHelper {
-  public xAccessor = (d: Position) => d.x;
-  public yAccessor = (d: Position) => d.y;
-
   static getDimensions = (
     width: number,
     height: number,
@@ -32,20 +29,14 @@ class NavigatorHelper {
   };
 
   static getScales = (data: Position[], width: number, height: number) => {
-    const helper = new NavigatorHelper();
     return {
       xScale: d3
         .scaleLinear()
-        .domain(d3.extent(data, helper.xAccessor) as [number, number])
+        .domain(d3.extent(data, (d) => d.x) as [number, number])
         .range([0, width]),
       yScale: d3
         .scaleLinear()
-        .domain([
-          0,
-          d3.max(data, (d) => {
-            return d.y;
-          }),
-        ] as number[])
+        .domain([0, d3.max(data, (d) => d.y)] as [number, number])
         .range([height, 0])
         .nice(),
     };

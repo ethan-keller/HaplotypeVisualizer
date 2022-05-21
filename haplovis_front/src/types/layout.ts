@@ -8,11 +8,6 @@ export interface Bounds {
   xr: number;
 }
 
-// export interface LayoutNode {
-//   segment: string;
-//   position: Position;
-// }
-
 export interface RectangleRange {
   lu: Position;
   rd: Position;

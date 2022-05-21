@@ -61,18 +61,11 @@ const Navigator: React.FC<NavigatorProps> = ({ data }) => {
     <div style={{ width: '100%', height: '100%' }} ref={navigatorRef}>
       {data.length > 1 && brushDimensions.current && areaDimensions.current ? (
         <>
-          <NavigatorArea
-            dimensions={areaDimensions.current}
-            data={brushedData}
-            fill='#0d6efd'
-            stroke='rgb(47, 74, 89)'
-          />
+          <NavigatorArea dimensions={areaDimensions.current} data={brushedData} />
           <NavigatorBrush
             dimensions={brushDimensions.current}
             data={data}
             onBrushUpdateData={onBrushUpdateData}
-            fill='#999999'
-            stroke='rgb(47, 74, 89)'
             focusHeight={brushDimensions.current.boundedHeight}
           />
         </>
