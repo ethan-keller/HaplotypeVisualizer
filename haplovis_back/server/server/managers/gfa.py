@@ -75,6 +75,8 @@ class GfaManager:
         result: Set[GfaLink] = set()
         if cls.link_map is None:
             raise Exception("Cannot retrieve links because there is no link map")
+        elif len(cls.link_map.keys()) == 0:
+            return []
         else:
             for segment in segment_ids:
                 if segment not in cls.link_map:

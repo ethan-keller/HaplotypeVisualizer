@@ -26,7 +26,7 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
         <Table borderless size='sm'>
           <tbody>
             <tr>
-              <td>
+              <td style={{width: '50%'}}>
                 <StatTable
                   tableEntries={
                     gfaInfo
@@ -49,7 +49,7 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
                   }
                 />
               </td>
-              <td>
+              <td style={{width: '50%'}}>
                 <StatTable
                   tableEntries={
                     gfaInfo

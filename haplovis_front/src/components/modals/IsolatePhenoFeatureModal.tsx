@@ -74,7 +74,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
                     {phenotypes[phenoFeature].map((phenotype, i) => {
                       return (
                         <tr key={i}>
-                          <td>{phenotype}</td>
+                          <td>{phenotype.toString()}</td>
                           <td>
                             <ColorPicker
                               defaultColor={

@@ -95,7 +95,7 @@ class Gfa:
     @classmethod
     def _create_links(cls, links: List[Line]) -> List[GfaLink]:
         if not links:
-            raise PydanticConversionError(str(Line), str(List[GfaLink]), "'links' is None")
+            return []
 
         if len(links) == 0:
             return []

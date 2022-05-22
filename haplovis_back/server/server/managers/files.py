@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from typing import List
 from os.path import isfile, splitext
@@ -7,7 +8,8 @@ import server.managers as managers
 
 
 class FileManager:
-    FILE_BASE_PATH = "C:\\Users\\ethan\\Documents\\TUDelft\\Honours Program\\HAPLOTYPE_VISUALISATION\\HaplotypeVisualizer\\haplovis_back\\server\\server\\server_data\\"
+    # Server should be ran from root dir
+    FILE_BASE_PATH = Path('./server/server_data').resolve()
     files: List[File] = [
         File(id=0, description="GFA file", status=FileStatus.NO_FILE, required=True, file_extensions=[".gfa"]),
         File(id=1, description="Phenotype table", status=FileStatus.NO_FILE, required=False, file_extensions=[".csv"]),
@@ -17,7 +19,7 @@ class FileManager:
 
     @classmethod
     def get_absolute_file_path(cls, id: int) -> Path:
-        return Path(cls.FILE_BASE_PATH + cls.get_file(id).name)
+        return cls.FILE_BASE_PATH.joinpath(cls.get_file(id).name)
 
     @classmethod
     def _does_file_have_status(cls, id: int, status: FileStatus) -> bool:
