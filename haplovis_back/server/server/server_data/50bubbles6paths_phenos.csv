@@ -1,0 +1,7 @@
+sample,shape,color,resistance,size
+path1,round,blue,1,L
+path2,round,orange,1,M
+path3,square,purple,0,L
+path4,oval,orange,0,S
+path5,oval,orange,1,M
+path6,square,blue,1,M

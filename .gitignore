@@ -2,8 +2,20 @@
 
 # server requested files
 *.gfa
+!15GFA.gfa
+!50bubbles6paths.gfa
+!2kbubbles.gfa
+!5kbubbles.gfa
+!10kbubbles.gfa
+!L3000N4P.gfa
+!L100N10P.gfa
+
 *.gfa2
+
 *.csv
+!15GFA_phenos.csv
+!50bubbles6paths_phenos.csv
+
 *.gff
 
 # output/temp files
