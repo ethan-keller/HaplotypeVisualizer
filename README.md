@@ -120,7 +120,7 @@ This section explains how you can run the back-end and front-end in either dev m
     - Make sure to navigate to the root directory: `\HaplotypeVisualizer`
     - Navigate to the back-end server
     ```sh
-    cd haplovis_back/serve
+    cd haplovis_back/server
     ```
     - Run the server in dev or prod mode
     ```sh
