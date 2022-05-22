@@ -25,7 +25,7 @@ const PanWidget: React.FC<PanWidgetProps> = (props) => {
         up === undefined
           ? (reversePan ? -1 : 1) * (left ? 1 : -1) * (double ? doublePan : singlePan)
           : 0,
-      y: up === undefined ? 0 : (up ? 1 : -1) * singlePan,
+      y: up === undefined ? 0 : (reversePan ? -1 : 1) * (up ? 1 : -1) * singlePan,
     });
   };
 
