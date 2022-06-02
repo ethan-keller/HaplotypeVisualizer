@@ -22,6 +22,6 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/frontend/src"
+    "src"
   ]
 }

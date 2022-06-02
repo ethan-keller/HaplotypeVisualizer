@@ -2,8 +2,11 @@
   "name": "haplotype-visualizer",
   "version": "0.1.0",
   "description": "Graph-based haplotype visualizer",
-  "keywords": ["genomics", "bioinformatics", "haplotype"],
-  "homepage": "https://github.com/ethan-keller/HaplotypeVisualizer#readme",
+  "keywords": [
+    "genomics",
+    "bioinformatics",
+    "haplotype"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/ethan-keller/HaplotypeVisualizer.git"
@@ -29,6 +32,7 @@
     "react-redux": "^7.2.6",
     "react-router": "^6.2.1",
     "react-router-dom": "^6.2.1",
+    "react-scripts": "^5.0.1",
     "react-select": "^5.2.2",
     "redux-persist": "^6.0.0",
     "typescript": "^4.1.2",
@@ -37,7 +41,7 @@
   },
   "scripts": {
     "start-dev": "react-scripts start",
-    "start-prod": "npx serve -s src/frontend/build",
+    "start-prod": "npx serve -s ../haplovis/server/static",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -64,8 +68,8 @@
     ]
   },
   "devDependencies": {
+    "eslint-plugin-prettier": "^4.0.0",
     "lint-staged": "^11.2.3",
-    "prettier": "2.5.1",
-    "eslint-plugin-prettier": "^4.0.0"
+    "prettier": "2.5.1"
   }
 }
