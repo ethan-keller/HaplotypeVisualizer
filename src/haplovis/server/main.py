@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
 from haplovis.server.routers import files, gfa, layout, pheno, bookmarks
 
 origins = ["http://localhost:3000"]
+VERSION = "0.1.0"
 
 server = FastAPI()
 server.include_router(files.router)
@@ -20,6 +20,6 @@ server.add_middleware(
 )
 
 
-@server.get("/")
+@server.get("/", response_model=str)
 def root():
-    return {"message": "Hello", "five": 2 + 3}
+    return f"Haplotype Visualizer Server\nversion: {VERSION}"
