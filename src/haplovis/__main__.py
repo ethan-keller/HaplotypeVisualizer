@@ -1,3 +1,4 @@
+import webbrowser
 from pathlib import Path
 from typing import List, Optional
 import typer
@@ -5,14 +6,20 @@ from haplovis.layout import Layout
 from haplovis.kdtree import KDTree
 from haplovis.serialization import PickleSerializer
 from haplovis.gfa import Gfa
+import subprocess
 
-APP = typer.Typer(add_completion=False)
+CLI = typer.Typer(add_completion=False)
 
 # Static variables
 VERSION = "0.1.0"
 VALID_GRAPH_EXTENSIONS = [".gfa"]
 VALID_LAYOUT_EXTENSIONS = [".pickle"]
 DEFAULT_OUTPUT_DIR = Path("./src/haplovis/out").resolve()
+DEFAULT_PORT = 3000
+BUILD_COMMAND = "npm run build"
+INSTALL_DEPENDENCIES_COMMAND = "npm install && cd ../haplovis/graph_layout && npm install"
+START_STATIC_SERVER_COMMAND = "npx serve -s ./server/static"
+START_BACKEND_COMMAND = "uvicorn server.main:server"
 
 
 def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
@@ -34,9 +41,10 @@ def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
 def version_callback(version: Optional[bool]):
     if version:
         typer.echo(f"CLI version: {VERSION}")
+        raise typer.Exit()
 
 
-@APP.command()
+@CLI.command()
 def layout(
     gfas: List[Path] = typer.Argument(
         ...,
@@ -50,6 +58,9 @@ def layout(
     output_folder: Path = typer.Option(DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True),
     verbose: bool = typer.Option(True, "--verbose", "-v"),
 ):
+    """
+    Generate multiple layout files
+    """
     for gfa in gfas:
         try:
             if verbose:
@@ -72,9 +83,9 @@ def layout(
             typer.secho(f"Unexpected error occured: [{e}]", fg="red")
 
 
-@APP.command()
+@CLI.command()
 def see_layout(
-    layouts: List[Path] = typer.Argument(
+    layout: Path = typer.Argument(
         ...,
         exists=True,
         file_okay=True,
@@ -84,20 +95,103 @@ def see_layout(
         callback=path_validation_callback,
     )
 ):
-    # for debugging puproses
+    """
+    Visualize a layout file
+    """
     # visualization of index tree
-    for layout in layouts:
-        kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layout.name))
-        kdtree.print()
+    kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layout.name))
+    kdtree.print()
 
 
-@APP.callback()
+def error_echo(explanation: str):
+    typer.secho(explanation, fg="red")
+    typer.echo("Terminating command...")
+
+@CLI.command()
+def build():
+    """
+    Install needed dependencies and build HaplotypeVisualizer
+    """
+    # install deps
+    try:
+        typer.echo("Installing dependencies...")
+        subprocess.run(INSTALL_DEPENDENCIES_COMMAND, cwd="./src/frontend", shell=True)
+
+        # check dependencies
+        frontend_deps_exists = Path("./src/frontend/node_modules").exists()
+        graph_layout_deps_exists = Path("./src/haplovis/graph_layout/node_modules").exists()
+        if (not (frontend_deps_exists and graph_layout_deps_exists)):
+            error_echo("Dependencies were wrongly installed")
+            return
+        else:
+            typer.secho("Done installing dependencies!", fg="green")
+    except Exception:
+        error_echo("Could not install dependencies")
+        return   
+
+    # build react to static folder
+    try:
+        typer.echo("Building HaplotypeVisualizer...")
+        subprocess.run(BUILD_COMMAND, cwd="./src/frontend", shell=True)
+
+        # check build
+        static_dir_exists = Path("./src/haplovis/server/static").exists()
+        if (not static_dir_exists):
+            error_echo("HaplotypeVisualizer was not built correctly")
+            return
+        else:
+            typer.secho("Done building HaplotypeVisualizer!", fg="green")
+    except Exception:
+        error_echo("Could not build HaplotypeVisualizer")
+        return
+
+@CLI.command()
+def start(port: int = typer.Option(DEFAULT_PORT, "--port", "-p")):
+    """
+    Start HaplotypeVisualizer
+    """
+    # start static server
+    try:
+        typer.echo("Starting static server...")
+        p = subprocess.Popen(f"{START_STATIC_SERVER_COMMAND} -p {port}", cwd="./src/haplovis", shell=True, stdout=subprocess.PIPE)
+
+        # open web browser
+        webbrowser.open(f"http://localhost:{port}")
+
+        # check build
+        static_dir_exists = Path("./src/haplovis/server/static").exists()
+        if (not static_dir_exists):
+            error_echo("Cannot start HaplotypeVisualizer because no build/static folder was found")
+            return
+        else:
+            typer.secho("Sucessfully started the static server!", fg="green")
+    except Exception:
+        error_echo("Could not start the static server")
+        return
+
+
+    # start backend
+    try:
+        typer.echo("Starting backend...")
+        subprocess.run(START_BACKEND_COMMAND, cwd="./src/haplovis", shell=True)
+        typer.secho("Successfully started the backend!", fg="green")
+    except Exception:
+        error_echo("Could not start the backend")
+        return
+
+
+
+@CLI.callback()
 def main(version: Optional[bool] = typer.Option(None, "--version", is_eager=True, callback=version_callback)):
     """
-    This CLI functions as a stand-alone application to create layout files that can be used in HaplotypVisualizer.
+    Command Line Interface (CLI) for HaplotypeVisualizer.
+
+    Offers:\n
+        - layout file generation/visualization\n
+        - web-app (HaplotypeVisualizer) startup\n
     """
     pass
 
 
 if __name__ == "__main__":
-    APP()
+    CLI()
