@@ -8,7 +8,7 @@ import haplovis.server.managers as managers
 from haplovis.server.managers.files import FileManager
 from haplovis.server.managers.layout import LayoutManager
 from haplovis.schemas.file import FileIndex
-
+from haplovis.data_locations import output_location
 
 class GfaManager:
     segment_map: Optional[Dict[str, GfaSegment]] = None
@@ -104,10 +104,10 @@ class GfaManager:
             gfa_file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
             gfa_hash = cls.get_hash()
             if cls.recognize(gfa_file_path):
-                gfa = Gfa.deserialize(from_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
+                gfa = Gfa.deserialize(from_file=output_location.joinpath(Path(f"{gfa_hash}.gfa.json")))
             else:
                 gfa = Gfa.read_gfa_from_file(gfa_file_path)
-                Gfa.serialize(gfa, out_file=Path(f"../cli/cli/out/{gfa_hash}.gfa.json"))
+                Gfa.serialize(gfa, out_file=output_location.joinpath(Path(f"{gfa_hash}.gfa.json")))
             cls.segment_map = cls.create_segment_map(gfa.segments)
             cls.link_map = cls.create_link_map(gfa.links)
             cls.path_map = cls.create_path_map(gfa.paths)
@@ -140,7 +140,8 @@ class GfaManager:
         LayoutManager.index = LayoutManager.get_index_from_layout(layout)
         gfa_hash = Gfa.get_gfa_hash(file_path)
         if gfa_hash:
-            layout_path = KDTree.serialize(LayoutManager.index, Path("../cli/cli/out/" + gfa_hash + ".pickle"))
+            layout_path = KDTree.serialize(LayoutManager.index, output_location.joinpath(Path(f"{gfa_hash}.pickle")))
+            print(1)
             if isinstance(layout_path, Path):
                 LayoutManager.index_file_path = layout_path
         else:

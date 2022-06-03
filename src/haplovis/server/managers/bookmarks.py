@@ -7,6 +7,7 @@ from haplovis.server.managers.files import FileManager
 from haplovis.server.managers.gfa import GfaManager
 from haplovis.schemas.bookmark import Bookmark
 from haplovis.schemas.file import FileIndex, FileStatus
+from haplovis.data_locations import output_location
 
 
 class BookmarkManager:
@@ -23,7 +24,7 @@ class BookmarkManager:
             if elem_id in cls.bookmarks:
                 return cls.bookmarks.pop(elem_id)
             else:
-                raise Exception(f"Could not remove element with id {id} from bookmarks")
+                raise Exception(f"Could not remove element with id {elem_id} from bookmarks")
         else:
             return None
 
@@ -33,7 +34,7 @@ class BookmarkManager:
 
     @classmethod
     def store_bookmarks_in_default_out_dir(cls, index_file: UploadFile, gfa_hash: str) -> Path:
-        bookmarks_file_path = f"../cli/cli/out/{gfa_hash}.bookmarks.json"
+        bookmarks_file_path = output_location.joinpath(Path(f"{gfa_hash}.bookmarks.json"))
         os.makedirs(os.path.dirname(bookmarks_file_path), exist_ok=True)
         with open(bookmarks_file_path, "wb") as f:
             index_content = index_file.file.read()
@@ -42,7 +43,7 @@ class BookmarkManager:
 
     @classmethod
     def bookmarks_for_gfa_exists(cls, gfa_hash: str) -> Optional[Path]:
-        path = Path(f"../cli/cli/out/{gfa_hash}.bookmarks.json")
+        path = output_location.joinpath(Path(f"{gfa_hash}.bookmarks.json"))
         if path.exists():
             return path
         else:
@@ -52,8 +53,9 @@ class BookmarkManager:
     def export(cls) -> Optional[Path]:
         gfa_hash = GfaManager.get_hash()
         if gfa_hash:
+            bookmarks_file = output_location.joinpath(Path(f"{gfa_hash}.bookmarks.json"))
             file_path = JsonSerializer.serialize(
-                cls.bookmarks, out_file=Path(f"../cli/cli/out/{gfa_hash}.bookmarks.json")
+                cls.bookmarks, out_file=bookmarks_file
             )
             if isinstance(file_path, Path):
                 FileManager.set_file_status(FileIndex.BOOKMARKS, FileStatus.READY)

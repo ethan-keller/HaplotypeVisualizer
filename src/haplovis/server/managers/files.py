@@ -5,11 +5,12 @@ from os.path import isfile, splitext
 
 from haplovis.schemas.file import File, FileStatus, FileIndex
 import haplovis.server.managers as managers
+from haplovis.data_locations import server_data_location
 
 
 class FileManager:
     # Server should be ran from root dir
-    FILE_BASE_PATH = Path('./server/server_data').resolve()
+    FILE_BASE_PATH = server_data_location
     files: List[File] = [
         File(id=0, description="GFA file", status=FileStatus.NO_FILE, required=True, file_extensions=[".gfa"]),
         File(id=1, description="Phenotype table", status=FileStatus.NO_FILE, required=False, file_extensions=[".csv"]),

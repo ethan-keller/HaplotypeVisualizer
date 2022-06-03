@@ -78,7 +78,7 @@ function createCytoscape(gfa: Gfa): cytoscape.Core {
   return cy;
 }
 
-const gfa_file_path: string = "../" + process.argv[2];
+const gfa_file_path: string = process.argv[2];
 const fs = require("fs");
 let gfa;
 

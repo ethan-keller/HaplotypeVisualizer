@@ -12,7 +12,7 @@ APP = typer.Typer(add_completion=False)
 VERSION = "0.1.0"
 VALID_GRAPH_EXTENSIONS = [".gfa"]
 VALID_LAYOUT_EXTENSIONS = [".pickle"]
-DEFAULT_OUTPUT_DIR = "/out"
+DEFAULT_OUTPUT_DIR = Path("./src/haplovis/out").resolve()
 
 
 def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
@@ -50,13 +50,12 @@ def layout(
     output_folder: Path = typer.Option(DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True),
     verbose: bool = typer.Option(True, "--verbose", "-v"),
 ):
-
     for gfa in gfas:
         try:
             if verbose:
                 typer.echo(f"Creating layout for {str(gfa)}")
                 typer.echo("Computing layout...")
-            layout = Layout.get_layout_from_gfa_file(gfa)
+            layout = Layout.get_layout_from_gfa_file(gfa, output_folder)
             if verbose:
                 typer.echo(f"Creating index tree for layout...")
             kdtree = KDTree.create_tree_from_layout(layout)
@@ -64,7 +63,7 @@ def layout(
             if gfa_hash:
                 if verbose:
                     typer.echo("Serializing index tree...")
-                index_file_path = Path(f".{output_folder}/{gfa_hash}.pickle").resolve()
+                index_file_path = output_folder.joinpath(Path(f"{gfa_hash}.pickle")).resolve()
                 out_path = PickleSerializer.serialize(kdtree, index_file_path)
                 typer.secho(f"Successfully computed layout for {gfa} --> Stored at {str(out_path)}", fg="green")
             else:
@@ -88,7 +87,7 @@ def see_layout(
     # for debugging puproses
     # visualization of index tree
     for layout in layouts:
-        kdtree: KDTree = PickleSerializer.deserialize(from_file=Path("./out/" + layout.name))
+        kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layout.name))
         kdtree.print()
 
 
