@@ -14,8 +14,8 @@ class FileManager:
     files: List[File] = [
         File(id=0, description="GFA file", status=FileStatus.NO_FILE, required=True, file_extensions=[".gfa"]),
         File(id=1, description="Phenotype table", status=FileStatus.NO_FILE, required=False, file_extensions=[".csv"]),
-        File(id=2, description="GFF file", status=FileStatus.NO_FILE, required=False, file_extensions=[".gff"]),
-        File(id=3, description="Bookmarks file", status=FileStatus.NO_FILE, required=False, file_extensions=[".json"]),
+        # File(id=*, description="GFF file", status=FileStatus.NO_FILE, required=False, file_extensions=[".gff"]),
+        File(id=2, description="Bookmarks file", status=FileStatus.NO_FILE, required=False, file_extensions=[".json"]),
     ]
 
     @classmethod
