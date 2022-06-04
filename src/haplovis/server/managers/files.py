@@ -1,16 +1,16 @@
-import os
 from pathlib import Path
 from typing import List
 from os.path import isfile, splitext
 
 from haplovis.schemas.file import File, FileStatus, FileIndex
 import haplovis.server.managers as managers
-from haplovis.data_locations import server_data_location
 
 
 class FileManager:
     # Server should be ran from root dir
-    FILE_BASE_PATH = server_data_location
+    output_folder = Path("./out").resolve()
+    data_folder = Path("./server/server_data").resolve()
+
     files: List[File] = [
         File(id=0, description="GFA file", status=FileStatus.NO_FILE, required=True, file_extensions=[".gfa"]),
         File(id=1, description="Phenotype table", status=FileStatus.NO_FILE, required=False, file_extensions=[".csv"]),
@@ -19,8 +19,33 @@ class FileManager:
     ]
 
     @classmethod
+    def get_output_folder(cls) -> str:
+        return str(cls.output_folder)
+
+    @classmethod
+    def get_data_folder(cls) -> str:
+        return str(cls.data_folder)
+
+    @classmethod
+    def update_output_folder(cls, new_folder: str) -> None:
+        new_folder_path = Path(new_folder)
+        if (new_folder_path.exists() and new_folder_path.is_dir()):
+            cls.output_folder = new_folder_path.resolve()
+        else:
+            raise Exception(f"Cannot update output folder. {new_folder} does not exist or is not a directory.")
+
+    @classmethod
+    def update_data_folder(cls, new_folder: str) -> None:
+        # TODO: remove "server/"
+        new_folder_path = Path("server/" + new_folder)
+        if (new_folder_path.exists() and new_folder_path.is_dir()):
+            cls.data_folder = new_folder_path.resolve()
+        else:
+            raise Exception(f"Cannot update data folder. {new_folder} does not exist or is not a directory.")
+
+    @classmethod
     def get_absolute_file_path(cls, id: int) -> Path:
-        return cls.FILE_BASE_PATH.joinpath(cls.get_file(id).name)
+        return cls.data_folder.joinpath(cls.get_file(id).name)
 
     @classmethod
     def _does_file_have_status(cls, id: int, status: FileStatus) -> bool:

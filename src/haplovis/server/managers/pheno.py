@@ -16,7 +16,7 @@ class PhenoManager:
         file_name = managers.FileManager.get_file(FileIndex.PHENO).name
 
         try:
-            phenos_dp = pd.read_csv(managers.FileManager.FILE_BASE_PATH.joinpath(file_name))
+            phenos_dp = pd.read_csv(managers.FileManager.data_folder.joinpath(file_name))
             phenos_dp.set_index(phenos_dp.columns.values[0], inplace=True)
             cls.phenotypes = cls.get_possible_phenotypes(pheno_table=phenos_dp)
             cls.pheno_per_sample = cls.create_pheno_per_sample(pheno_table=phenos_dp)

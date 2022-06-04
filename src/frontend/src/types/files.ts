@@ -27,4 +27,8 @@ interface UpdateFileParams extends CoreApiParams {
 
 interface ClearFileParams extends CoreApiParams {}
 
-export type { File, GetFileParams, UpdateFileParams, ClearFileParams };
+interface UpdateFolderParams {
+  new_folder: string;
+}
+
+export type { File, GetFileParams, UpdateFileParams, ClearFileParams, UpdateFolderParams };

@@ -3,20 +3,30 @@ import {
   clearFile,
   fileBaseUrl,
   getAllFiles,
+  getDataFolder,
   getFile,
+  getOutputFolder,
   prepareFiles,
   preprocess,
   ready,
+  updateDataFolder,
   updateFile,
+  updateOutputFolder,
   uploadBookmarks,
   uploadLayout,
 } from '../endpoints_config/FileEndpoints';
-import { File, GetFileParams, UpdateFileParams, ClearFileParams } from '../types/files';
+import {
+  File,
+  GetFileParams,
+  UpdateFileParams,
+  ClearFileParams,
+  UpdateFolderParams,
+} from '../types/files';
 
 const filesApi = createApi({
   reducerPath: 'filesApi',
   baseQuery: fetchBaseQuery({ baseUrl: fileBaseUrl }),
-  tagTypes: ['File'],
+  tagTypes: ['File', 'Folder'],
   endpoints: (builder) => ({
     getAllFiles: builder.query<File[], void>({
       query: () => ({ url: getAllFiles, method: 'GET' }),
@@ -24,7 +34,7 @@ const filesApi = createApi({
     }),
     getFile: builder.query<File, GetFileParams>({
       query: (params) => ({ url: getFile, params: params, method: 'GET' }),
-      providesTags: (file, error, args) => ['File'],
+      providesTags: ['File'],
     }),
     areFilesReady: builder.query<boolean, void>({
       query: () => ({ url: ready, method: 'GET' }),
@@ -46,12 +56,28 @@ const filesApi = createApi({
       invalidatesTags: (result, error, args) => ['File'],
     }),
     uploadLayout: builder.mutation<void, FormData>({
-      query: (formData) => ({ url: uploadLayout, method: 'POST', body: formData }),
+      query: (formData) => ({ url: uploadLayout, body: formData, method: 'POST' }),
       invalidatesTags: (result, error, args) => ['File'],
     }),
     uploadBookmarks: builder.mutation<void, FormData>({
       query: (formData) => ({ url: uploadBookmarks, body: formData, method: 'POST' }),
       invalidatesTags: (result, error, args) => ['File'],
+    }),
+    getOutputFolder: builder.query<string, void>({
+      query: () => ({ url: getOutputFolder, method: 'GET' }),
+      providesTags: ['Folder'],
+    }),
+    getDataFolder: builder.query<string, void>({
+      query: () => ({ url: getDataFolder, method: 'GET' }),
+      providesTags: ['Folder'],
+    }),
+    updateOutputFolder: builder.mutation<void, UpdateFolderParams>({
+      query: (params) => ({ url: updateOutputFolder, params: params, method: 'PUT' }),
+      invalidatesTags: (result, error, args) => ['Folder'],
+    }),
+    updateDataFolder: builder.mutation<void, UpdateFolderParams>({
+      query: (params) => ({ url: updateDataFolder, params: params, method: 'PUT' }),
+      invalidatesTags: (result, error, args) => ['Folder'],
     }),
   }),
 });

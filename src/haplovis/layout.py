@@ -7,7 +7,7 @@ from subprocess import check_output, CalledProcessError
 from haplovis.gfa import Gfa
 from haplovis.schemas.layout import LayoutCLI as LayoutType
 from haplovis.serialization import JsonSerializer
-from haplovis.data_locations import output_location
+from haplovis.server.managers.files import FileManager
 
 class Layout:
     def __init__(self, nodes: LayoutType) -> None:
@@ -27,7 +27,7 @@ class Layout:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
                 gfa = Gfa.read_gfa_from_file(gfa_path)
-                out_loc = output_location
+                out_loc = FileManager.output_folder
                 if custom_output_location:
                     out_loc = custom_output_location
                 gfa_json_path = out_loc.joinpath(Path(f"{gfa_hash}.gfa.json"))

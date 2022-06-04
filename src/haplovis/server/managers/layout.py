@@ -7,7 +7,7 @@ from haplovis.gfa import Gfa
 from haplovis.kdtree import KDTree
 from haplovis.server.logic.density import get_density_values
 from haplovis.schemas.layout import Layout as LayoutType, LayoutNode, RectangleRange
-from haplovis.data_locations import output_location
+from haplovis.server.managers.files import FileManager
 
 
 class LayoutManager:
@@ -57,7 +57,7 @@ class LayoutManager:
 
     @classmethod
     def store_index_in_default_out_dir(cls, index_file: UploadFile, gfa_hash: str) -> Path:
-        index_file_path = output_location.joinpath(Path(f"{gfa_hash}.pickle"))
+        index_file_path = FileManager.output_folder.joinpath(Path(f"{gfa_hash}.pickle"))
         os.makedirs(os.path.dirname(index_file_path), exist_ok=True)
         with open(index_file_path, "wb") as f:
             index_content = index_file.file.read()
@@ -67,7 +67,7 @@ class LayoutManager:
     @classmethod
     def index_for_gfa_exists(cls, gfa_file_path: Path) -> Optional[Path]:
         gfa_hash = Gfa.get_gfa_hash(gfa_file_path)
-        path = output_location.joinpath(Path(f"{gfa_hash}.pickle"))
+        path = FileManager.output_folder.joinpath(Path(f"{gfa_hash}.pickle"))
         if path.exists():
             return path
         else:

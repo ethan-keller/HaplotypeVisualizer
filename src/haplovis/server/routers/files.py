@@ -192,3 +192,44 @@ async def upload_bookmarks(bookmarks_file: UploadFile = FastApiFile(...)):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Cannot generate hash for gfa file",
         )
+
+@router.get("/output_folder", summary="Get output folder location")
+async def get_output_folder():
+    """
+    Get the location of the output folder.
+    """
+    return FileManager.get_output_folder()
+
+
+@router.get("/data_folder", summary="Get data folder location")
+async def get_data_folder():
+    """
+    Get the location of the data folder.
+    """
+    return FileManager.get_data_folder()
+
+@router.put("/update_output_folder", summary="Update ouput folder location")
+async def update_output_folder(new_folder: str):
+    """
+    Update the location (directory) for output files.
+    """
+    try:
+        FileManager.update_output_folder(new_folder)
+    except Exception:
+        raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid output folder {new_folder}",
+            )
+
+@router.put("/update_data_folder", summary="Update data folder location")
+async def update_data_folder(new_folder: str):
+    """
+    Update the location (directory) for data files.
+    """
+    try:
+        FileManager.update_data_folder(new_folder)
+    except Exception:
+        raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail=f"Invalid data folder {new_folder}",
+            )
