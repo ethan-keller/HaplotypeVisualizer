@@ -78,7 +78,7 @@ Still under development.
 
 ## Getting Started
 
-To get HaplotypeVisualizer up and running, a few dependencies need to be installed for both the front-end and back-end.
+To get `HaplotypeVisualizer` up and running, a few dependencies need to be installed.
 
 ### Prerequisites
 
@@ -86,65 +86,32 @@ Make sure to have `pip` and `npm` installed on your machine.
 
 1) Open a terminal in the root directory: `/HaplotypeVisualizer`
 
-2) Navigate to the front-end directory:
+2) Install the `haplovis` package and its dependencies:
     ```sh
-    cd haplovis_front
+    pip install .
     ```
-3) Install the front-end dependencies:
+3) To verify that the installation was successfull, try to use the CLI:
     ```sh
-    npm install
-    ```
-4) Navigate to the back-end directory:
-    ```sh
-    cd ../haplovis_back
-    ```
-5) Install the back-end dependencies:
-    ```sh
-    pip install -r requirements.txt
-    ```
-6) Navigate to the graph layout module:
-    ```sh
-    cd cli/cli/graph_layout
-    ```
-7) Install the graph layout module dependencies:
-    ```sh
-    npm install
+    haplovis --help
     ```
 
 ### Run
 
-This section explains how you can run the back-end and front-end in either dev mode or prod mode.
+This section explains how you can build and start the `HaplotypeVisualizer` web-app.
 
-- Back-end
-    - Open a new terminal
-    - Make sure to navigate to the root directory: `\HaplotypeVisualizer`
-    - Navigate to the back-end server
+1) Build `HaplotypeVisualizer` (installs dependencies + builds a production react app)
     ```sh
-    cd haplovis_back/server
-    ```
-    - Run the server in dev or prod mode
-    ```sh
-    # DEV
-    uvicorn server.main:server --reload --reload-dir ../
-
-    # PROD
-    uvicorn server.main:server
+    haplovis build
     ```
 
-- Front-end
-    - Open a new terminal
-    - Make sure to navigate to the root directory: `\HaplotypeVisualizer`
-    - Navigate to the front-end directory
+2) Start `HaplotypeVisualizer` (starts a static server and a backend server)
     ```sh
-    cd haplovis_front
+    haplovis start
     ```
-    - Run the client in dev or prod mode
+
+    or specify a custom port with the `--port` or `-p` flag:
     ```sh
-    # DEV
-    npm run start-dev
-    
-    # PROD
-    npm run start-prod
+    haplovis start -p 9999
     ```
 
 <p align="right"><a href="#top">back to top</a></p>
