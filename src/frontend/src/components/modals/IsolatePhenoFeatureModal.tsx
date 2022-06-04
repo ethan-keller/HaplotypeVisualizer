@@ -42,7 +42,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
   return (
     <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
-        <Modal.Title>Pheno feature isolation</Modal.Title>
+        <Modal.Title>Phenotype visualization</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         {isError ? (
@@ -54,7 +54,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
           />
         ) : phenotypes && phenosPerSample && paths ? (
           <>
-            <p>Select a pheno feature</p>
+            <p>Select a feature</p>
             <PhenoFeatureIsolateSelect
               value={phenoFeature ? { label: phenoFeature, value: phenoFeature } : null}
               onChange={(newPheno) => {
@@ -114,7 +114,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
                     props.onHide();
                   }}
                 >
-                  Isolate: <b>{phenoFeature}</b>
+                  <b>{phenoFeature}</b>
                 </Button>
                 <Button
                   style={{ marginLeft: 6 }}

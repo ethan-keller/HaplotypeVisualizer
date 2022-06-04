@@ -12,9 +12,9 @@ const PhenoIsolationSidebarSection: React.FC<PhenoIsolationSidebarSectionProps> 
   const dispatch = useAppDispatch();
   const isolate = useAppSelector((state) => state.pheno.isolate);
   return (
-    <SidebarSection title='Pheno feature isolation'>
+    <SidebarSection title='Visualize phenotypes'>
       <Button size='sm' onClick={() => setShowIsolatePhenoFeature(true)} style={{ marginRight: 8 }}>
-        Isolate
+        Visualize
       </Button>
       <Button
         disabled={!isolate}
