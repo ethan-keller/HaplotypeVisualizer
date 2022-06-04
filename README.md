@@ -137,7 +137,7 @@ This section explains how you can build and start the `HaplotypeVisualizer` web-
 
 ## Usage
 
-In the import table on the welcome view, you **must** import files that are located in the `HaplotypeVisualizer/haplovis_back/server/server/server_data` directory. Move your files to this folder or use one of the given data files.
+In the import table on the welcome view, you **must** import files that are located in the `HaplotypeVisualizer/src/haplovis/server/server_data` directory. Move your files to this folder or use one of the given data files.
 
 Below is a table of given GFA files with their respective phenotype tables:
 | GFA file            | Phenotable                 |
