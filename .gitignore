@@ -18,8 +18,10 @@
 
 *.gff
 
-# output/temp files
-/haplovis_back/cli/cli/out
+# output/temp/static files
+out
+src/haplovis/server/static
+
 
 # dependencies
 node_modules
@@ -61,3 +63,4 @@ yarn-error.log*
 
 # VS Code
 .vscode
+*.egg-info

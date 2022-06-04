@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "@types/cytoscape": "^3.14.17",
+    "@types/cytoscape-dagre": "^2.3.0",
+    "cytoscape": "^3.19.0",
+    "cytoscape-dagre": "^2.4.0",
+    "dagre": "ethan-keller/dagre",
+    "graphlib": "ethan-keller/graphlib#iterativeDFS",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.1.2"
+  },
+  "overrides": {
+    "dagre": {
+      "graphlib": "$graphlib"
+    },
+    "cytoscape-dagre": {
+      "dagre": "$dagre"
+    }
+  }
+}

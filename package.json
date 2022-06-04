@@ -1,6 +1,0 @@
-{
-  "scripts": {
-    "start-api-dev": "conda activate haplo & cd haplovis_back/server & uvicorn server.main:server --reload --reload-dir ../",
-    "start-api-prod": "conda activate haplo & cd haplovis_back/server & uvicorn server.main:server"
-  }
-}
