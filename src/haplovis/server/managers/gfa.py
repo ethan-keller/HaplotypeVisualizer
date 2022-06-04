@@ -141,7 +141,6 @@ class GfaManager:
         gfa_hash = Gfa.get_gfa_hash(file_path)
         if gfa_hash:
             layout_path = KDTree.serialize(LayoutManager.index, output_location.joinpath(Path(f"{gfa_hash}.pickle")))
-            print(1)
             if isinstance(layout_path, Path):
                 LayoutManager.index_file_path = layout_path
         else:
