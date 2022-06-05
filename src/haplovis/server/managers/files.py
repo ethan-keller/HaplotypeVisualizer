@@ -128,6 +128,11 @@ class FileManager:
             managers.BookmarkManager.prepare()
 
     @classmethod
+    def clear_all(cls) -> None:
+        for index in FileIndex:
+            cls.clear_file(index)
+
+    @classmethod
     def clear_file(cls, id: int) -> None:
         if cls.is_valid_id(id):
             file = cls.get_file(id)

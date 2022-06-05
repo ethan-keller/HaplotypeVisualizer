@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
+  clearAll,
   clearFile,
   fileBaseUrl,
   getAllFiles,
@@ -46,6 +47,10 @@ const filesApi = createApi({
     }),
     clearFile: builder.mutation<void, ClearFileParams>({
       query: (params) => ({ url: clearFile, params: params, method: 'PUT' }),
+      invalidatesTags: (result, error, args) => ['File'],
+    }),
+    clearAll: builder.mutation<void, void>({
+      query: () => ({ url: clearAll, method: 'PUT' }),
       invalidatesTags: (result, error, args) => ['File'],
     }),
     prepareFiles: builder.mutation<void, void>({

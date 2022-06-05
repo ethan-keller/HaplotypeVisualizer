@@ -89,6 +89,20 @@ async def clear_file(id: int = Query(..., ge=0, lt=len(FileManager.files))):
     FileManager.clear_file(id)
 
 
+@router.put("/clear_all", summary="Clear file information for all files")
+async def clear_all():
+    """
+    Clear the file information for all the needed files.
+    """
+    try:
+        FileManager.clear_all()
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Could not clear all files: {e}",
+        )
+
+
 @router.put(
     "/prepare",
     responses={status.HTTP_424_FAILED_DEPENDENCY: {"description": "Files not ready for preparation", "model": str}},
