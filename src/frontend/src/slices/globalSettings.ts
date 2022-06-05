@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { persistor } from '../store';
 import { GlobalSettings } from '../types/settings';
 
 export const initialState: GlobalSettings = {
@@ -46,8 +47,6 @@ export const globalSettingsSlice = createSlice({
       state.reversePan = action.payload;
     },
     updateNavigatorTwoViews: (state, action: PayloadAction<boolean>) => {
-      // refresh the window for correct navigator dimensions
-      window.location.reload();
       state.navigatorTwoViews = action.payload;
     },
     reset: () => initialState,

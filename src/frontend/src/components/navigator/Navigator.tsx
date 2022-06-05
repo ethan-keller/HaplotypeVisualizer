@@ -18,43 +18,35 @@ const Navigator: React.FC<NavigatorProps> = ({ data, downSampleFactor }) => {
   const [brushedData, setBrushedData] = useState<Position[]>([{ x: 0, y: 0 }]);
   const [boundingRect, setBoundingRect] = useState<{ width: number; height: number }>({
     width: 1000,
-    height: 400,
+    height: 100,
   });
   const navigatorRef = useRef<HTMLDivElement>(null);
-  const brushDimensions = useRef<Dimensions>();
-  const areaDimensions = useRef<Dimensions>();
+  const [brushDimensions, setBrushDimensions] = useState<Dimensions>();
+  const [areaDimensions, setAreaDimensions] = useState<Dimensions>();
   const navigatorTwoViews = useAppSelector((state) => state.globalSettings.navigatorTwoViews);
 
+  const [first, setFirst] = useState<boolean>(false);
+
   useEffect(() => {
-    if (navigatorRef.current) {
+    if (navigatorRef.current && !first) {
       setBoundingRect(navigatorRef.current.getBoundingClientRect());
-      if (navigatorTwoViews) {
-        areaDimensions.current = NavigatorHelper.getDimensions(
-          boundingRect.width,
-          boundingRect.height * 0.6,
-          20,
-          5,
-          5,
-          5,
-        );
-        brushDimensions.current = NavigatorHelper.getDimensions(
-          boundingRect.width,
-          boundingRect.height * 0.4,
-          20,
-          5,
-          5,
-          5,
-        );
-      } else {
-        brushDimensions.current = NavigatorHelper.getDimensions(
-          boundingRect.width,
-          boundingRect.height,
-          20,
-          5,
-          5,
-          5,
-        );
-      }
+      setFirst(true);
+    }
+  }, [navigatorRef.current]);
+
+  useEffect(() => {
+    if (navigatorTwoViews) {
+      setAreaDimensions(
+        NavigatorHelper.getDimensions(boundingRect.width, boundingRect.height * 0.6, 20, 5, 5, 5),
+      );
+      setBrushDimensions(
+        NavigatorHelper.getDimensions(boundingRect.width, boundingRect.height * 0.4, 20, 5, 5, 5),
+      );
+    } else {
+      setAreaDimensions(undefined);
+      setBrushDimensions(
+        NavigatorHelper.getDimensions(boundingRect.width, boundingRect.height, 20, 5, 5, 5),
+      );
     }
   }, [navigatorRef.current, navigatorTwoViews]);
 
@@ -73,21 +65,17 @@ const Navigator: React.FC<NavigatorProps> = ({ data, downSampleFactor }) => {
 
   return (
     <div style={{ width: '100%', height: '100%' }} ref={navigatorRef}>
-      {data.length > 1 &&
-      brushDimensions.current &&
-      (!navigatorTwoViews || areaDimensions.current) ? (
-        <>
-          {navigatorTwoViews && areaDimensions.current ? (
-            <NavigatorArea dimensions={areaDimensions.current} data={brushedData} />
-          ) : null}
-          <NavigatorBrush
-            dimensions={brushDimensions.current}
-            data={data}
-            downSampleFactor={downSampleFactor}
-            onBrushUpdateData={onBrushUpdateData}
-            focusHeight={brushDimensions.current.boundedHeight}
-          />
-        </>
+      {data.length > 1 && areaDimensions ? (
+        <NavigatorArea dimensions={areaDimensions} data={brushedData} />
+      ) : null}
+      {data.length > 1 && brushDimensions ? (
+        <NavigatorBrush
+          dimensions={brushDimensions}
+          data={data}
+          downSampleFactor={downSampleFactor}
+          onBrushUpdateData={onBrushUpdateData}
+          focusHeight={brushDimensions.boundedHeight}
+        />
       ) : (
         <SpinnerAnnotated message='Loading navigator' />
       )}

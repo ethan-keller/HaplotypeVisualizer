@@ -67,8 +67,6 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
           size='sm'
           variant='warning'
           onClick={() => {
-            // refresh the window for correct navigator dimensions
-            window.location.reload();
             dispatch(reset());
             // add additional reset for drawArrows since it is not in the global settings state
             dispatch(updateDrawArrows(initialGraphSettingsState.drawArrows));
