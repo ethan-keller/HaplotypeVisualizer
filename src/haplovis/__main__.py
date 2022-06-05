@@ -2,7 +2,7 @@ import webbrowser
 from pathlib import Path
 from typing import List, Optional
 import typer
-from haplovis.layout import Layout
+from haplovis.server.managers.layout import LayoutManager
 from haplovis.kdtree import KDTree
 from haplovis.serialization import PickleSerializer
 from haplovis.gfa import Gfa
@@ -66,7 +66,7 @@ def layout(
             if verbose:
                 typer.echo(f"Creating layout for {str(gfa)}")
                 typer.echo("Computing layout...")
-            layout = Layout.get_layout_from_gfa_file(gfa, output_folder)
+            layout = LayoutManager.get_layout_from_gfa_file(gfa, output_folder)
             if verbose:
                 typer.echo(f"Creating index tree for layout...")
             kdtree = KDTree.create_tree_from_layout(layout)
@@ -127,7 +127,7 @@ def build():
             typer.secho("Done installing dependencies!", fg="green")
     except Exception:
         error_echo("Could not install dependencies")
-        return   
+        return
 
     # build react to static folder
     try:

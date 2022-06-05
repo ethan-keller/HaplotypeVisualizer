@@ -1,4 +1,6 @@
 import os
+from subprocess import check_output, CalledProcessError
+from asyncio.subprocess import STDOUT
 from pathlib import Path
 from typing import List, Optional
 from haplovis.layout import Layout
@@ -14,6 +16,47 @@ class LayoutManager:
     index: Optional[KDTree] = None
     densities: Optional[List[int]] = None
     index_file_path: Optional[Path] = None
+
+    @classmethod
+    def get_layout_from_gfa_file(cls, gfa_path: Path, custom_output_location: Optional[Path] = None) -> "Layout":
+        return cls.compute_layout(gfa_path, custom_output_location)
+
+    @classmethod
+    def compute_layout(cls, gfa_path: Path, custom_output_location: Optional[Path] = None) -> "Layout":
+        try:
+            gfa_hash = Gfa.get_gfa_hash(gfa_path)
+            if gfa_hash:
+                gfa = Gfa.read_gfa_from_file(gfa_path)
+                out_loc = FileManager.output_folder
+                if custom_output_location:
+                    out_loc = custom_output_location
+                gfa_json_path = out_loc.joinpath(Path(f"{gfa_hash}.gfa.json"))
+                Gfa.serialize(gfa, out_file=gfa_json_path)
+                cwd = "./graph_layout"
+                if Path(os.getcwd()).name == "HaplotypeVisualizer":
+                    cwd = "./src/haplovis/graph_layout"
+                try:
+                    out = check_output(
+                        [
+                            "node",
+                            "-r",
+                            "ts-node/register",
+                            "./cytoscape.ts",
+                            str(gfa_json_path),
+                        ],
+                        cwd=cwd,
+                        shell=True,
+                        stderr=STDOUT,
+                    )
+                except CalledProcessError as e:
+                    raise RuntimeError(
+                        "command '{}' returned with error (code {}): {}".format(e.cmd, e.returncode, e.output)
+                    )
+                return cls.deserialize(out)
+            else:
+                raise Exception("Could not compute gfa hash")
+        except Exception as e:
+            raise Exception(f"Could not compute layout: [{e}]")
 
     @classmethod
     def get_densities(cls) -> List[int]:
