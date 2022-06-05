@@ -26,7 +26,7 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
         <Table borderless size='sm'>
           <tbody>
             <tr>
-              <td style={{width: '50%'}}>
+              <td style={{ width: '50%' }}>
                 <StatTable
                   tableEntries={
                     gfaInfo
@@ -49,7 +49,7 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
                   }
                 />
               </td>
-              <td style={{width: '50%'}}>
+              <td style={{ width: '50%' }}>
                 <StatTable
                   tableEntries={
                     gfaInfo
@@ -59,13 +59,13 @@ const GraphInfoModal: React.FC<GraphInfoModalProps> = (props) => {
                           'mean node length':
                             gfaInfo.mean_segment.toLocaleString('en-NL', floatOptions) + ' bp',
                           'std node length': gfaInfo.std_dev.toLocaleString('en-NL') + ' bp',
-                          N50: gfaInfo.n50.toLocaleString('en-NL', floatOptions) + ' bp',
+                          // N50: gfaInfo.n50.toLocaleString('en-NL', floatOptions) + ' bp',
                         }
                       : {
                           'median node length': '-',
                           'mean node length': '-',
                           'std node length': '-',
-                          N50: '-',
+                          // N50: '-',
                         }
                   }
                 />
