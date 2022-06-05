@@ -14,13 +14,9 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
   const [updateDataFolder] = filesApi.useUpdateDataFolderMutation();
 
   const getFolderName = async () => {
-    try {
-      // @ts-ignore
-      const dirHandle = await window.showDirectoryPicker();
-      return dirHandle.name;
-    } catch (e) {
-      console.log(e);
-    }
+    // @ts-ignore
+    const dirHandle = await window.showDirectoryPicker();
+    return dirHandle.name;
   };
 
   const handleUpdateOutputFolder = (newFolderName: string) => {
@@ -52,8 +48,12 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
           variant='secondary'
           style={{ marginTop: 8 }}
           onClick={async () => {
-            const folderName = await getFolderName();
-            handleUpdateOutputFolder(folderName);
+            try {
+              const folderName = await getFolderName();
+              handleUpdateOutputFolder(folderName);
+            } catch (_) {
+              // ignore (exception is raised when user cancels folder selection)
+            }
           }}
         >
           Change folder
@@ -68,8 +68,12 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
           variant='secondary'
           style={{ marginTop: 8 }}
           onClick={async () => {
-            const folderName = await getFolderName();
-            handleUpdateDataFolder(folderName);
+            try {
+              const folderName = await getFolderName();
+              handleUpdateDataFolder(folderName);
+            } catch (_) {
+              // ignore (exception is raised when user cancels folder selection)
+            }
           }}
         >
           Change folder
