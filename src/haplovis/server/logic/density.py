@@ -19,4 +19,4 @@ def get_density_values(xs: List[Bounds]) -> List[int]:
 
 
 def get_down_sample_factor(size: int) -> int:
-    return max(1, size // 5000)
+    return max(1, size // 6500)
