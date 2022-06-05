@@ -11,7 +11,7 @@ export const initialState: GlobalSettings = {
   defaultSegmentThickness: 10,
   defaultLinkThickness: 1.5,
   reversePan: false,
-  navigatorBrush: false,
+  navigatorTwoViews: false,
 };
 
 export const globalSettingsSlice = createSlice({
@@ -45,8 +45,10 @@ export const globalSettingsSlice = createSlice({
     updateReversePan: (state, action: PayloadAction<boolean>) => {
       state.reversePan = action.payload;
     },
-    updateNavigatorBrush: (state, action: PayloadAction<boolean>) => {
-      state.navigatorBrush = action.payload;
+    updateNavigatorTwoViews: (state, action: PayloadAction<boolean>) => {
+      // refresh the window for correct navigator dimensions
+      window.location.reload();
+      state.navigatorTwoViews = action.payload;
     },
     reset: () => initialState,
   },
@@ -62,7 +64,7 @@ export const {
   updateDefaultSegmentThickness,
   updateDefaultLinkThickness,
   updateReversePan,
-  updateNavigatorBrush,
+  updateNavigatorTwoViews,
   reset,
 } = globalSettingsSlice.actions;
 

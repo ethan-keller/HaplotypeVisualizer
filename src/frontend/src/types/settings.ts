@@ -8,5 +8,5 @@ export interface GlobalSettings {
   defaultSegmentThickness: number;
   defaultLinkThickness: number;
   reversePan: boolean;
-  navigatorBrush: boolean;
+  navigatorTwoViews: boolean;
 }

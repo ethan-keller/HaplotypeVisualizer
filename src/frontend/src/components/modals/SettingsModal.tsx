@@ -9,7 +9,7 @@ import DrawArrowsSetting from '../settings/DrawArrowsSetting';
 import DrawLabelsSetting from '../settings/DrawLabelsSetting';
 import DrawPathsSetting from '../settings/DrawPathsSetting';
 import LinkThicknessSetting from '../settings/LinkThicknessSetting';
-import NavigatorBrushSetting from '../settings/NavigatorBrushSetting';
+import NavigatorTwoViewSetting from '../settings/NavigatorTwoViewSetting';
 import NavigatorCompressionSetting from '../settings/NavigatorCompressionSetting';
 import PanSetting from '../settings/PanSetting';
 import ReversePanDirectionSetting from '../settings/ReversePanDirectionSetting';
@@ -59,7 +59,7 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
               <DrawArrowsSetting />
             </tr>
             <tr>
-              <NavigatorBrushSetting />
+              <NavigatorTwoViewSetting />
             </tr>
           </tbody>
         </Table>
@@ -67,6 +67,8 @@ const SettingsModal: React.FC<SettingsModalProps> = (props) => {
           size='sm'
           variant='warning'
           onClick={() => {
+            // refresh the window for correct navigator dimensions
+            window.location.reload();
             dispatch(reset());
             // add additional reset for drawArrows since it is not in the global settings state
             dispatch(updateDrawArrows(initialGraphSettingsState.drawArrows));

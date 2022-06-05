@@ -5,6 +5,7 @@ import NavigatorBrush from './NavigatorBrush';
 import { Position } from '../../types/layout';
 import { Dimensions } from '../../types/navigator';
 import SpinnerAnnotated from '../SpinnerAnnotated';
+import { useAppSelector } from '../../store';
 
 interface NavigatorProps {
   data: Position[];
@@ -22,28 +23,40 @@ const Navigator: React.FC<NavigatorProps> = ({ data, downSampleFactor }) => {
   const navigatorRef = useRef<HTMLDivElement>(null);
   const brushDimensions = useRef<Dimensions>();
   const areaDimensions = useRef<Dimensions>();
+  const navigatorTwoViews = useAppSelector((state) => state.globalSettings.navigatorTwoViews);
 
   useEffect(() => {
     if (navigatorRef.current) {
       setBoundingRect(navigatorRef.current.getBoundingClientRect());
-      areaDimensions.current = NavigatorHelper.getDimensions(
-        boundingRect.width,
-        boundingRect.height * 0.6,
-        20,
-        5,
-        5,
-        5,
-      );
-      brushDimensions.current = NavigatorHelper.getDimensions(
-        boundingRect.width,
-        boundingRect.height * 0.4,
-        20,
-        5,
-        5,
-        5,
-      );
+      if (navigatorTwoViews) {
+        areaDimensions.current = NavigatorHelper.getDimensions(
+          boundingRect.width,
+          boundingRect.height * 0.6,
+          20,
+          5,
+          5,
+          5,
+        );
+        brushDimensions.current = NavigatorHelper.getDimensions(
+          boundingRect.width,
+          boundingRect.height * 0.4,
+          20,
+          5,
+          5,
+          5,
+        );
+      } else {
+        brushDimensions.current = NavigatorHelper.getDimensions(
+          boundingRect.width,
+          boundingRect.height,
+          20,
+          5,
+          5,
+          5,
+        );
+      }
     }
-  }, [navigatorRef.current]);
+  }, [navigatorRef.current, navigatorTwoViews]);
 
   const onBrushUpdateData = (values: number[]) => {
     let newData = [];
@@ -60,9 +73,13 @@ const Navigator: React.FC<NavigatorProps> = ({ data, downSampleFactor }) => {
 
   return (
     <div style={{ width: '100%', height: '100%' }} ref={navigatorRef}>
-      {data.length > 1 && brushDimensions.current && areaDimensions.current ? (
+      {data.length > 1 &&
+      brushDimensions.current &&
+      (!navigatorTwoViews || areaDimensions.current) ? (
         <>
-          <NavigatorArea dimensions={areaDimensions.current} data={brushedData} />
+          {navigatorTwoViews && areaDimensions.current ? (
+            <NavigatorArea dimensions={areaDimensions.current} data={brushedData} />
+          ) : null}
           <NavigatorBrush
             dimensions={brushDimensions.current}
             data={data}
