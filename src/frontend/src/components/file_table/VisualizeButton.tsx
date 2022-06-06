@@ -14,6 +14,7 @@ import {
 } from '../../slices/graphSettings';
 import { useState } from 'react';
 import AlertModal from '../modals/AlertModal';
+import ConfirmationModal from '../modals/ConfirmationModal';
 
 interface VisualizeButtonProps {}
 
@@ -26,10 +27,13 @@ const VisualizeButton: React.FC<VisualizeButtonProps> = (props) => {
   const globalSettings = useAppSelector((state) => state.globalSettings);
   const [showFailedPreparation, setShowFailedPreparation] = useState<boolean>(false);
   const [showFailedMatch, setShowFailedMatch] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
 
-  const handleStartVisualize = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleStartVisualize = (event?: React.MouseEvent<HTMLButtonElement>) => {
     // prevent default click behaviour
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
 
     prepareFiles()
       .unwrap()
@@ -65,23 +69,31 @@ const VisualizeButton: React.FC<VisualizeButtonProps> = (props) => {
 
   return (
     <>
-      <Button variant='primary' disabled={!ready} onClick={handleStartVisualize}>
+      <Button variant='primary' disabled={!ready} onClick={() => setShowConfirmation(true)}>
         Visualize{' '}
         {isPreparing || isMatching ? <Spinner className='spinner' animation='border' /> : null}
       </Button>
       <AlertModal
         title='Failed file preparation'
-        description='Files did not prepare correctly on server.'
-        secondaryDescription='Please try again.'
+        description='Files did not prepare correctly on server'
+        secondaryDescription='Please try again'
         show={showFailedPreparation}
         onHide={() => setShowFailedPreparation(false)}
       />
       <AlertModal
         title='Failed file matching'
-        description='Gfa file and phenotype table do not match.'
-        secondaryDescription='Import matching files.'
+        description='The gfa file and phenotype table do not match'
+        secondaryDescription='Please import matching files'
         show={showFailedMatch}
         onHide={() => setShowFailedMatch(false)}
+      />
+      <ConfirmationModal
+        title='Visualize'
+        description='Ready to visualize?'
+        show={showConfirmation}
+        onHide={() => setShowConfirmation(false)}
+        confirmText='Yes, visualize'
+        onConfirm={handleStartVisualize}
       />
     </>
   );
