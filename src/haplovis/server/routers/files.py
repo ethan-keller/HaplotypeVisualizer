@@ -263,10 +263,13 @@ async def gfa_pheno_match():
                 detail=f"Could not check if the gfa file and phenotype table match: [{e}]",
             )
     else:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="No gfa information found. Either no gfa file was imported or it was not prepared properly",
-        )
+        if PhenoManager.pheno_per_sample:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail="No gfa information found. Either no gfa file was imported or it was not prepared properly",
+            )
+        else:
+            return True
 
 
 
