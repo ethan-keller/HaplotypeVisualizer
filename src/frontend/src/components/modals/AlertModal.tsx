@@ -13,7 +13,7 @@ const AlertModal: React.FC<AlertModalProps> = (props) => {
   return (
     <Modal onHide={props.onHide} show={props.show} backdrop='static' keyboard={false}>
       <Modal.Header closeButton>
-        <TiWarningOutline size={28} color='orange' style={{ margin: 3 }} />
+        <TiWarningOutline size={28} color='orange' style={{ margin: 3, marginRight: 10}} />
         <Modal.Title>{props.title}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
