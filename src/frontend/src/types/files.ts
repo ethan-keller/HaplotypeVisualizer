@@ -15,6 +15,13 @@ export enum FileStatus {
   READY = 4,
 }
 
+export enum FileIndex {
+  GFA = 0,
+  PHENO = 1,
+  // GFF = *,
+  BOOKMARKS = 2,
+}
+
 interface CoreApiParams {
   id: number;
 }

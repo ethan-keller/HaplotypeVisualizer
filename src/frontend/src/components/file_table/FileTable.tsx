@@ -1,6 +1,6 @@
 import React, { createRef, useMemo } from 'react';
 import { Table, Button } from 'react-bootstrap';
-import { File, FileStatus } from '../../types/files';
+import { File, FileIndex, FileStatus } from '../../types/files';
 import ErrorCard from '../ErrorCard';
 import SpinnerAnnotated from '../SpinnerAnnotated';
 import filesApi from '../../api/files';
@@ -98,7 +98,9 @@ const FileTable: React.FC<FileTableProps> = (props) => {
           <input
             ref={inputRef}
             onChange={(e) =>
-              i === 3 ? handleUpload(e, 'bookmarks_file', uploadBookmarks) : handleImport(i, e)
+              i === FileIndex.BOOKMARKS
+                ? handleUpload(e, 'bookmarks_file', uploadBookmarks)
+                : handleImport(i, e)
             }
             className='d-none'
             type='file'
@@ -109,7 +111,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
               <Button onClick={() => preprocess()} variant='outline-info' size='sm'>
                 preprocess
               </Button>{' '}
-              {i === 0 ? (
+              {i === FileIndex.GFA ? (
                 <>
                   <input
                     ref={layoutInputRef}
@@ -175,15 +177,21 @@ const FileTable: React.FC<FileTableProps> = (props) => {
               <tr
                 key={'file-table-row-' + i}
                 className={
-                  (i === 1 && locationState && locationState.highlightPhenoTableRow) ||
-                  (i === 3 && locationState && locationState.highlightBookmarksRow)
+                  (i === FileIndex.PHENO &&
+                    locationState &&
+                    locationState.highlightPhenoTableRow) ||
+                  (i === FileIndex.BOOKMARKS &&
+                    locationState &&
+                    locationState.highlightBookmarksRow)
                     ? 'highlight-row'
                     : ''
                 }
               >
                 {getDescription(file)}
                 {getName(file)}
-                {getStatus(file.id === 0 && isPreprocessing ? FileStatus.PRE_PROCESSING : status)}
+                {getStatus(
+                  file.id === FileIndex.GFA && isPreprocessing ? FileStatus.PRE_PROCESSING : status,
+                )}
                 {getAction(file, i, inputRef, status)}
               </tr>
             );
