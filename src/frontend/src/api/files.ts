@@ -7,6 +7,7 @@ import {
   getDataFolder,
   getFile,
   getOutputFolder,
+  gfaPhenoMatch,
   prepareFiles,
   preprocess,
   ready,
@@ -83,6 +84,9 @@ const filesApi = createApi({
     updateDataFolder: builder.mutation<void, UpdateFolderParams>({
       query: (params) => ({ url: updateDataFolder, params: params, method: 'PUT' }),
       invalidatesTags: (result, error, args) => ['Folder'],
+    }),
+    matchGfaPheno: builder.mutation<boolean, void>({
+      query: () => ({ url: gfaPhenoMatch, method: 'PUT' }),
     }),
   }),
 });

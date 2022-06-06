@@ -146,6 +146,16 @@ class GfaManager:
             raise Exception("Could not compute gfa hash")
 
     @classmethod
+    def do_paths_exist(cls, paths: List[str]) -> bool:
+        if cls.path_map:
+            for path in paths:
+                if path not in cls.path_map:
+                    return False
+            return True
+        else:
+            raise Exception("Could not check if paths exist because no gfa path information is available")
+
+    @classmethod
     def clear(cls) -> None:
         cls.segment_map = None
         cls.link_map = None

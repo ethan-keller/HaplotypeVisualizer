@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query, status, UploadFile, File as FastApiFile
 from fastapi.exceptions import HTTPException
 from haplovis.server.managers.bookmarks import BookmarkManager
 from haplovis.schemas.file import File, FileStatus, FileIndex
-from haplovis.server.managers import FileManager, GfaManager, LayoutManager
+from haplovis.server.managers import FileManager, GfaManager, LayoutManager, PhenoManager
 
 router = APIRouter(prefix="/files", tags=["files"])
 
@@ -207,7 +207,7 @@ async def upload_bookmarks(bookmarks_file: UploadFile = FastApiFile(...)):
             detail=f"Cannot generate hash for gfa file",
         )
 
-@router.get("/output_folder", summary="Get output folder location")
+@router.get("/output_folder", response_model=str, summary="Get output folder location")
 async def get_output_folder():
     """
     Get the location of the output folder.
@@ -215,7 +215,7 @@ async def get_output_folder():
     return FileManager.get_output_folder()
 
 
-@router.get("/data_folder", summary="Get data folder location")
+@router.get("/data_folder", response_model=str, summary="Get data folder location")
 async def get_data_folder():
     """
     Get the location of the data folder.
@@ -247,3 +247,27 @@ async def update_data_folder(new_folder: str):
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail=f"Invalid data folder {new_folder}",
             )
+
+@router.put("/gfa_pheno_match", response_model=bool, summary="Check if imported gfa file and phenotype table correspond")
+async def gfa_pheno_match():
+    if GfaManager.path_map:
+        try:
+            if PhenoManager.pheno_per_sample:
+                pheno_samples = list(PhenoManager.pheno_per_sample.keys())
+                return GfaManager.do_paths_exist(pheno_samples)
+            else:
+                return True
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Could not check if the gfa file and phenotype table match: [{e}]",
+            )
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="No gfa information found. Either no gfa file was imported or it was not prepared properly",
+        )
+
+
+
+    

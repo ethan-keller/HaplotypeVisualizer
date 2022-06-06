@@ -12,9 +12,7 @@ const AboutModal: React.FC<AboutModalProps> = (props) => {
         <Modal.Title>Haplotype browser</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>
-          This is a program to browse polyploid haplotype graphs. The app reads GFA files.
-        </p>
+        <p>This is a program to browse polyploid haplotype graphs. The app reads GFA files.</p>
         <p>
           Contact <a href={'mailto:e.keller@student.tudelft.nl'}>Ethan Keller</a>
         </p>

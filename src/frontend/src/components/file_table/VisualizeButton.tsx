@@ -12,6 +12,8 @@ import {
   updateLinkThickness,
   updateSegmentThickness,
 } from '../../slices/graphSettings';
+import { useState } from 'react';
+import AlertModal from '../modals/AlertModal';
 
 interface VisualizeButtonProps {}
 
@@ -19,12 +21,35 @@ const VisualizeButton: React.FC<VisualizeButtonProps> = (props) => {
   const navigate = useNavigate();
   const [prepareFiles, { isLoading: isPreparing }] = filesApi.usePrepareFilesMutation();
   const { data: ready = false } = filesApi.useAreFilesReadyQuery();
+  const [matchGfaPheno, { isLoading: isMatching }] = filesApi.useMatchGfaPhenoMutation();
   const dispatch = useAppDispatch();
   const globalSettings = useAppSelector((state) => state.globalSettings);
+  const [showFailedPreparation, setShowFailedPreparation] = useState<boolean>(false);
+  const [showFailedMatch, setShowFailedMatch] = useState<boolean>(false);
 
   const handleStartVisualize = (event: React.MouseEvent<HTMLButtonElement>) => {
     // prevent default click behaviour
     event.preventDefault();
+
+    prepareFiles()
+      .unwrap()
+      .then(() => {
+        matchGfaPheno()
+          .unwrap()
+          .then((match) => {
+            if (match) {
+              navigate(urlPopulationView);
+            } else {
+              setShowFailedMatch(true);
+            }
+          })
+          .catch(() => {
+            setShowFailedMatch(true);
+          });
+      })
+      .catch(() => {
+        setShowFailedPreparation(true);
+      });
 
     // reset settings
     dispatch(resetGraphSelection());
@@ -36,21 +61,29 @@ const VisualizeButton: React.FC<VisualizeButtonProps> = (props) => {
     dispatch(updateDrawLabels(globalSettings.defaultDrawLabels));
     dispatch(updateSegmentThickness(globalSettings.defaultSegmentThickness));
     dispatch(updateLinkThickness(globalSettings.defaultLinkThickness));
-
-    prepareFiles()
-      .unwrap()
-      .then(() => {
-        navigate(urlPopulationView);
-      })
-      .catch((err) => {
-        alert('Files did not prepare correctly on server.');
-      });
   };
 
   return (
-    <Button variant='primary' disabled={!ready} onClick={handleStartVisualize}>
-      Visualize {isPreparing ? <Spinner className='spinner' animation='border' /> : null}
-    </Button>
+    <>
+      <Button variant='primary' disabled={!ready} onClick={handleStartVisualize}>
+        Visualize{' '}
+        {isPreparing || isMatching ? <Spinner className='spinner' animation='border' /> : null}
+      </Button>
+      <AlertModal
+        title='Failed file preparation'
+        description='Files did not prepare correctly on server.'
+        secondaryDescription='Please try again.'
+        show={showFailedPreparation}
+        onHide={() => setShowFailedPreparation(false)}
+      />
+      <AlertModal
+        title='Failed file matching'
+        description='Gfa file and phenotype table do not match.'
+        secondaryDescription='Import matching files.'
+        show={showFailedMatch}
+        onHide={() => setShowFailedMatch(false)}
+      />
+    </>
   );
 };
 
