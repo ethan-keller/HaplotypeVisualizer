@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List
 from os.path import isfile, splitext
+import os
 
 from haplovis.schemas.file import File, FileStatus, FileIndex
 import haplovis.server.managers as managers
@@ -115,6 +116,25 @@ class FileManager:
     def get_file_extension(cls, path: Path) -> str:
         _, extension = splitext(path)
         return extension
+
+
+    @classmethod
+    def clear_output_folder(cls):
+        cls.clear_folder_contents(cls.output_folder)
+
+    @classmethod
+    def clear_data_folder(cls):
+        cls.clear_folder_contents(cls.data_folder)
+
+    @classmethod
+    def clear_folder_contents(cls, folder: Path):
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                raise Exception(f"Failed to delete {file_path}. Reason: {e}")
 
     @classmethod
     def prepare_files(cls) -> None:

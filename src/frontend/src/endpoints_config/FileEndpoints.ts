@@ -18,3 +18,4 @@ export const getDataFolder = '/data_folder';
 export const updateOutputFolder = '/update_output_folder';
 export const updateDataFolder = '/update_data_folder';
 export const gfaPhenoMatch = '/gfa_pheno_match';
+export const clearFolder = '/clear_folder';

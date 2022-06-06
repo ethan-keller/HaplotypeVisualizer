@@ -271,6 +271,17 @@ async def gfa_pheno_match():
         else:
             return True
 
-
+@router.delete("/clear_folder", summary="Clear the contents of a folder")
+async def clear_folder(folder: str):
+    try:
+        if folder == "OUTPUT":
+            FileManager.clear_output_folder()
+        elif folder == "DATA":
+            FileManager.clear_data_folder()
+    except Exception as e:
+        raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Could not delete folder contents: [{e}]",
+            )
 
     

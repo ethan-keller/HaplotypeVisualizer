@@ -1,17 +1,23 @@
+import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import filesApi from '../../api/files';
 import VerticalSpacer from '../VerticalSpacer';
+import AlertModal from './AlertModal';
+import ConfirmationModal from './ConfirmationModal';
 
-interface ChangeFoldersModalProps {
+interface EditFoldersModalProps {
   onHide: () => void;
   show: boolean;
 }
 
-const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
+const EditFoldersModal: React.FC<EditFoldersModalProps> = (props) => {
   const { data: outputFolder } = filesApi.useGetOutputFolderQuery();
   const { data: dataFolder } = filesApi.useGetDataFolderQuery();
   const [updateOutputFolder] = filesApi.useUpdateOutputFolderMutation();
   const [updateDataFolder] = filesApi.useUpdateDataFolderMutation();
+  const [clearFolder] = filesApi.useClearFolderMutation();
+  const [showConfirmation, setShowConfirmation] = useState<string | undefined>(undefined);
+  const [showAlert, setShowAlert] = useState<boolean>(false);
 
   const getFolderName = async () => {
     // @ts-ignore
@@ -22,7 +28,7 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
   const handleUpdateOutputFolder = (newFolderName: string) => {
     updateOutputFolder({ new_folder: newFolderName })
       .unwrap()
-      .catch((e) => {
+      .catch((_) => {
         alert('Could not update ouput folder name');
       });
   };
@@ -30,9 +36,19 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
   const handleUpdateDataFolder = (newFolderName: string) => {
     updateDataFolder({ new_folder: newFolderName })
       .unwrap()
-      .catch((e) => {
+      .catch((_) => {
         alert('Could not update data folder name');
       });
+  };
+
+  const handleClearFolder = (folder: string | undefined) => {
+    if (folder) {
+      clearFolder({ folder: folder })
+        .unwrap()
+        .catch(() => {
+          setShowAlert(true);
+        });
+    }
   };
 
   return (
@@ -57,10 +73,16 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
           }}
         >
           Change folder
+        </Button>{' '}
+        <Button
+          size='sm'
+          variant='danger'
+          style={{ marginTop: 8 }}
+          onClick={() => setShowConfirmation('OUTPUT')}
+        >
+          Clear folder
         </Button>
-
         <VerticalSpacer space={40} />
-
         <b>DATA</b>
         <div style={{ wordWrap: 'break-word' }}>{dataFolder ?? '-'}</div>
         <Button
@@ -77,10 +99,37 @@ const ChangeFoldersModal: React.FC<ChangeFoldersModalProps> = (props) => {
           }}
         >
           Change folder
+        </Button>{' '}
+        <Button
+          size='sm'
+          variant='danger'
+          style={{ marginTop: 8 }}
+          onClick={() => setShowConfirmation('DATA')}
+        >
+          Clear folder
         </Button>
       </Modal.Body>
+      {showConfirmation ? (
+        <ConfirmationModal
+          title={'Clear ' + showConfirmation + ' folder'}
+          description={'Are you sure you want to clear the ' + showConfirmation + ' folder?'}
+          secondaryDescription={'This WILL delete the files in the ' + showConfirmation + ' folder'}
+          show={showConfirmation !== undefined}
+          onHide={() => setShowConfirmation(undefined)}
+          confirmText='Clear'
+          confirmButtonVariant='danger'
+          onConfirm={() => handleClearFolder(showConfirmation)}
+        />
+      ) : null}
+      <AlertModal
+        title='Failed clearing folder'
+        description='Could not delete folder contents'
+        secondaryDescription='Please try again'
+        show={showAlert}
+        onHide={() => setShowAlert(false)}
+      />
     </Modal>
   );
 };
 
-export default ChangeFoldersModal;
+export default EditFoldersModal;

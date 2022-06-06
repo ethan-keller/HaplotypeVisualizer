@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import {
   clearAll,
   clearFile,
+  clearFolder,
   fileBaseUrl,
   getAllFiles,
   getDataFolder,
@@ -23,6 +24,7 @@ import {
   UpdateFileParams,
   ClearFileParams,
   UpdateFolderParams,
+  ClearFolderParams,
 } from '../types/files';
 
 const filesApi = createApi({
@@ -87,6 +89,9 @@ const filesApi = createApi({
     }),
     matchGfaPheno: builder.mutation<boolean, void>({
       query: () => ({ url: gfaPhenoMatch, method: 'PUT' }),
+    }),
+    clearFolder: builder.mutation<void, ClearFolderParams>({
+      query: (params) => ({ url: clearFolder, params: params, method: 'DELETE' }),
     }),
   }),
 });

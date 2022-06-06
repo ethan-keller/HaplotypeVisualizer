@@ -38,4 +38,15 @@ interface UpdateFolderParams {
   new_folder: string;
 }
 
-export type { File, GetFileParams, UpdateFileParams, ClearFileParams, UpdateFolderParams };
+interface ClearFolderParams {
+  folder: string;
+}
+
+export type {
+  File,
+  GetFileParams,
+  UpdateFileParams,
+  ClearFileParams,
+  UpdateFolderParams,
+  ClearFolderParams,
+};
