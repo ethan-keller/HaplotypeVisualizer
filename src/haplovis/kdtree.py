@@ -1,13 +1,16 @@
-from typing import List, Optional, Tuple, Union
+from __future__ import annotations
+
+from typing import List, Optional, Tuple, Union, TYPE_CHECKING
 from pathlib import Path
 import numpy as np
-from haplovis.layout import Layout
 from haplovis.serialization import PickleSerializer
 from haplovis.schemas.layout import Position, Bounds
 
+if TYPE_CHECKING:
+    from haplovis.layout import Layout
+
+
 # https://github.com/khuyentran1401/kdtree-implementation/blob/master/kdtree.py
-
-
 class KDTreeNode:
     def __init__(self, segment_id: str, bounds: Bounds, position: Position, split_x=True):
         self.segment_id = segment_id
