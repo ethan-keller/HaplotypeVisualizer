@@ -2,35 +2,27 @@ from asyncio.subprocess import STDOUT
 from pydantic import parse_obj_as
 import os
 from pathlib import Path
-from typing import Optional, Union
+from typing import Union
 from subprocess import check_output, CalledProcessError
 from haplovis.gfa import Gfa
 from haplovis.schemas.layout import LayoutCLI as LayoutType
 from haplovis.serialization import JsonSerializer
-from haplovis.server.managers.files import FileManager
 
 class Layout:
     def __init__(self, nodes: LayoutType) -> None:
         self.nodes = nodes
 
     @classmethod
-    def get_layout_from_gfa_file(cls, gfa_path: Path, custom_output_location: Optional[Path] = None) -> "Layout":
-        return cls.compute_layout(gfa_path, custom_output_location)
-
-    @classmethod
     def get_layout_from_layout_file(cls, layout_path: Path) -> "Layout":
         return cls.deserialize(from_file=layout_path)
 
     @classmethod
-    def compute_layout(cls, gfa_path: Path, custom_output_location: Optional[Path] = None) -> "Layout":
+    def compute_layout(cls, gfa_path: Path, output_location: Path) -> "Layout":
         try:
             gfa_hash = Gfa.get_gfa_hash(gfa_path)
             if gfa_hash:
                 gfa = Gfa.read_gfa_from_file(gfa_path)
-                out_loc = FileManager.output_folder
-                if custom_output_location:
-                    out_loc = custom_output_location
-                gfa_json_path = out_loc.joinpath(Path(f"{gfa_hash}.gfa.json"))
+                gfa_json_path = output_location.joinpath(Path(f"{gfa_hash}.gfa.json"))
                 Gfa.serialize(gfa, out_file=gfa_json_path)
                 cwd = "./graph_layout"
                 if Path(os.getcwd()).name == "HaplotypeVisualizer":

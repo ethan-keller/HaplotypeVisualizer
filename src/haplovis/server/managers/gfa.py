@@ -135,7 +135,7 @@ class GfaManager:
     def preprocess(cls) -> None:
         cls.prepare_gfa()
         file_path = FileManager.get_absolute_file_path(FileIndex.GFA)
-        layout = Layout.compute_layout(file_path)
+        layout = Layout.compute_layout(file_path, FileManager.output_folder)
         LayoutManager.index = LayoutManager.get_index_from_layout(layout)
         gfa_hash = Gfa.get_gfa_hash(file_path)
         if gfa_hash:

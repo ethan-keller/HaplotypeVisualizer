@@ -66,7 +66,7 @@ def layout(
             if verbose:
                 typer.echo(f"Creating layout for {str(gfa)}")
                 typer.echo("Computing layout...")
-            layout = Layout.get_layout_from_gfa_file(gfa, output_folder)
+            layout = Layout.compute_layout(gfa, output_folder)
             if verbose:
                 typer.echo(f"Creating index tree for layout...")
             kdtree = KDTree.create_tree_from_layout(layout)
@@ -85,7 +85,7 @@ def layout(
 
 @CLI.command()
 def see_layout(
-    layout: Path = typer.Argument(
+    layouts: List[Path] = typer.Argument(
         ...,
         exists=True,
         file_okay=True,
@@ -99,7 +99,8 @@ def see_layout(
     Visualize a layout file
     """
     # visualization of index tree
-    kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layout.name))
+    # TODO: fix type of 'layouts'
+    kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layouts[0]))
     kdtree.print()
 
 
