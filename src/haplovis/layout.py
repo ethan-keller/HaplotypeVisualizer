@@ -37,7 +37,6 @@ class Layout:
                             str(gfa_json_path),
                         ],
                         cwd=cwd,
-                        shell=True,
                         stderr=STDOUT,
                     )
                 except CalledProcessError as e:
