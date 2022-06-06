@@ -28,36 +28,40 @@ const EditPathsModal: React.FC<EditPathsModalProps> = (props) => {
       </Modal.Header>
       <Modal.Body>
         {paths ? (
-          <Table size='sm'>
-            <tbody>
-              <tr>
-                <td className='text-start'>Name</td>
-                <td className='text-center'>Color</td>
-                <td className='text-end'>Active</td>
-              </tr>
-              {Object.values(paths).map((path, i) => (
-                <tr key={'path_' + i} style={{ fontWeight: 100 }}>
-                  <td className='text-start'>{path.name}</td>
-                  <td className='text-center'>
-                    <ColorPicker
-                      style={{ margin: 'auto' }}
-                      defaultColor={pathColors[path.index]}
-                      onPick={(color) =>
-                        dispatch(updatePathColor({ path: path.index, color: color }))
-                      }
-                    />
-                  </td>
-                  <td className='text-end'>
-                    <Form.Check
-                      type='switch'
-                      checked={activePaths.length === 0 ? true : activePaths[path.index]}
-                      onChange={(e) => dispatch(toggleActivePath(i))}
-                    />
-                  </td>
+          Object.keys(paths).length > 0 ? (
+            <Table size='sm'>
+              <tbody>
+                <tr>
+                  <td className='text-start'>Name</td>
+                  <td className='text-center'>Color</td>
+                  <td className='text-end'>Active</td>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
+                {Object.values(paths).map((path, i) => (
+                  <tr key={'path_' + i} style={{ fontWeight: 100 }}>
+                    <td className='text-start'>{path.name}</td>
+                    <td className='text-center'>
+                      <ColorPicker
+                        style={{ margin: 'auto' }}
+                        defaultColor={pathColors[path.index]}
+                        onPick={(color) =>
+                          dispatch(updatePathColor({ path: path.index, color: color }))
+                        }
+                      />
+                    </td>
+                    <td className='text-end'>
+                      <Form.Check
+                        type='switch'
+                        checked={activePaths.length === 0 ? true : activePaths[path.index]}
+                        onChange={(e) => dispatch(toggleActivePath(i))}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          ) : (
+            <p>No paths found</p>
+          )
         ) : (
           <SpinnerAnnotated message='Loading path colors' />
         )}
