@@ -8,7 +8,7 @@ from haplovis.serialization import PickleSerializer
 from haplovis.gfa import Gfa
 import subprocess
 
-CLI = typer.Typer(add_completion=False)
+CLI = typer.Typer(add_completion=False, context_settings={"help_option_names": ["-h", "--help"]})
 
 # Static variables
 VERSION = "0.1.0"
@@ -17,23 +17,30 @@ VALID_LAYOUT_EXTENSIONS = [".pickle"]
 DEFAULT_OUTPUT_DIR = Path("./src/haplovis/out").resolve()
 DEFAULT_PORT = 3000
 BUILD_COMMAND = "npm run build"
-INSTALL_DEPENDENCIES_COMMAND = "npm install && cd ../haplovis/graph_layout && npm install"
+INSTALL_DEPENDENCIES_COMMAND = "npm install && cd ../haplovis && npm install"
 START_STATIC_SERVER_COMMAND = "npx serve -s ./server/static"
 START_BACKEND_COMMAND = "uvicorn server.main:server"
 
 
-def path_validation_callback(param: typer.CallbackParam, paths: List[Path]):
+def path_validation_callback(param: typer.CallbackParam, path: Path):
     valid_extensions = VALID_GRAPH_EXTENSIONS if param.name == "gfas" else VALID_LAYOUT_EXTENSIONS
 
+    # validation
+    if path.suffix not in valid_extensions:
+        styled_err_explanation = typer.style(f"Invalid file extension {path.suffix}", fg=typer.colors.RED)
+        raise typer.BadParameter(styled_err_explanation)
+
+    return path
+
+
+def paths_validation_callback(param: typer.CallbackParam, paths: List[Path]):
     # At least one path must be given
     if len(paths) == 0:
         raise typer.BadParameter("No gfa paths were given")
 
     # validation
     for path in paths:
-        if path.suffix not in valid_extensions:
-            styled_err_explanation = typer.style(f"Invalid file extension {path.suffix}", fg=typer.colors.RED)
-            raise typer.BadParameter(styled_err_explanation)
+        path_validation_callback(param, path)
 
     return paths
 
@@ -53,7 +60,7 @@ def layout(
         dir_okay=False,
         resolve_path=True,
         case_sensitive=True,
-        callback=path_validation_callback,
+        callback=paths_validation_callback,
     ),
     output_folder: Path = typer.Option(DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True),
     verbose: bool = typer.Option(True, "--verbose", "-v"),
@@ -85,7 +92,7 @@ def layout(
 
 @CLI.command()
 def see_layout(
-    layouts: List[Path] = typer.Argument(
+    layout: Path = typer.Argument(
         ...,
         exists=True,
         file_okay=True,
@@ -99,8 +106,7 @@ def see_layout(
     Visualize a layout file
     """
     # visualization of index tree
-    # TODO: fix type of 'layouts'
-    kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layouts[0]))
+    kdtree: KDTree = PickleSerializer.deserialize(from_file=Path(layout))
     kdtree.print()
 
 
@@ -120,9 +126,9 @@ def build():
 
         # check dependencies
         frontend_deps_exists = Path("./src/frontend/node_modules").exists()
-        graph_layout_deps_exists = Path("./src/haplovis/graph_layout/node_modules").exists()
+        graph_layout_deps_exists = Path("./src/haplovis/node_modules").exists()
         if (not (frontend_deps_exists and graph_layout_deps_exists)):
-            error_echo("Dependencies were wrongly installed")
+            error_echo("Failed installing dependencies. Some dependencies are missing")
             return
         else:
             typer.secho("Done installing dependencies!", fg="green")
@@ -160,9 +166,9 @@ def start(port: int = typer.Option(DEFAULT_PORT, "--port", "-p")):
         webbrowser.open(f"http://localhost:{port}")
 
         # check build
-        static_dir_exists = Path("./src/haplovis/server/static").exists()
-        if (not static_dir_exists):
-            error_echo("Cannot start HaplotypeVisualizer because no build/static folder was found")
+        index_file_exists = Path("./src/haplovis/server/static/index.html").exists()
+        if (not index_file_exists):
+            error_echo("Cannot start HaplotypeVisualizer because no index.html file was found in the static folder")
             return
         else:
             typer.secho("Successfully started the static server!", fg="green")

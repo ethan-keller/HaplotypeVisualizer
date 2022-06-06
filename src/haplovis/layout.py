@@ -24,16 +24,16 @@ class Layout:
                 gfa = Gfa.read_gfa_from_file(gfa_path)
                 gfa_json_path = output_location.joinpath(Path(f"{gfa_hash}.gfa.json"))
                 Gfa.serialize(gfa, out_file=gfa_json_path)
-                cwd = "./graph_layout"
+                cwd = "."
                 if Path(os.getcwd()).name == "HaplotypeVisualizer":
-                    cwd = "./src/haplovis/graph_layout"
+                    cwd = "./src/haplovis"
                 try:
                     out = check_output(
                         [
                             "node",
                             "-r",
                             "ts-node/register",
-                            "./cytoscape.ts",
+                            "./graph_layout/cytoscape.ts",
                             str(gfa_json_path),
                         ],
                         cwd=cwd,
