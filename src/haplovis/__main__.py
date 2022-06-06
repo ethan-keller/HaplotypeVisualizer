@@ -165,7 +165,7 @@ def start(port: int = typer.Option(DEFAULT_PORT, "--port", "-p")):
             error_echo("Cannot start HaplotypeVisualizer because no build/static folder was found")
             return
         else:
-            typer.secho("Sucessfully started the static server!", fg="green")
+            typer.secho("Successfully started the static server!", fg="green")
     except Exception:
         error_echo("Could not start the static server")
         return
