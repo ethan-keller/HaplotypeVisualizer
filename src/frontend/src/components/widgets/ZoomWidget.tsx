@@ -1,12 +1,12 @@
 import { Button } from 'react-bootstrap';
 import { BsZoomIn, BsZoomOut } from 'react-icons/bs';
-import { MdFitScreen } from 'react-icons/md';
+import { AiOutlineVerticalAlignMiddle } from 'react-icons/ai';
 import { useAppSelector } from '../../store';
 import ZoomIndicator from './ZoomIndicator';
 
 interface ZoomWidgetProps {
   onZoom: (newZoom: number) => void;
-  onCenter: () => void;
+  onVerticalCenter: () => void;
   isZoomLimit: (zoomIn: boolean) => boolean;
 }
 
@@ -20,9 +20,9 @@ const ZoomWidget: React.FC<ZoomWidgetProps> = (props) => {
         className='widget-button'
         size='sm'
         variant='secondary'
-        onClick={() => props.onCenter()}
+        onClick={() => props.onVerticalCenter()}
       >
-        <MdFitScreen size={24} />
+        <AiOutlineVerticalAlignMiddle size={24} />
       </Button>
       <div className='separator' />
       <Button

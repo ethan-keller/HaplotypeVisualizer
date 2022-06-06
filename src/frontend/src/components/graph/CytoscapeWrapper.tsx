@@ -45,7 +45,13 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
                   },
                 });
               }}
-              onCenter={() => cy.center()}
+              onVerticalCenter={() => {
+                const bb = cy.elements().boundingBox({});
+                cy.pan({
+                  x: cy.pan().x,
+                  y: (cy.height() - cy.zoom() * (bb.y1 + bb.y2)) / 2,
+                });
+              }}
               isZoomLimit={(zoomIn) =>
                 zoomIn ? cy.zoom() >= cy.maxZoom() : cy.zoom() <= cy.minZoom()
               }
