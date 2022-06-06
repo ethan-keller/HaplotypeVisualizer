@@ -28,35 +28,39 @@ const PhenotypesInfoCardSection: React.FC<PhenotypesInfoCardSectionProps> = ({ f
   ) : phenotypes && paths ? (
     <ListGroup>
       {feature.paths.map((pathName, i) => {
-        const pheno = phenotypes[pathName];
-        const c =
-          pathToIsolateColors && pathName in pathToIsolateColors
-            ? pathToIsolateColors[pathName]
-            : '#999999';
+        if (pathName in phenotypes) {
+          const pheno = phenotypes[pathName];
+          const c =
+            pathToIsolateColors && pathName in pathToIsolateColors
+              ? pathToIsolateColors[pathName]
+              : '#999999';
 
-        return (
-          <ListGroupItem
-            style={{
-              backgroundColor: c + '60',
-              padding: '0.2rem 1rem',
-              wordWrap: 'normal',
-              overflowX: 'auto',
-            }}
-            key={i}
-          >
-            <span>
-              <b>{pathName}</b>:{' '}
-              {Object.entries(pheno).map(([_, v], j, arr) => {
-                return (
-                  <span key={j}>
-                    <span>{v}</span>
-                    {j === arr.length - 1 ? null : ', '}
-                  </span>
-                );
-              })}
-            </span>
-          </ListGroupItem>
-        );
+          return (
+            <ListGroupItem
+              style={{
+                backgroundColor: c + '60',
+                padding: '0.2rem 1rem',
+                wordWrap: 'normal',
+                overflowX: 'auto',
+              }}
+              key={i}
+            >
+              <span>
+                <b>{pathName}</b>:{' '}
+                {Object.entries(pheno).map(([_, v], j, arr) => {
+                  return (
+                    <span key={j}>
+                      <span>{v}</span>
+                      {j === arr.length - 1 ? null : ', '}
+                    </span>
+                  );
+                })}
+              </span>
+            </ListGroupItem>
+          );
+        } else {
+          return null;
+        }
       })}
     </ListGroup>
   ) : (
