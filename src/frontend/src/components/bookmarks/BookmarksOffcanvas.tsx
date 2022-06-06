@@ -8,6 +8,7 @@ import { useState } from 'react';
 import ExportBookmarksModal from '../modals/ExportBookmarksModal';
 import { useNavigate } from 'react-router';
 import { url as urlWelcomeView } from '../../views/WelcomeView';
+import ConfirmationModal from '../modals/ConfirmationModal';
 
 interface BookmarksOffcanvasProps {
   onHide: () => void;
@@ -19,6 +20,7 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
   const [exportBookmarks, { data: filePath, isLoading, isError }] =
     bookmarksApi.useExportBookmarksMutation();
   const [showExportBookmarks, setShowExportBookmarks] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
   const navigate = useNavigate();
 
   return (
@@ -29,8 +31,7 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
       <Offcanvas.Body>
         <Button
           onClick={() => {
-            setShowExportBookmarks(true);
-            exportBookmarks();
+            setShowConfirmation(true);
           }}
           disabled={
             bookmarks === undefined || bookmarks === null || Object.keys(bookmarks).length === 0
@@ -74,6 +75,18 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
         filePath={filePath}
         isError={isError}
         isLoading={isLoading}
+      />
+      <ConfirmationModal
+        title='Export bookmarks'
+        description='Are you sure you want to export your bookmarks ?'
+        show={showConfirmation}
+        onHide={() => setShowConfirmation(false)}
+        confirmText='Export'
+        confirmButtonVariant='warning'
+        onConfirm={() => {
+          setShowExportBookmarks(true);
+          exportBookmarks();
+        }}
       />
     </Offcanvas>
   );
