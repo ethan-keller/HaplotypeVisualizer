@@ -31,6 +31,13 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
   }, [pan]);
 
   useEffect(() => {
+    if (cy && selectedFeature) {
+      cy.elements().unselect();
+      cy.$id(selectedFeature.name).select().active();
+    }
+  }, [selectedFeature]);
+
+  useEffect(() => {
     try {
       const settings: GraphSettings = pheno
         ? { ...graphSettings, drawPaths: false }

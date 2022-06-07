@@ -1,18 +1,23 @@
 import { useState } from 'react';
 import { Card, Button, CloseButton } from 'react-bootstrap';
 import bookmarksApi from '../../api/bookmarks';
+import { updatePanNav } from '../../slices/graphLayout';
+import { updateFeature } from '../../slices/graphSelection';
+import { useAppDispatch } from '../../store';
 import { Bookmark } from '../../types/bookmark';
 import ConfirmationModal from '../modals/ConfirmationModal';
 import FeatureInfoModal from '../modals/FeatureInfoModal';
 
 interface BookmarkCardProps {
   bookmark: Bookmark;
+  onHide: () => void;
 }
 
-const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark }) => {
+const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark, onHide }) => {
   const [removeBookMark] = bookmarksApi.useRemoveBookmarkMutation();
   const [featureId, setFeatureId] = useState<string | undefined>(undefined);
   const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
   return (
     <>
@@ -26,7 +31,17 @@ const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark }) => {
           <CloseButton
             style={{ position: 'absolute', right: 0, top: 0, padding: 16 }}
             onClick={() => setShowConfirmation(true)}
-          />
+          />{' '}
+          <Button
+            size='sm'
+            onClick={() => {
+              dispatch(updatePanNav({ xl: bookmark.viewport.lu.x, xr: bookmark.viewport.rd.x }));
+              dispatch(updateFeature({ name: bookmark.elem_id, type: bookmark.elem_type }));
+              onHide();
+            }}
+          >
+            Navigate to element
+          </Button>
         </Card.Body>
         {featureId ? (
           <FeatureInfoModal

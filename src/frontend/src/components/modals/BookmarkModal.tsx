@@ -16,6 +16,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
   const { data: bookmarks } = bookmarksApi.useGetBookmarksQuery();
   const [comment, setComment] = useState<string>('');
   const viewport = useAppSelector((state) => state.graphLayout.viewport);
+  const extent = useAppSelector((state) => state.graphLayout.extent);
 
   useEffect(() => {
     if (bookmarks && props.elem.name in bookmarks) {
@@ -48,7 +49,15 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
         <VerticalSpacer space={15} />
         <Button
           onClick={() => {
-            addBookmark({ elem_id: props.elem.name, comment: comment, viewport: viewport });
+            addBookmark({
+              elem_id: props.elem.name,
+              elem_type: props.elem.type,
+              comment: comment,
+              viewport: {
+                lu: { x: extent.xl, y: viewport.lu.y },
+                rd: { x: extent.xr, y: viewport.rd.y },
+              },
+            });
             props.onHide();
           }}
           size='sm'

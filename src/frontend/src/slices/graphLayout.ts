@@ -21,6 +21,7 @@ export const graphLayoutSlice = createSlice({
         if (state.bufferSize === 0) {
           state.bufferSize = 300;
         }
+        state.viewport = addViewportBuffer(action.payload, 4 * state.bufferSize);
       }
     },
     updateZoom: (state, action: PayloadAction<number>) => {

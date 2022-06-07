@@ -60,7 +60,7 @@ const BookmarksOffcanvas: React.FC<BookmarksOffcanvasProps> = (props) => {
           ) : (
             Object.values(bookmarks).map((bookmark, i) => (
               <div key={i}>
-                <BookmarkCard bookmark={bookmark} />
+                <BookmarkCard bookmark={bookmark} onHide={props.onHide} />
                 <VerticalSpacer space={10} />
               </div>
             ))
