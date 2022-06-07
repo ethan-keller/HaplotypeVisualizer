@@ -48,7 +48,7 @@ const Graph: React.FC<GraphProps> = ({
         edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, settings, pheno, isolate),
       } as GraphType;
     }
-  }, [paths, links, graphSettings, filter, pheno, isolate]);
+  }, [paths, segments, links, graphSettings, filter, pheno, isolate]);
 
   return graph ? (
     <CytoscapeWrapper graph={graph} layout={layout} pheno={pheno} />
