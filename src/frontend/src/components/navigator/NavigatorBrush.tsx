@@ -4,7 +4,8 @@ import { BrushBehavior } from 'd3-brush';
 import NavigatorHelper from './NavigatorHelper';
 import { Dimensions } from '../../types/navigator';
 import { Position } from '../../types/layout';
-import { useAppSelector } from '../../store';
+import { useAppDispatch, useAppSelector } from '../../store';
+import { updatePanNav } from '../../slices/graphLayout';
 
 interface NavigatorBrushProps {
   dimensions: Dimensions;
@@ -21,6 +22,7 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
   const scales = useMemo(() => {
     return NavigatorHelper.getScales(props.data, props.dimensions.boundedWidth, props.focusHeight);
   }, [props.data, props.dimensions.boundedWidth, props.focusHeight]);
+  const dispatch = useAppDispatch();
 
   const memoizedDrawCallback = useCallback(() => {
     // draw chart
@@ -69,14 +71,18 @@ const NavigatorBrush: React.FC<NavigatorBrushProps> = (props) => {
         props.onBrushUpdateData(value);
       }
     }
-    function brushEnded(event: { selection: []; mode?: string }) {
+    function brushEnded(event: { selection: [number, number]; mode?: string }) {
       if (!event.selection) {
         // @ts-ignore
         gBrush.call(brush.current.move, defaultSelection);
       }
       if (event.mode && (event.mode === 'drag' || event.mode === 'handle')) {
-        // TODO: navigate to this location in the graph
-        console.log('YES');
+        dispatch(
+          updatePanNav({
+            xl: scales.xScale.invert(event.selection[0]) * props.downSampleFactor,
+            xr: scales.xScale.invert(event.selection[1]) * props.downSampleFactor,
+          }),
+        );
       }
     }
 

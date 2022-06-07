@@ -21,10 +21,19 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
   const firstGraphRender = useAppSelector((state) => state.graphLayout.firstGraphRender);
   const dispatch = useAppDispatch();
 
+  const verticalCenter = (cy: cytoscape.Core) => {
+    const bb = cy.elements().boundingBox({});
+    cy.pan({
+      x: cy.pan().x,
+      y: (cy.height() - cy.zoom() * (bb.y1 + bb.y2)) / 2,
+    });
+  };
+
   // Fit when graph is rendered for the first time
   useEffect(() => {
     if (cy && !cy.destroyed() && firstGraphRender) {
-      cy.fit();
+      verticalCenter(cy);
+      cy.pan({ x: 0, y: cy.pan().y });
       dispatch(updateFirstGraphRender(false));
     }
   }, [cy, firstGraphRender, dispatch]);
@@ -47,13 +56,7 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
                     },
                   });
                 }}
-                onVerticalCenter={() => {
-                  const bb = cy.elements().boundingBox({});
-                  cy.pan({
-                    x: cy.pan().x,
-                    y: (cy.height() - cy.zoom() * (bb.y1 + bb.y2)) / 2,
-                  });
-                }}
+                onVerticalCenter={() => verticalCenter(cy)}
                 isZoomLimit={(zoomIn) =>
                   zoomIn ? cy.zoom() >= cy.maxZoom() : cy.zoom() <= cy.minZoom()
                 }
@@ -75,7 +78,11 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
           setError(error);
           alert(error);
         }}
-        onSuccess={(newCy) => setCy(newCy)}
+        onSuccess={(newCy) => {
+          setCy((_) => {
+            return newCy;
+          });
+        }}
         pheno={pheno}
       />
     </>

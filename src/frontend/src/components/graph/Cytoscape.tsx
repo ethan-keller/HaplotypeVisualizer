@@ -25,6 +25,12 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (cy) {
+      cy.pan(pan);
+    }
+  }, [pan]);
+
+  useEffect(() => {
     try {
       const settings: GraphSettings = pheno
         ? { ...graphSettings, drawPaths: false }
