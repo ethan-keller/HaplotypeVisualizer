@@ -1,4 +1,4 @@
-import React, { createRef, useMemo } from 'react';
+import React, { createRef, useMemo, useState } from 'react';
 import { Table, Button } from 'react-bootstrap';
 import { File, FileIndex, FileStatus } from '../../types/files';
 import ErrorCard from '../ErrorCard';
@@ -9,6 +9,7 @@ import { reset as resetPheno } from '../../slices/pheno';
 import { reset as resetLayout } from '../../slices/graphLayout';
 import { reset as resetSelection } from '../../slices/graphSelection';
 import { useLocation } from 'react-router';
+import ConfirmationModal from '../modals/ConfirmationModal';
 
 interface FileTableProps {}
 
@@ -24,6 +25,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
     highlightPhenoTableRow?: boolean;
     highlightBookmarksRow?: boolean;
   };
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
 
   // create refs for inputs
   const importInputRefs: React.RefObject<HTMLInputElement>[] = useMemo(
@@ -108,7 +110,7 @@ const FileTable: React.FC<FileTableProps> = (props) => {
           />
           {status === FileStatus.NEEDS_PRE_PROCESSING && !isPreprocessing ? (
             <>
-              <Button onClick={() => preprocess()} variant='outline-info' size='sm'>
+              <Button onClick={() => setShowConfirmation(true)} variant='outline-info' size='sm'>
                 preprocess
               </Button>{' '}
               {i === FileIndex.GFA ? (
@@ -197,6 +199,16 @@ const FileTable: React.FC<FileTableProps> = (props) => {
             );
           })}
         </tbody>
+        <ConfirmationModal
+          title='Preprocess'
+          description='Are you sure you want to preprocess this file?'
+          secondaryDescription='Preprocessing cannot be halted'
+          confirmButtonVariant='info'
+          confirmText='Preprocess'
+          onConfirm={() => preprocess()}
+          show={showConfirmation}
+          onHide={() => setShowConfirmation(false)}
+        />
       </Table>
     );
   };
