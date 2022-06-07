@@ -134,7 +134,7 @@ async def get_graph_info():
             longest_segment=max(segment_lengths),
             median_segment=median(segment_lengths),
             mean_segment=mean(segment_lengths),
-            std_dev=stdev(segment_lengths),
+            std_dev=stdev(segment_lengths) if len(segment_lengths) > 1 else 0,
             n50=compute_N50(segment_lengths)
         )
     else:
