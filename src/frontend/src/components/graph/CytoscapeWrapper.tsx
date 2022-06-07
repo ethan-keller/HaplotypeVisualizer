@@ -7,6 +7,7 @@ import PanWidget from '../widgets/PanWidget';
 import Cytoscape from './Cytoscape';
 import { useAppDispatch, useAppSelector } from '../../store';
 import { updateFirstGraphRender } from '../../slices/graphLayout';
+import SearchWidget from '../widgets/SearchWidget';
 
 interface CytoscapeWrapperProps {
   graph: Graph;
@@ -33,29 +34,34 @@ const CytoscapeWrapper: React.FC<CytoscapeWrapperProps> = ({ graph, layout, phen
       {error ? <ErrorCard message='Could not load graph' /> : null}
       {cy ? (
         <>
-          <div className='zoom-widget'>
-            <ZoomWidget
-              onZoom={(newZoom) => {
-                const extent = cy.extent();
-                cy.zoom({
-                  level: newZoom,
-                  position: {
-                    x: extent.x1 + (extent.x2 - extent.x1) / 2,
-                    y: extent.y1 + (extent.y2 - extent.y1) / 2,
-                  },
-                });
-              }}
-              onVerticalCenter={() => {
-                const bb = cy.elements().boundingBox({});
-                cy.pan({
-                  x: cy.pan().x,
-                  y: (cy.height() - cy.zoom() * (bb.y1 + bb.y2)) / 2,
-                });
-              }}
-              isZoomLimit={(zoomIn) =>
-                zoomIn ? cy.zoom() >= cy.maxZoom() : cy.zoom() <= cy.minZoom()
-              }
-            />
+          <div className='zoom-search-widgets'>
+            <div className='zoom-widget'>
+              <ZoomWidget
+                onZoom={(newZoom) => {
+                  const extent = cy.extent();
+                  cy.zoom({
+                    level: newZoom,
+                    position: {
+                      x: extent.x1 + (extent.x2 - extent.x1) / 2,
+                      y: extent.y1 + (extent.y2 - extent.y1) / 2,
+                    },
+                  });
+                }}
+                onVerticalCenter={() => {
+                  const bb = cy.elements().boundingBox({});
+                  cy.pan({
+                    x: cy.pan().x,
+                    y: (cy.height() - cy.zoom() * (bb.y1 + bb.y2)) / 2,
+                  });
+                }}
+                isZoomLimit={(zoomIn) =>
+                  zoomIn ? cy.zoom() >= cy.maxZoom() : cy.zoom() <= cy.minZoom()
+                }
+              />
+            </div>
+            <div className='search-widget'>
+              <SearchWidget />
+            </div>
           </div>
           <div className='pan-widget'>
             <PanWidget onPan={(p) => cy.panBy(p)} />

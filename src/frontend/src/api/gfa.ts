@@ -8,6 +8,7 @@ import {
   getGfaSegmentLengths,
   getSegment,
   getLink,
+  getGfaSegmentNames,
 } from '../endpoints_config/GfaEndpoints';
 import { GfaLink, GfaPath, GfaSegment, GfaInfo } from '../types/gfa';
 
@@ -35,6 +36,9 @@ const gfaApi = createApi({
     }),
     getGfaSegmentLengths: builder.query<number[], void>({
       query: () => ({ url: getGfaSegmentLengths }),
+    }),
+    getGfaSegmentNames: builder.query<string[], void>({
+      query: () => ({ url: getGfaSegmentNames }),
     }),
   }),
 });

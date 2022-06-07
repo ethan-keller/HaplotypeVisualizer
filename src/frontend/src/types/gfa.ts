@@ -67,6 +67,11 @@ export const getSegmentLength = (segment: GfaSegment) => {
   }
 };
 
+interface GfaElementOption {
+  readonly value: string;
+  readonly label: string;
+}
+
 export type {
   GfaElement,
   GfaHeader,
@@ -77,5 +82,7 @@ export type {
   GfaInfo,
   GfaHist,
   GfaFeature,
+  GfaElementOption,
 };
+
 export default Gfa;

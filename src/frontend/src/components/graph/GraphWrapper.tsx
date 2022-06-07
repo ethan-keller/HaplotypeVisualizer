@@ -1,3 +1,4 @@
+import gfaApi from '../../api/gfa';
 import layoutApi from '../../api/layout';
 import { updateFeature } from '../../slices/graphSelection';
 import { useAppDispatch, useAppSelector } from '../../store';

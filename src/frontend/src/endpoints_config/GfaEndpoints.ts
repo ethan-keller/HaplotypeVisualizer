@@ -11,3 +11,4 @@ export const getLink = '/link';
 export const getPaths = '/paths';
 export const getGfaInfo = '/gfa_info';
 export const getGfaSegmentLengths = '/segment_lengths';
+export const getGfaSegmentNames = '/segment_names';

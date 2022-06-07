@@ -44,6 +44,16 @@ async def get_segment(segment_id: str):
         )
 
 
+@router.get("/segment_names", response_model=List[str], summary="Get all segment names")
+async def get_segment_names():
+    if GfaManager.segment_map is not None:
+        return list(GfaManager.segment_map.keys())
+    else:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Could not retrieve segment names from a non-existent gfa object"
+        )
+
+
 @router.put(
     "/links",
     response_model=List[GfaLink],
