@@ -63,13 +63,10 @@ const EditFoldersModal: React.FC<EditFoldersModalProps> = (props) => {
           size='sm'
           variant='secondary'
           style={{ marginTop: 8 }}
-          onClick={async () => {
-            try {
-              const folderName = await getFolderName();
+          onClick={() => {
+            getFolderName().then((folderName) => {
               handleUpdateOutputFolder(folderName);
-            } catch (_) {
-              // ignore (exception is raised when user cancels folder selection)
-            }
+            });
           }}
         >
           Change folder
@@ -89,13 +86,10 @@ const EditFoldersModal: React.FC<EditFoldersModalProps> = (props) => {
           size='sm'
           variant='secondary'
           style={{ marginTop: 8 }}
-          onClick={async () => {
-            try {
-              const folderName = await getFolderName();
+          onClick={() => {
+            getFolderName().then((folderName) => {
               handleUpdateDataFolder(folderName);
-            } catch (_) {
-              // ignore (exception is raised when user cancels folder selection)
-            }
+            });
           }}
         >
           Change folder
