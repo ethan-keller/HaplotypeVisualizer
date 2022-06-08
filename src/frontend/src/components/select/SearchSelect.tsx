@@ -27,11 +27,14 @@ const SearchSelect: React.FC<SearchSelectProps> = (props) => {
   return segment_names ? (
     <>
       <Select<GfaElementOption>
+        // TODO: remove isDisabled when feature is done
+        isDisabled={true}
+        
         isSearchable
         isClearable
         closeMenuOnSelect={true}
         closeMenuOnScroll
-        isDisabled={segment_names.length === 0}
+        // isDisabled={segment_names.length === 0}
         onChange={(value) => {
           if (value) {
             setSelection(value.value);
