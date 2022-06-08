@@ -15,7 +15,7 @@ const PopuViewInfoCard: React.FC<PopuViewInfoCardProps> = (props) => {
       : gfaApi.useGetLinkQuery({ link_id: props.feature.name });
 
   return feature ? (
-    <InfoCard feature={feature} onClose={props.onClose}>
+    <InfoCard elemPosition={props.feature.type === 'segment' ? props.feature.position : undefined} feature={feature} onClose={props.onClose}>
       <PopuViewInfoCardSection feature={feature} />
     </InfoCard>
   ) : null;

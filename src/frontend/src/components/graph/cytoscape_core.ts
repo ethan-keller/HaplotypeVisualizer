@@ -100,6 +100,7 @@ export const cytoscapeEdges = (
     const gradient = getGradient(link, paths, settings, isolatedColors);
     return {
       data: {
+        id: link.name,
         source: link.from_segment,
         target: link.to_segment,
         width:

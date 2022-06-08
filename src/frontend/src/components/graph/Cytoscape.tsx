@@ -35,7 +35,7 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
       cy.elements().unselect();
       cy.$id(selectedFeature.name).select().active();
     }
-  }, [selectedFeature]);
+  }, [selectedFeature?.name]);
 
   useEffect(() => {
     try {
@@ -73,7 +73,10 @@ const Cytoscape: React.FC<CytoscapeProps> = ({ graph, layout, onError, onSuccess
 
     if (cy) {
       cy.on('unselect', () => dispatch(updateFeature(undefined)));
-      cy.on('select', (e) => dispatch(updateFeature(e.target.data('feature'))));
+      cy.on('select', (e) => {
+        const featureData = e.target.data('feature');
+        dispatch(updateFeature({ ...featureData, position: cy.$id(featureData.name).position() }));
+      });
       cy.on('pan', () => {
         dispatch(updateViewport(extentToRectangleRange(cy.extent())));
         dispatch(updatePan(cy.pan()));

@@ -36,6 +36,10 @@ export const graphLayoutSlice = createSlice({
       state.pan.x -=
         state.zoom * (newMiddle - (state.extent.xl + (state.extent.xr - state.extent.xl) / 2));
     },
+    updatePanBookmark: (state, action: PayloadAction<number>) => {
+      state.pan.x -=
+        state.zoom * (action.payload - (state.extent.xl + (state.extent.xr - state.extent.xl) / 2));
+    },
     updateBufferSize: (state, action: PayloadAction<number>) => {
       state.bufferSize = action.payload;
     },
@@ -71,10 +75,6 @@ const addViewportBuffer = (viewport: RectangleRange, bufferSize: number) => {
   return { lu: newLu, rd: newRd } as RectangleRange;
 };
 
-const getRrArea = (rr: RectangleRange) => {
-  return (rr.rd.x - rr.lu.x) * (rr.rd.y - rr.lu.y);
-};
-
 export const {
   updateZoom,
   updatePan,
@@ -82,6 +82,7 @@ export const {
   updateViewport,
   updateFirstGraphRender,
   updatePanNav,
+  updatePanBookmark,
   reset,
 } = graphLayoutSlice.actions;
 

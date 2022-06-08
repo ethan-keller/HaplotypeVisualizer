@@ -1,4 +1,5 @@
 import { EdgeDefinition, NodeDefinition } from 'cytoscape';
+import { Position } from './layout';
 
 export interface Graph {
   nodes: NodeDefinition[];
@@ -18,6 +19,7 @@ export interface GraphSettings {
 export interface FeatureSelection {
   type: string;
   name: string;
+  position?: Position;
 }
 
 export interface GraphSelectionState {

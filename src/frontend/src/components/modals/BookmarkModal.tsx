@@ -3,12 +3,14 @@ import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import bookmarksApi from '../../api/bookmarks';
 import { useAppSelector } from '../../store';
 import { GfaFeature } from '../../types/gfa';
+import { Position } from '../../types/layout';
 import VerticalSpacer from '../VerticalSpacer';
 
 interface BookmarkModalProps {
   onHide: () => void;
   show: boolean;
   elem: GfaFeature;
+  elemPosition?: Position;
 }
 
 const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
@@ -52,6 +54,7 @@ const BookmarkModal: React.FC<BookmarkModalProps> = (props) => {
             addBookmark({
               elem_id: props.elem.name,
               elem_type: props.elem.type,
+              elem_pos: props.elemPosition,
               comment: comment,
               viewport: {
                 lu: { x: extent.xl, y: viewport.lu.y },

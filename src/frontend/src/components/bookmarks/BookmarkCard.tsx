@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Card, Button, CloseButton } from 'react-bootstrap';
 import bookmarksApi from '../../api/bookmarks';
-import { updatePanNav } from '../../slices/graphLayout';
+import { updatePanBookmark, updatePanNav } from '../../slices/graphLayout';
 import { updateFeature } from '../../slices/graphSelection';
 import { useAppDispatch } from '../../store';
 import { Bookmark } from '../../types/bookmark';
@@ -35,8 +35,19 @@ const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark, onHide }) => {
           <Button
             size='sm'
             onClick={() => {
-              dispatch(updatePanNav({ xl: bookmark.viewport.lu.x, xr: bookmark.viewport.rd.x }));
-              dispatch(updateFeature({ name: bookmark.elem_id, type: bookmark.elem_type }));
+              if (bookmark.elem_pos) {
+                dispatch(updatePanBookmark(bookmark.elem_pos.x));
+              } else {
+                dispatch(updatePanNav({ xl: bookmark.viewport.lu.x, xr: bookmark.viewport.rd.x }));
+              }
+
+              dispatch(
+                updateFeature({
+                  name: bookmark.elem_id,
+                  type: bookmark.elem_type,
+                  position: bookmark.elem_pos,
+                }),
+              );
               onHide();
             }}
           >
