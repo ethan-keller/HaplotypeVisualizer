@@ -29,6 +29,7 @@ const Graph: React.FC<GraphProps> = ({
 
   const graphSettings = useAppSelector((state) => state.graphSettings);
   const isolate = useAppSelector((state) => state.pheno.isolate);
+  const pathToIsolate = useAppSelector((state) => state.pheno.pathToIsolateColors);
   const { data: segments } = gfaApi.useGetSegmentsQuery(segmentIds);
   const { data: links } = gfaApi.useGetLinksQuery(segmentIds);
   const { data: paths } = gfaApi.useGetPathsQuery();
@@ -44,8 +45,22 @@ const Graph: React.FC<GraphProps> = ({
         ? { ...graphSettings, drawPaths: false }
         : graphSettings;
       return {
-        nodes: cytoscapeNodes(filterSegments(segments, filter), paths, settings, pheno, isolate),
-        edges: cytoscapeEdges(filterLinks(links, layout, filter), paths, settings, pheno, isolate),
+        nodes: cytoscapeNodes(
+          filterSegments(segments, filter),
+          paths,
+          settings,
+          pheno,
+          isolate,
+          pathToIsolate,
+        ),
+        edges: cytoscapeEdges(
+          filterLinks(links, layout, filter),
+          paths,
+          settings,
+          pheno,
+          isolate,
+          pathToIsolate,
+        ),
       } as GraphType;
     }
   }, [paths, segments, links, graphSettings, filter, pheno, isolate]);

@@ -50,13 +50,21 @@ export const cytoscapeNodes = (
   settings: GraphSettings,
   pheno?: boolean,
   isolate?: PhenoIsolate,
+  pathToIsolateColors?: Record<string, string>,
 ) => {
   return segments.map((segment: GfaSegment) => {
-    const isolatedColors = isolate
-      ? Object.keys(isolate.isolateColors).length !== 0 && segment.name in isolate.isolateColors
-        ? isolate.isolateColors[segment.name]
-        : ['#000000']
-      : undefined;
+    let isolatedColors = undefined;
+    if (pathToIsolateColors && isolate && Object.keys(pathToIsolateColors).length !== 0) {
+      isolatedColors = [];
+      for (const path of segment.paths) {
+        if (path in pathToIsolateColors && segment.name in isolate.isolateColors) {
+          isolatedColors.push(pathToIsolateColors[path]);
+        } else {
+          isolatedColors.push('#000000');
+        }
+      }
+    }
+
     const gradient = getGradient(segment, paths, settings, isolatedColors);
     const phenoIsolationMode = pheno && isolate !== undefined;
     return {
@@ -87,32 +95,26 @@ export const cytoscapeEdges = (
   settings: GraphSettings,
   pheno?: boolean,
   isolate?: PhenoIsolate,
+  pathToIsolateColors?: Record<string, string>,
 ) => {
   const phenoIsolationMode = pheno && isolate !== undefined;
   return links.map((link: GfaLink) => {
     let isolatedColors = undefined;
-    if (isolate) {
-      if (
-        Object.keys(isolate.isolateColors).length !== 0 &&
-        link.from_segment in isolate.isolateColors &&
-        link.to_segment in isolate.isolateColors
-      ) {
+    if (pathToIsolateColors && isolate && Object.keys(pathToIsolateColors).length !== 0) {
+      isolatedColors = [];
+      for (const path of link.paths) {
         if (
-          isolate.isolateColors[link.from_segment].length <
-          isolate.isolateColors[link.to_segment].length
+          path in pathToIsolateColors &&
+          link.from_segment in isolate.isolateColors &&
+          link.to_segment in isolate.isolateColors
         ) {
-          isolatedColors = isolate.isolateColors[link.from_segment];
+          isolatedColors.push(pathToIsolateColors[path]);
         } else {
-          isolatedColors = isolate.isolateColors[link.to_segment];
+          isolatedColors.push('#000000');
         }
-      } else {
-        isolatedColors = ['#000000'];
       }
     }
 
-    if (link.name === 'S10->S12') {
-      console.log(isolate);
-    }
     const gradient = getGradient(link, paths, settings, isolatedColors);
     return {
       data: {

@@ -39,6 +39,18 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
     }
   }, [isolate]);
 
+  const initColors = () => {
+    if (phenoFeature && phenotypes) {
+      let newColors: Record<string, string> = {};
+      for (const phenotype of phenotypes[phenoFeature]) {
+        newColors[phenotype] = '#000000';
+      }
+      return newColors;
+    } else {
+      return {};
+    }
+  };
+
   return (
     <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
@@ -78,7 +90,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
                           <td>
                             <ColorPicker
                               defaultColor={
-                                colors && phenotype.toString() in colors
+                                colors !== undefined && phenotype.toString() in colors
                                   ? colors[phenotype.toString()]
                                   : '#000000'
                               }
@@ -96,13 +108,14 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
                     })}
                   </tbody>
                 </Table>
+
                 <Button
                   onClick={() => {
                     const isolateColors = getIsolateColors(
                       phenosPerSample,
                       paths,
                       phenoFeature,
-                      colors ?? {},
+                      colors ?? initColors(),
                     );
                     dispatch(
                       updateIsolate({
@@ -116,6 +129,7 @@ const IsolatePhenoFeatureModal: React.FC<IsolatePhenoFeatureModalProps> = (props
                 >
                   <b>{phenoFeature}</b>
                 </Button>
+
                 <Button
                   style={{ marginLeft: 6 }}
                   variant='danger'
