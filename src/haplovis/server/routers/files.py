@@ -1,3 +1,4 @@
+from pathlib import Path
 import time
 from typing import List
 
@@ -228,7 +229,7 @@ async def update_output_folder(new_folder: str):
     Update the location (directory) for output files.
     """
     try:
-        FileManager.update_output_folder(new_folder)
+        FileManager.update_output_folder(Path("./" + new_folder))
     except Exception:
         raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
@@ -241,7 +242,7 @@ async def update_data_folder(new_folder: str):
     Update the location (directory) for data files.
     """
     try:
-        FileManager.update_data_folder(new_folder)
+        FileManager.update_data_folder(Path("./" + new_folder))
     except Exception:
         raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,

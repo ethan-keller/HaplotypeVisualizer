@@ -19,7 +19,7 @@
 *.gff
 
 # output/temp/static files
-out
+.out
 src/haplovis/server/static
 
 

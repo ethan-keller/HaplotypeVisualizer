@@ -1,3 +1,4 @@
+import os
 import webbrowser
 from pathlib import Path
 from typing import List, Optional
@@ -6,7 +7,9 @@ from haplovis.layout import Layout
 from haplovis.kdtree import KDTree
 from haplovis.serialization import PickleSerializer
 from haplovis.gfa import Gfa
+from haplovis import folder_locations
 import subprocess
+
 
 CLI = typer.Typer(add_completion=False, context_settings={"help_option_names": ["-h", "--help"]})
 
@@ -14,8 +17,8 @@ CLI = typer.Typer(add_completion=False, context_settings={"help_option_names": [
 VERSION = "0.1.0"
 VALID_GRAPH_EXTENSIONS = [".gfa"]
 VALID_LAYOUT_EXTENSIONS = [".pickle"]
-DEFAULT_OUTPUT_DIR = Path("./src/haplovis/out").resolve()
 DEFAULT_PORT = 3000
+DEFAULT_FOLDER = Path("./data")
 BUILD_COMMAND = "npm run build"
 INSTALL_DEPENDENCIES_COMMAND = "npm install && cd ../haplovis && npm install"
 START_STATIC_SERVER_COMMAND = "npx serve -s ./server/static"
@@ -62,8 +65,9 @@ def layout(
         case_sensitive=True,
         callback=paths_validation_callback,
     ),
-    output_folder: Path = typer.Option(DEFAULT_OUTPUT_DIR, "--output", "-o", dir_okay=True, case_sensitive=True),
-    verbose: bool = typer.Option(True, "--verbose", "-v"),
+    folder: Path = typer.Option(DEFAULT_FOLDER, "--folder", "-f", file_okay=False,
+        dir_okay=True, resolve_path=True, case_sensitive=True),
+    verbose: bool = typer.Option(True, "--verbose/--no-verbose", "-v/-V"),
 ):
     """
     Generate multiple layout files
@@ -71,9 +75,27 @@ def layout(
     for gfa in gfas:
         try:
             if verbose:
+                typer.echo(f"Searching for data folder at: {folder} ...")
+
+            if not folder.exists():
+                if verbose:
+                    typer.echo(f"Could not find data folder. Creating {folder} ...")
+                os.mkdir(folder)
+
+            hidden_out_folder = folder.joinpath(".out/")
+
+            if verbose:
+                typer.echo(f"Searching for hidden output folder at: {hidden_out_folder} ...")
+
+            if not hidden_out_folder.exists():
+                if verbose:
+                    typer.echo(f"Could not find hidden output folder. Creating {hidden_out_folder} ...")
+                os.mkdir(hidden_out_folder)
+
+            if verbose:
                 typer.echo(f"Creating layout for {str(gfa)}")
                 typer.echo("Computing layout...")
-            layout = Layout.compute_layout(gfa, output_folder)
+            layout = Layout.compute_layout(gfa, hidden_out_folder)
             if verbose:
                 typer.echo(f"Creating index tree for layout...")
             kdtree = KDTree.create_tree_from_layout(layout)
@@ -81,7 +103,7 @@ def layout(
             if gfa_hash:
                 if verbose:
                     typer.echo("Serializing index tree...")
-                index_file_path = output_folder.joinpath(Path(f"{gfa_hash}.pickle")).resolve()
+                index_file_path = hidden_out_folder.joinpath(Path(f"{gfa_hash}.pickle")).resolve()
                 out_path = PickleSerializer.serialize(kdtree, index_file_path)
                 typer.secho(f"Successfully computed layout for {gfa} --> Stored at {str(out_path)}", fg="green")
             else:
@@ -153,7 +175,18 @@ def build():
         return
 
 @CLI.command()
-def start(port: int = typer.Option(DEFAULT_PORT, "--port", "-p")):
+def start(
+    folder: Path = typer.Option(
+        DEFAULT_FOLDER,
+        "--folder",
+        "-f",
+        file_okay=False,
+        dir_okay=True,
+        resolve_path=True,
+        case_sensitive=True,
+    ),
+    port: int = typer.Option(DEFAULT_PORT, "--port", "-p")
+):
     """
     Start HaplotypeVisualizer
     """
@@ -180,6 +213,20 @@ def start(port: int = typer.Option(DEFAULT_PORT, "--port", "-p")):
     # start backend
     try:
         typer.echo("Starting backend...")
+        typer.echo(f"Searching for data folder at: {folder} ...")
+        if not folder.exists():
+            typer.echo(f"Could not find data folder. Creating {folder} ...")
+            os.mkdir(folder)
+
+        hidden_out_folder = folder.joinpath(".out/")
+        typer.echo(f"Searching for hidden output folder at: {hidden_out_folder} ...")
+        if not hidden_out_folder.exists():
+            typer.echo(f"Could not find hidden output folder. Creating {hidden_out_folder} ...")
+            os.mkdir(hidden_out_folder)
+
+        folder_locations.data_folder = folder
+        folder_locations.out_folder = hidden_out_folder
+
         subprocess.run(START_BACKEND_COMMAND, cwd="./src/haplovis", shell=True)
         typer.secho("Successfully started the backend!", fg="green")
     except Exception:

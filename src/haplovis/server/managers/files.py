@@ -2,15 +2,16 @@ from pathlib import Path
 from typing import List
 from os.path import isfile, splitext
 import os
+from haplovis import folder_locations
 
 from haplovis.schemas.file import File, FileStatus, FileIndex
 import haplovis.server.managers as managers
 
 
 class FileManager:
-    # Server should be ran from root dir
-    output_folder = Path("./out").resolve()
-    data_folder = Path("./server/server_data").resolve()
+    data_folder = folder_locations.data_folder
+    output_folder = folder_locations.out_folder
+    
 
     files: List[File] = [
         File(id=0, description="GFA file", status=FileStatus.NO_FILE, required=True, file_extensions=[".gfa"]),
@@ -28,19 +29,16 @@ class FileManager:
         return str(cls.data_folder)
 
     @classmethod
-    def update_output_folder(cls, new_folder: str) -> None:
-        new_folder_path = Path(new_folder)
-        if (new_folder_path.exists() and new_folder_path.is_dir()):
-            cls.output_folder = new_folder_path.resolve()
+    def update_output_folder(cls, new_folder: Path) -> None:
+        if (new_folder.exists() and new_folder.is_dir()):
+            cls.output_folder = new_folder.resolve()
         else:
             raise Exception(f"Cannot update output folder. {new_folder} does not exist or is not a directory.")
 
     @classmethod
-    def update_data_folder(cls, new_folder: str) -> None:
-        # TODO: remove "server/"
-        new_folder_path = Path("server/" + new_folder)
-        if (new_folder_path.exists() and new_folder_path.is_dir()):
-            cls.data_folder = new_folder_path.resolve()
+    def update_data_folder(cls, new_folder: Path) -> None:
+        if (new_folder.exists() and new_folder.is_dir()):
+            cls.data_folder = new_folder.resolve()
         else:
             raise Exception(f"Cannot update data folder. {new_folder} does not exist or is not a directory.")
 
