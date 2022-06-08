@@ -90,13 +90,29 @@ export const cytoscapeEdges = (
 ) => {
   const phenoIsolationMode = pheno && isolate !== undefined;
   return links.map((link: GfaLink) => {
-    const isolatedColors = isolate
-      ? Object.keys(isolate.isolateColors).length !== 0 &&
+    let isolatedColors = undefined;
+    if (isolate) {
+      if (
+        Object.keys(isolate.isolateColors).length !== 0 &&
         link.from_segment in isolate.isolateColors &&
         link.to_segment in isolate.isolateColors
-        ? isolate.isolateColors[link.from_segment]
-        : ['#000000']
-      : undefined;
+      ) {
+        if (
+          isolate.isolateColors[link.from_segment].length <
+          isolate.isolateColors[link.to_segment].length
+        ) {
+          isolatedColors = isolate.isolateColors[link.from_segment];
+        } else {
+          isolatedColors = isolate.isolateColors[link.to_segment];
+        }
+      } else {
+        isolatedColors = ['#000000'];
+      }
+    }
+
+    if (link.name === 'S10->S12') {
+      console.log(isolate);
+    }
     const gradient = getGradient(link, paths, settings, isolatedColors);
     return {
       data: {
