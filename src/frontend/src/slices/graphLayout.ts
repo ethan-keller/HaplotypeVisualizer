@@ -19,7 +19,7 @@ export const graphLayoutSlice = createSlice({
       state.extent.xr = action.payload.rd.x;
       if (viewportNeedsUpdate(state.viewport, action.payload, state.bufferSize)) {
         if (state.bufferSize === 0) {
-          state.bufferSize = 300;
+          state.bufferSize = 500;
         }
         state.viewport = addViewportBuffer(action.payload, 4 * state.bufferSize);
       }
