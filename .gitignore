@@ -9,12 +9,16 @@
 !10kbubbles.gfa
 !L3000N4P.gfa
 !L100N10P.gfa
+!demo1.gfa
+!demo2.gfa
 
 *.gfa2
 
 *.csv
 !15GFA_phenos.csv
 !50bubbles6paths_phenos.csv
+!demo1.csv
+!demo2.csv
 
 *.gff
 
