@@ -12,7 +12,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/ethan-keller/HaplotypeVisualizer">
-    <!-- <img src="images/logo.png" alt="Logo" width="80" height="80"> -->
+    <img src="img/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">HaplotypeVisualizer</h3>
@@ -25,9 +25,9 @@
     <br />
     <a href=".">View Demo</a>
     ·
-    <a href=".">Report Bug</a>
+    <a href="https://github.com/ethan-keller/HaplotypeVisualizer/pulls">Report Bug</a>
     ·
-    <a href=".">Request Feature</a>
+    <a href="https://github.com/ethan-keller/HaplotypeVisualizer/pulls">Request Feature</a>
   </p>
 </div>
 
@@ -44,7 +44,7 @@
     <li>
       <a href="#getting-started">Getting Started</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#cli">CLI</a></li>
         <li><a href="#run">Run</a></li>
       </ul>
     </li>
@@ -59,8 +59,6 @@
 
 ## About The Project
 
-<!-- [![Product Name Screen Shot][product-screenshot]](https://example.com) -->
-
 Still under development.
 
 <p align="right"><a href="#top">back to top</a></p>
@@ -71,48 +69,64 @@ Still under development.
 - [Cytoscape.js](https://js.cytoscape.org/)
 - [FastAPI](https://fastapi.tiangolo.com/)
 
-
 <p align="right"><a href="#top">back to top</a></p>
 
 <!-- GETTING STARTED -->
 
 ## Getting Started
 
-To get `HaplotypeVisualizer` up and running, a few dependencies need to be installed.
+> ### Important:
+>
+> Make sure to have `pip` and `nodejs` installed on your machine!
 
-### Prerequisites
+Start by cloning this repository to your machine. E.g., like so:
+```sh
+git clone https://github.com/ethan-keller/HaplotypeVisualizer
+```
 
-Make sure to have `pip` and `npm` installed on your machine.
+For other ways to clone a repository to your machine: [GitHub Cloning Docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
 
-1) Open a terminal in the root directory: `/HaplotypeVisualizer`
 
-2) Install the `haplovis` package and its dependencies:
-    ```sh
-    pip install .
-    ```
-3) To verify that the installation was successfull, try to use the CLI:
-    ```sh
-    haplovis --help
-    ```
+
+
+
+
+### CLI
+
+To get `HaplotypeVisualizer` up and running, you need to install the `haplovis` CLI (Command Line Interface).
+
+1. Open a terminal in the root directory: `/HaplotypeVisualizer`
+
+2. Install the `haplovis` package and its dependencies:
+   ```sh
+   pip install .
+   ```
+3. To verify that the installation was successfull, try to use the `haplovis` CLI:
+   ```sh
+   haplovis --help
+   ```
 
 ### Run
 
 This section explains how you can build and start the `HaplotypeVisualizer` web-app.
 
-1) Build `HaplotypeVisualizer` (installs dependencies + builds a production react app)
-    ```sh
-    haplovis build
-    ```
+1. Build `HaplotypeVisualizer` (installs dependencies + builds a production react app)
 
-2) Start `HaplotypeVisualizer` (starts a static server and a backend server)
-    ```sh
-    haplovis start
-    ```
+   ```sh
+   haplovis build
+   ```
 
-    or specify a custom port with the `--port` or `-p` flag:
-    ```sh
-    haplovis start -p 9999
-    ```
+2. Start `HaplotypeVisualizer` (starts a static server and a backend server)
+
+   ```sh
+   haplovis start
+   ```
+
+   or specify a custom port with the `--port` or `-p` flag:
+
+   ```sh
+   haplovis start -p 9999
+   ```
 
 <p align="right"><a href="#top">back to top</a></p>
 
@@ -134,25 +148,24 @@ This section explains how you can build and start the `HaplotypeVisualizer` web-
 
 <p align="right"><a href="#top">back to top</a></p> -->
 
-
 ## Usage
 
-In the import table on the welcome view, you **must** import files that are located in the `HaplotypeVisualizer/src/haplovis/server/server_data` directory. Move your files to this folder or use one of the given data files.
+In the import table on the welcome view, you **must** import files that are located in the `HaplotypeVisualizer/data` directory. Move your files to this folder or use one of the given data files.
 
-Below is a table of given GFA files with their respective phenotype tables:
-| GFA file            | Phenotable                 |
+Below is a table of demo GFA files with their respective phenotype tables:
+| GFA file | Phenotable |
 |---------------------|----------------------------|
-| `15GFA.gfa`           | `15GFA_phenos.csv`           |
+| `15GFA.gfa` | `15GFA_phenos.csv` |
 | `50bubbles6paths.gfa` | `50bubbles6paths_phenos.csv` |
-| `2kbubbles.gfa`       | NA                         |
-| `5kbubbles.gfa`       | NA                         |
-| `10kbubbles.gfa`      | NA                         |
-| `L3000N4P.gfa`        | NA                         |
-| `L100N10P.gfa`        | NA                         |
-
+| `demo1.gfa` | `demo1.csv` |
+| `demo2.gfa` | `demo2.csv` |
+| `2kbubbles.gfa` | NA |
+| `5kbubbles.gfa` | NA |
+| `10kbubbles.gfa` | NA |
+| `L3000N4P.gfa` | NA |
+| `L100N10P.gfa` | NA |
 
 <p align="right"><a href="#top">back to top</a></p>
-
 
 <!-- CONTRIBUTING -->
 
