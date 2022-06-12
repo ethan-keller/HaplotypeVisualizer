@@ -5,41 +5,17 @@ import VerticalSpacer from '../VerticalSpacer';
 import AlertModal from './AlertModal';
 import ConfirmationModal from './ConfirmationModal';
 
-interface EditFoldersModalProps {
+interface SeeFoldersModalProps {
   onHide: () => void;
   show: boolean;
 }
 
-const EditFoldersModal: React.FC<EditFoldersModalProps> = (props) => {
+const SeeFoldersModal: React.FC<SeeFoldersModalProps> = (props) => {
   const { data: outputFolder } = filesApi.useGetOutputFolderQuery();
   const { data: dataFolder } = filesApi.useGetDataFolderQuery();
-  const [updateOutputFolder] = filesApi.useUpdateOutputFolderMutation();
-  const [updateDataFolder] = filesApi.useUpdateDataFolderMutation();
   const [clearFolder] = filesApi.useClearFolderMutation();
   const [showConfirmation, setShowConfirmation] = useState<string | undefined>(undefined);
   const [showAlert, setShowAlert] = useState<boolean>(false);
-
-  const getFolderName = async () => {
-    // @ts-ignore
-    const dirHandle = await window.showDirectoryPicker();
-    return dirHandle.name;
-  };
-
-  const handleUpdateOutputFolder = (newFolderName: string) => {
-    updateOutputFolder({ new_folder: newFolderName })
-      .unwrap()
-      .catch((_) => {
-        alert('Could not update ouput folder name');
-      });
-  };
-
-  const handleUpdateDataFolder = (newFolderName: string) => {
-    updateDataFolder({ new_folder: newFolderName })
-      .unwrap()
-      .catch((_) => {
-        alert('Could not update data folder name');
-      });
-  };
 
   const handleClearFolder = (folder: string | undefined) => {
     if (folder) {
@@ -54,54 +30,22 @@ const EditFoldersModal: React.FC<EditFoldersModalProps> = (props) => {
   return (
     <Modal onHide={props.onHide} show={props.show} size='xl'>
       <Modal.Header closeButton>
-        <Modal.Title>Change folder locations</Modal.Title>
+        <Modal.Title>Folder locations</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <b>OUTPUT</b>
         <div style={{ wordWrap: 'break-word' }}>{outputFolder ?? '-'}</div>
         <Button
           size='sm'
-          variant='secondary'
-          style={{ marginTop: 8 }}
-          onClick={() => {
-            getFolderName().then((folderName) => {
-              handleUpdateOutputFolder(folderName);
-            });
-          }}
-        >
-          Change folder
-        </Button>{' '}
-        <Button
-          size='sm'
           variant='danger'
           style={{ marginTop: 8 }}
           onClick={() => setShowConfirmation('OUTPUT')}
         >
-          Clear folder
+          Clear
         </Button>
         <VerticalSpacer space={40} />
         <b>DATA</b>
         <div style={{ wordWrap: 'break-word' }}>{dataFolder ?? '-'}</div>
-        <Button
-          size='sm'
-          variant='secondary'
-          style={{ marginTop: 8 }}
-          onClick={() => {
-            getFolderName().then((folderName) => {
-              handleUpdateDataFolder(folderName);
-            });
-          }}
-        >
-          Change folder
-        </Button>{' '}
-        <Button
-          size='sm'
-          variant='danger'
-          style={{ marginTop: 8 }}
-          onClick={() => setShowConfirmation('DATA')}
-        >
-          Clear folder
-        </Button>
       </Modal.Body>
       {showConfirmation ? (
         <ConfirmationModal
@@ -126,4 +70,4 @@ const EditFoldersModal: React.FC<EditFoldersModalProps> = (props) => {
   );
 };
 
-export default EditFoldersModal;
+export default SeeFoldersModal;

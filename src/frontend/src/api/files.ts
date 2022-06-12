@@ -12,9 +12,7 @@ import {
   prepareFiles,
   preprocess,
   ready,
-  updateDataFolder,
   updateFile,
-  updateOutputFolder,
   uploadBookmarks,
   uploadLayout,
 } from '../endpoints_config/FileEndpoints';
@@ -78,14 +76,6 @@ const filesApi = createApi({
     getDataFolder: builder.query<string, void>({
       query: () => ({ url: getDataFolder, method: 'GET' }),
       providesTags: ['Folder'],
-    }),
-    updateOutputFolder: builder.mutation<void, UpdateFolderParams>({
-      query: (params) => ({ url: updateOutputFolder, params: params, method: 'PUT' }),
-      invalidatesTags: (result, error, args) => ['Folder'],
-    }),
-    updateDataFolder: builder.mutation<void, UpdateFolderParams>({
-      query: (params) => ({ url: updateDataFolder, params: params, method: 'PUT' }),
-      invalidatesTags: (result, error, args) => ['Folder'],
     }),
     matchGfaPheno: builder.mutation<boolean, void>({
       query: () => ({ url: gfaPhenoMatch, method: 'PUT' }),

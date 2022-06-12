@@ -1,8 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from haplovis.server.config import settings
+from haplovis.server.managers.files import FileManager
 from haplovis.server.routers import files, gfa, layout, pheno, bookmarks
 
 VERSION = "0.1.0"
+SERVER_NAME = "Haplotype Visualizer Backend"
 
 server = FastAPI()
 server.include_router(files.router)
@@ -18,7 +21,8 @@ server.add_middleware(
     allow_headers=["*"],
 )
 
+FileManager.set_folders(settings.folder)
 
-@server.get("/", response_model=str)
+@server.get("/", response_model=dict)
 def root():
-    return f"Haplotype Visualizer Server\nversion: {VERSION}"
+    return {"name": SERVER_NAME, "version": VERSION, "port": settings.port, "folder": settings.folder}

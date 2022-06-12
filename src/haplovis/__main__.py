@@ -7,7 +7,6 @@ from haplovis.layout import Layout
 from haplovis.kdtree import KDTree
 from haplovis.serialization import PickleSerializer
 from haplovis.gfa import Gfa
-from haplovis import folder_locations
 import subprocess
 
 
@@ -17,7 +16,8 @@ CLI = typer.Typer(add_completion=False, context_settings={"help_option_names": [
 VERSION = "0.1.0"
 VALID_GRAPH_EXTENSIONS = [".gfa"]
 VALID_LAYOUT_EXTENSIONS = [".pickle"]
-DEFAULT_PORT = 3000
+DEFAULT_SERVER_PORT = 3000
+DEFAULT_BACKEND_PORT = 8000
 DEFAULT_FOLDER = Path("./data")
 BUILD_COMMAND = "npm run build"
 INSTALL_DEPENDENCIES_COMMAND = "npm install && cd ../haplovis && npm install"
@@ -185,7 +185,7 @@ def start(
         resolve_path=True,
         case_sensitive=True,
     ),
-    port: int = typer.Option(DEFAULT_PORT, "--port", "-p")
+    port: int = typer.Option(DEFAULT_SERVER_PORT, "--port", "-p"),
 ):
     """
     Start HaplotypeVisualizer
@@ -224,8 +224,7 @@ def start(
             typer.echo(f"Could not find hidden output folder. Creating {hidden_out_folder} ...")
             os.mkdir(hidden_out_folder)
 
-        folder_locations.data_folder = folder
-        folder_locations.out_folder = hidden_out_folder
+        os.environ["FOLDER"] = str(folder)
 
         subprocess.run(START_BACKEND_COMMAND, cwd="./src/haplovis", shell=True)
         typer.secho("Successfully started the backend!", fg="green")

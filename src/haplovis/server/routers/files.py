@@ -223,31 +223,6 @@ async def get_data_folder():
     """
     return FileManager.get_data_folder()
 
-@router.put("/update_output_folder", summary="Update ouput folder location")
-async def update_output_folder(new_folder: str):
-    """
-    Update the location (directory) for output files.
-    """
-    try:
-        FileManager.update_output_folder(Path("./" + new_folder))
-    except Exception:
-        raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid output folder {new_folder}",
-            )
-
-@router.put("/update_data_folder", summary="Update data folder location")
-async def update_data_folder(new_folder: str):
-    """
-    Update the location (directory) for data files.
-    """
-    try:
-        FileManager.update_data_folder(Path("./" + new_folder))
-    except Exception:
-        raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail=f"Invalid data folder {new_folder}",
-            )
 
 @router.put("/gfa_pheno_match", response_model=bool, summary="Check if imported gfa file and phenotype table correspond")
 async def gfa_pheno_match():

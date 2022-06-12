@@ -1,7 +1,7 @@
 import { Card } from 'react-bootstrap';
 import VisualizeButton from './file_table/VisualizeButton';
 import FileTable from './file_table/FileTable';
-import EditFoldersButton from './EditFoldersButton';
+import FoldersButton from './FoldersButton';
 import VerticalSpacer from './VerticalSpacer';
 import ClearFilesButton from './file_table/ClearFilesButton';
 
@@ -17,7 +17,7 @@ const WelcomeCard: React.FC<WelcomeCardProps> = (props) => {
         <Card.Title>Welcome!</Card.Title>
         <Card.Text>{props.description}</Card.Text>
         <FileTable />
-        <EditFoldersButton />
+        <FoldersButton />
         <VerticalSpacer space={30} />
         <VisualizeButton /> <ClearFilesButton />
       </Card.Body>
