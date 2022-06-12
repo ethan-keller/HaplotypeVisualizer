@@ -122,11 +122,18 @@ This section explains how you can build and start the `HaplotypeVisualizer` web-
    haplovis start
    ```
 
-   or specify a custom port with the `--port` or `-p` flag:
+   or specify an optional port (`--port` / `-p`) and/or your data folder:
 
    ```sh
-   haplovis start -p 9999
+   haplovis start -p 9999 -f ./my-data-folder
    ```
+
+   > ### Important:
+   >
+   > - Default port: `3000`
+   > - Default data folder: `/data`
+
+
 
 <p align="right"><a href="#top">back to top</a></p>
 
@@ -150,9 +157,9 @@ This section explains how you can build and start the `HaplotypeVisualizer` web-
 
 ## Usage
 
-In the import table on the welcome view, you **must** import files that are located in the `HaplotypeVisualizer/data` directory. Move your files to this folder or use one of the given data files.
+In the import table on the welcome view, you **must** import files that are located in your previously specified data folder (as explained in <a href="#run">the <b>Run</b> section</a>). If you did not specify a folder, the default one will be used which is the `HaplotypeVisualizer/data` directory. Move your files to this folder or use one of the provided data files (already located in this directory).
 
-Below is a table of demo GFA files with their respective phenotype tables:
+Below is a table of the given demo GFA files with their respective phenotype tables:
 | GFA file | Phenotable |
 |---------------------|----------------------------|
 | `15GFA.gfa` | `15GFA_phenos.csv` |
