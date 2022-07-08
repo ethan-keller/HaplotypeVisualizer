@@ -55,7 +55,7 @@
 
 ## About The Project
 
-HaplotypeVisualizer is a graph-based web-app for polyploid haplotype visualization. It interactively visualizes the differences between haplotypes and includes bookmarking, pre-processing and phenotype specific views.
+HaplotypeVisualizer is a graph-based web-app for polyploid haplotype visualization. It interactively visualizes the differences between haplotypes and includes features such as bookmarking, pre-processing and phenotype meta-data support.
 
 <p align="right"><a href="#top">back to top</a></p>
 
@@ -73,7 +73,7 @@ HaplotypeVisualizer is a graph-based web-app for polyploid haplotype visualizati
 
 > ### Tip
 >
-> It is recommended to use a virtual environment managers such as [Conda](https://docs.conda.io/en/latest/) or [venv](https://docs.python.org/3/library/venv.html) to avoid package versioning problems.
+> It is recommended to use a virtual environment manager such as [Conda](https://docs.conda.io/en/latest/) or [venv](https://docs.python.org/3/library/venv.html) to avoid package versioning problems.
 
 > ### Important:
 >
