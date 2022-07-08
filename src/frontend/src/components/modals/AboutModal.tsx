@@ -9,12 +9,16 @@ const AboutModal: React.FC<AboutModalProps> = (props) => {
   return (
     <Modal onHide={props.onHide} show={props.show}>
       <Modal.Header closeButton>
-        <Modal.Title>Haplotype browser</Modal.Title>
+        <Modal.Title>
+          HaplotypeVisualizer <span className='text-muted'>v{process.env.REACT_APP_VERSION}</span>
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p>This is a program to browse polyploid haplotype graphs. The app reads GFA files.</p>
+        <p>HaplotypeVisualizer is a graph-based haplotype visualizer.</p>
+        <p>Haplotypes differences can be visualized with optional phenotype meta-data.</p>
         <p>
-          Contact <a href={'mailto:e.keller@student.tudelft.nl'}>Ethan Keller</a>
+          Bug or feature request:{' '}
+          <a href={'https://github.com/ethan-keller/HaplotypeVisualizer/issues'}>Post an issue</a>
         </p>
         <p>
           {'Thanks to '}
@@ -22,9 +26,6 @@ const AboutModal: React.FC<AboutModalProps> = (props) => {
           {' and '}
           <a href={'https://github.com/cmdcolin'}>Colin Diesh</a>
           {' for inspiration.'}
-        </p>
-        <p>
-          <b>The app is still in development</b>
         </p>
         <a href={'https://github.com/ethan-keller/HaplotypeVisualizer'}>GitHub</a>
       </Modal.Body>
