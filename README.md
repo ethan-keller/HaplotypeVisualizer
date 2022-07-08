@@ -20,11 +20,7 @@
   <p align="center">
     A web-based visualization tool for polyploid haplotypes.
     <br />
-    <a href="."><strong>Explore the docs »</strong></a>
     <br />
-    <br />
-    <a href=".">View Demo</a>
-    ·
     <a href="https://github.com/ethan-keller/HaplotypeVisualizer/pulls">Report Bug</a>
     ·
     <a href="https://github.com/ethan-keller/HaplotypeVisualizer/pulls">Request Feature</a>
@@ -51,7 +47,7 @@
     <li><a href="#usage">Usage</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
-    <!-- <li><a href="#acknowledgments">Acknowledgments</a></li> -->
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
   </ol>
 </details>
 
@@ -59,7 +55,7 @@
 
 ## About The Project
 
-Still under development.
+HaplotypeVisualizer is a graph-based web-app for polyploid haplotype visualization. It interactively visualizes the differences between haplotypes and includes bookmarking, pre-processing and phenotype specific views.
 
 <p align="right"><a href="#top">back to top</a></p>
 
@@ -75,21 +71,21 @@ Still under development.
 
 ## Getting Started
 
+> ### Tip
+>
+> It is recommended to use a virtual environment managers such as [Conda](https://docs.conda.io/en/latest/) or [venv](https://docs.python.org/3/library/venv.html) to avoid package versioning problems.
+
 > ### Important:
 >
 > Make sure to have `pip` and `nodejs` installed on your machine!
 
 Start by cloning this repository to your machine. E.g., like so:
+
 ```sh
 git clone https://github.com/ethan-keller/HaplotypeVisualizer
 ```
 
 For other ways to clone a repository to your machine: [GitHub Cloning Docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
-
-
-
-
-
 
 ### CLI
 
@@ -132,8 +128,6 @@ This section explains how you can build and start the `HaplotypeVisualizer` web-
    >
    > - Default port: `3000`
    > - Default data folder: `/data`
-
-
 
 <p align="right"><a href="#top">back to top</a></p>
 
@@ -195,7 +189,7 @@ Don't forget to give the project a star! Thanks again!
 
 ## License
 
-TODO
+[BSD 3-clause](https://github.com/ethan-keller/HaplotypeVisualizer/blob/main/LICENSE)
 
 <p align="right"><a href="#top">back to top</a></p>
 
@@ -205,19 +199,13 @@ TODO
 
 Ethan Keller - e.keller@student.tudelft.nl
 
-<!-- Project Link: [https://github.com/github_username/repo_name](https://github.com/github_username/repo_name) -->
-
 <p align="right"><a href="#top">back to top</a></p>
 
-<!-- ACKNOWLEDGMENTS -->
+## Acknowledgments
 
-<!-- ## Acknowledgments
+I'd like to thank [Dr. Thomas Abeel](https://www.abeel.be/), [Lucas van Dijk](https://lucasvandijk.nl/) and the [AbeelLab](https://github.com/AbeelLab) team for guiding and assisting me throughout this project. Additionally, [Colin Diesh](https://github.com/cmdcolin) and [Bandage](https://rrwick.github.io/Bandage/) were a great source of inspiration.
 
-- []()
-- []()
-- []()
-
-<p align="right"><a href="#top">back to top</a></p> -->
+<p align="right"><a href="#top">back to top</a></p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
